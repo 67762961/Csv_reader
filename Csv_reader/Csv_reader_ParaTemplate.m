@@ -4,7 +4,7 @@
 clear;
 clc;
 
-%% 参数配置  
+%% 参数配置
 Para_file.location   = 'E:\20250409';                       %% 读取文件夹       文件夹以八位日期命名
 Para_file.tablename  = 'INVA';                              %% csv文件名        一般为BOOSTH(L) 或 INVA(BC)
 Para_file.dataname   = '320全斯达-AT4-高温-600-2.0-9.4';     %% 输出数据标签     (机型)-(器件)-(温度)-(电压)-(Ron)-(Roff)
@@ -15,7 +15,7 @@ Para_file.datnum     = 16;                                  %% 本组csv文件  
 Para_mode.nspd       = 1.6;                                 %% csv采样率        CSV保存时示波器设置ns/pt
 Para_mode.Chmode     = 'setch';                             %% 通道分配模式     'setch'或'findch'
 Para_mode.Ch_labels  = {1, 2, 3, 4, 5};                     %% 通道分配         Vge Vce Ic Vd Id对应通道
-Para_mode.dvdtmode   = 1;                                   %% dvdt模式选择     dvdt计算起始百分比
+Para_mode.dvdtmode   = [10, 90];                            %% dvdt模式选择     额外的dvdt计算起始和结束百分比
     
 % 数据配置参数    
 Para_data.gate_didt  = 3;                                   %% didt回落容错     didt计算中上升沿过滤毛刺阈值

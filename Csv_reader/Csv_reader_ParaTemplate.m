@@ -4,8 +4,7 @@
 clear;
 clc;
 
-%% 参数配置
-Para_file.location   = uigetdir();                          %% 手动选取路径     
+%% 参数配置  
 Para_file.location   = 'E:\20250409';                       %% 读取文件夹       文件夹以八位日期命名
 Para_file.tablename  = 'INVA';                              %% csv文件名        一般为BOOSTH(L) 或 INVA(BC)
 Para_file.dataname   = '320全斯达-AT4-高温-600-2.0-9.4';     %% 输出数据标签     (机型)-(器件)-(温度)-(电压)-(Ron)-(Roff)

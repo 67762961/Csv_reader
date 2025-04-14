@@ -1,7 +1,7 @@
 function draw(data1,dataname,path,Vmax)
 data1(data1==0)=NaN;
 
-% ��ȡ������
+% 参数表传递
 Ic=data1(:,1);
 Eon=data1(:,2);
 Eoff=data1(:,3);
@@ -13,7 +13,7 @@ Vcetop=data1(:,8);
 Erec=data1(:,9);
 Prrmax=data1(:,10);
 
-%% ����IGBT�������
+% 绘制IGBT开关损耗
 plot(Ic,Eon,'color','#A2142F','LineWidth',2);
 hold on;
 plot(Ic,Eoff,'color','#0072BD','LineWidth',2);
@@ -28,7 +28,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Eigbt'],'.png'])
 close(gcf);
 hold off
 
-%% ����Vcemax
+%% 绘制Vcemax
 plot(Ic,Vcemax,'color','#0072BD','LineWidth',2);
 hold on
 plot([0,fix(max(Ic)/50+0.5)*50],[Vmax,Vmax],'color','red','LineWidth',2);
@@ -44,7 +44,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Vcemax'],'.png'])
 close(gcf);
 hold off
 
-%% ����Vdmax
+%% 绘制Vdmax
 plot(Ic,Vdmax,'color','#0072BD','LineWidth',2);
 hold on
 plot([0,fix(max(Ic)/50+0.5)*50],[Vmax,Vmax],'color','red','LineWidth',2);
@@ -60,7 +60,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Vdmax'],'.png'])
 close(gcf);
 hold off
 
-%% ����Delta-Vce
+%% 绘制Delta-Vce
 plot(Ic,Vcemax-Vcetop,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -74,7 +74,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Delta_Vce'],'.png'])
 close(gcf);
 hold off
 
-%% ����di/dt
+%% 绘制di/dt
 plot(Ic,didt,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -90,7 +90,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-didt'],'.png'])
 close(gcf);
 hold off
 
-%% ����dv/dt
+%% 绘制dv/dt
 plot(Ic,dvdt,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -105,7 +105,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-dvdt'],'.png'])
 close(gcf);
 
-%% ����Erec
+%% 绘制Erec
 plot(Ic,Erec,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -119,7 +119,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Erec'],'.png'])
 close(gcf);
 
-%% ����Prrmax
+%% 绘制Prrmax
 plot(Ic,Prrmax,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');

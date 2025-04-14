@@ -1,48 +1,48 @@
 function zer = indzer(Vge, t, min_interval)
-%INDZER ¼ì²âÐÅºÅÔÚ¼õÈ¥ãÐÖµºóµÄÁãµã½»²æÎ»ÖÃ£¬²¢¿ØÖÆÏàÁÚÁãµãµÄ×îÐ¡¼ä¸ô
+%INDZER æ£€æµ‹ä¿¡å·åœ¨å‡åŽ»é˜ˆå€¼åŽçš„é›¶ç‚¹äº¤å‰ä½ç½®ï¼Œå¹¶æŽ§åˆ¶ç›¸é‚»é›¶ç‚¹çš„æœ€å°é—´éš”
 %   Inputs:
-%       Vge : Ò»Î¬Êý×é (double)
-%           ÊäÈëÐÅºÅÏòÁ¿£¬Ö§³ÖÊµÊýÐÅºÅ¡£
-%       t : ±êÁ¿ (double)
-%           ãÐÖµ£¬ÓÃÓÚÆ«ÒÆÐÅºÅ£¨Vge = Vge - t£©¡£
-%       min_interval : ÕýÕûÊý£¬¿ÉÑ¡ (Ä¬ÈÏ600)
-%           ÏàÁÚÁãµãµÄ×îÐ¡¼ä¸ô£¨µ¥Î»£ºÑù±¾µãÊý£©£¬ÈôÎ´Ö¸¶¨ÔòÄ¬ÈÏ600¡£
+%       Vge : ä¸€ç»´æ•°ç»„ (double)
+%           è¾“å…¥ä¿¡å·å‘é‡ï¼Œæ”¯æŒå®žæ•°ä¿¡å·ã€‚
+%       t : æ ‡é‡ (double)
+%           é˜ˆå€¼ï¼Œç”¨äºŽåç§»ä¿¡å·ï¼ˆVge = Vge - tï¼‰ã€‚
+%       min_interval : æ­£æ•´æ•°ï¼Œå¯é€‰ (é»˜è®¤600)
+%           ç›¸é‚»é›¶ç‚¹çš„æœ€å°é—´éš”ï¼ˆå•ä½ï¼šæ ·æœ¬ç‚¹æ•°ï¼‰ï¼Œè‹¥æœªæŒ‡å®šåˆ™é»˜è®¤600ã€‚
 %   Outputs:
-%       zer : 1¡ÁN Êý×é (double)
-%           ¼ÇÂ¼µÄÁãµã½»²æË÷ÒýÎ»ÖÃ£¬°´ÉýÐòÅÅÁÐ¡£
+%       zer : 1Ã—N æ•°ç»„ (double)
+%           è®°å½•çš„é›¶ç‚¹äº¤å‰ç´¢å¼•ä½ç½®ï¼ŒæŒ‰å‡åºæŽ’åˆ—ã€‚
 
 
-% ²ÎÊýÄ¬ÈÏÖµÉèÖÃ
+% å‚æ•°é»˜è®¤å€¼è®¾ç½®
 if nargin < 3
-    min_interval = 600;  % ÈôÎ´ÊäÈëmin_interval£¬ÔòÄ¬ÈÏ600
+    min_interval = 600;  % è‹¥æœªè¾“å…¥min_intervalï¼Œåˆ™é»˜è®¤600
 end
 
-Vge = Vge - t;          % ÐÅºÅÆ«ÒÆ
+Vge = Vge - t;          % ä¿¡å·åç§»
 len = length(Vge);
-zer = zeros(1, len);    % Ô¤·ÖÅäÊý×é
-cnt = 1;                % Áãµã¼ÆÊýÆ÷
+zer = zeros(1, len);    % é¢„åˆ†é…æ•°ç»„
+cnt = 1;                % é›¶ç‚¹è®¡æ•°å™¨
 
-% Ö÷Ñ­»·£º±éÀúÐÅºÅ¼ì²âÁãµã½»²æ
+% ä¸»å¾ªçŽ¯ï¼šéåŽ†ä¿¡å·æ£€æµ‹é›¶ç‚¹äº¤å‰
 for i = 1:len-1
-    % Ìø¹ýÒÑ¼ì²âµãºóµÄmin_interval¸öÑù±¾
+    % è·³è¿‡å·²æ£€æµ‹ç‚¹åŽçš„min_intervalä¸ªæ ·æœ¬
     if cnt > 1 && i <= zer(cnt-1) + min_interval
         continue;
     end
     
-    % ¼ì²âÏàÁÚÑù±¾µÄ·ûºÅ±ä»¯£¨º¬¹ýÁãµãÇé¿ö£©
+    % æ£€æµ‹ç›¸é‚»æ ·æœ¬çš„ç¬¦å·å˜åŒ–ï¼ˆå«è¿‡é›¶ç‚¹æƒ…å†µï¼‰
     if Vge(i) * Vge(i+1) <= 0
-        zer(cnt) = i;    % ¼ÇÂ¼ÁãµãÎ»ÖÃ
-        cnt = cnt + 1;   % ¼ÆÊýÆ÷µÝÔö
+        zer(cnt) = i;    % è®°å½•é›¶ç‚¹ä½ç½®
+        cnt = cnt + 1;   % è®¡æ•°å™¨é€’å¢ž
     end
 end
 
-% ´¦ÀíÐÅºÅÄ©Î²¿ÉÄÜµÄÁãµã£¨µ±×îºóÒ»¸öµãÕýºÃÎª0Ê±£©
+% å¤„ç†ä¿¡å·æœ«å°¾å¯èƒ½çš„é›¶ç‚¹ï¼ˆå½“æœ€åŽä¸€ä¸ªç‚¹æ­£å¥½ä¸º0æ—¶ï¼‰
 if Vge(end) == 0
     zer(cnt) = len;
     cnt = cnt + 1;
 end
 
-% ²Ã¼ôÎ´Ê¹ÓÃµÄÔ¤·ÖÅä¿Õ¼ä
+% è£å‰ªæœªä½¿ç”¨çš„é¢„åˆ†é…ç©ºé—´
 zer = zer(1:cnt-1);
 end
 

@@ -10,7 +10,7 @@ dvdt=data1(:,7);
 didt=data1(:,8);
 Erec=data1(:,15);
 Prrmax=data1(:,16);
-% ªÊ÷∆IGBTø™πÿÀ∫ƒ
+% ÁªòÂà∂IGBTÂºÄÂÖ≥ÊçüËÄó
 plot(Ic,Eon,'color','#A2142F','LineWidth',2);
 hold on
 plot(Ic,Eoff,'color','#0072BD','LineWidth',2);
@@ -26,7 +26,7 @@ saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Eigbt'],'.png'])
 close(gcf);
 hold off
 
-%% ªÊ÷∆Vcemax
+%% ÁªòÂà∂Vcemax
 plot(Ic,Vcemax,'color','#0072BD','LineWidth',2);
 hold on
 plot([0,1200],[Vmax,Vmax],'color','red','LineWidth',2);
@@ -44,7 +44,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Vcemax'],'.png'])
 close(gcf);
 hold off
-%% ªÊ÷∆Vdmax
+%% ÁªòÂà∂Vdmax
 plot(Ic,Vdmax,'color','#0072BD','LineWidth',2);
 hold on
 plot([0,1200],[Vmax,Vmax],'color','red','LineWidth',2);
@@ -62,7 +62,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Vdmax'],'.png'])
 close(gcf);
 hold off
-%% ªÊ÷∆Delta-Vce
+%% ÁªòÂà∂Delta-Vce
 plot(Ic,Vcemax-Vcetop,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -78,7 +78,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Delta_Vce'],'.png'])
 close(gcf);
 hold off
-%% ªÊ÷∆di/dt
+%% ÁªòÂà∂di/dt
 plot(Ic,didt,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -94,7 +94,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-didt'],'.png'])
 close(gcf);
 hold off
-%% ªÊ÷∆dv/dt
+%% ÁªòÂà∂dv/dt
 plot(Ic,dvdt,'color','#0072BD','LineWidth',2);
 hold on
 xlabel('Ic(A)');
@@ -109,7 +109,7 @@ title(strcat(dataname,' dv/dt'),'FontSize',14);
 grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-dvdt'],'.png'])
 close(gcf);
-%% ªÊ÷∆Erec
+%% ÁªòÂà∂Erec
 % plot(Ic,Erec,'color','#0072BD','LineWidth',2);
 % hold on
 % xlabel('Ic(A)');
@@ -124,7 +124,7 @@ close(gcf);
 % grid on
 % saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Erec'],'.png'])
 % close(gcf);
-%% ªÊ÷∆Prrmax
+%% ÁªòÂà∂Prrmax
 % plot(Ic,Prrmax,'color','#0072BD','LineWidth',2);
 % hold on
 % xlabel('Ic(A)');

@@ -17,7 +17,7 @@ else
     num=num2str(tablenum);
     filename=strcat(locate,'\',tablename,'_',num,'_ALL.csv');
 end
-data0 = csvread(filename,30,0);  %¶ÁÈ¡Êı¾İ±í¸ñ
+data0 = csvread(filename,30,0);  %è¯»å–æ•°æ®è¡¨æ ¼
 if mean(data0(:,6)==0)
     data = data0;
 else
@@ -36,70 +36,70 @@ ch4=data(:,5);
 ch5=data(:,6);
 Id=ch5;
 Prr=Id.*ch4;
-cntVge = indzer(Vge,Vgeth); %Vge¹ıÁãµãÎ»ÖÃ¼ÇÂ¼
-cntsw = length(cntVge); %Vge¹ıÁãµã´ÎÊı¼ÇÂ¼
-ton1=cntVge(cntsw-3);  %µÚÒ»´Î¿ªÍ¨Ê±¼äµã
-ton2=cntVge(cntsw-1);  %µÚ¶ş´Î¿ªÍ¨Ê±¼äµã
-toff1=cntVge(cntsw-2);  %µÚÒ»´Î¹Ø¶ÏÊ±¼äµã
-toff2=cntVge(cntsw);    %µÚ¶ş´Î¹Ø¶ÏÊ±¼äµã
-cnton1=toff1-ton1; %¼ÆËãµÚÒ»´Î¿ªÍ¨Ê±³¤
-cntoff1=ton2-toff1; %¼ÆËãµÚÒ»´Î¹Ø¶ÏÊ±³¤
-cnton2=toff2-ton2; %¼ÆËãµÚ¶ş´Î¿ªÍ¨Ê±³¤
-meanVgetop=mean(Vge(fix(ton1+cnton1/4):fix(toff1-cnton1/4))); %Vge¸ßµçÆ½µçÑ¹Öµ¶ÁÈ¡
+cntVge = indzer(Vge,Vgeth); %Vgeè¿‡é›¶ç‚¹ä½ç½®è®°å½•
+cntsw = length(cntVge); %Vgeè¿‡é›¶ç‚¹æ¬¡æ•°è®°å½•
+ton1=cntVge(cntsw-3);  %ç¬¬ä¸€æ¬¡å¼€é€šæ—¶é—´ç‚¹
+ton2=cntVge(cntsw-1);  %ç¬¬äºŒæ¬¡å¼€é€šæ—¶é—´ç‚¹
+toff1=cntVge(cntsw-2);  %ç¬¬ä¸€æ¬¡å…³æ–­æ—¶é—´ç‚¹
+toff2=cntVge(cntsw);    %ç¬¬äºŒæ¬¡å…³æ–­æ—¶é—´ç‚¹
+cnton1=toff1-ton1; %è®¡ç®—ç¬¬ä¸€æ¬¡å¼€é€šæ—¶é•¿
+cntoff1=ton2-toff1; %è®¡ç®—ç¬¬ä¸€æ¬¡å…³æ–­æ—¶é•¿
+cnton2=toff2-ton2; %è®¡ç®—ç¬¬äºŒæ¬¡å¼€é€šæ—¶é•¿
+meanVgetop=mean(Vge(fix(ton1+cnton1/4):fix(toff1-cnton1/4))); %Vgeé«˜ç”µå¹³ç”µå‹å€¼è¯»å–
 toff90=0;
 ton10=0;
-for i=toff1:-1:ton1  %Ñ°ÕÒ¹Ø¶ÏÊ±Vge=90%µÄµã
+for i=toff1:-1:ton1  %å¯»æ‰¾å…³æ–­æ—¶Vge=90%çš„ç‚¹
     if ch1(i)>0.9*meanVgetop
         toff90=i;
         break;
     end
 end
-for i=ton2:toff2 %Ñ°ÕÒ¿ªÍ¨Ê±Vge=10%µÄµã
+for i=ton2:toff2 %å¯»æ‰¾å¼€é€šæ—¶Vge=10%çš„ç‚¹
     if ch1(i)>0.1*meanVgetop
         ton10=i;
         break;
     end
 end
-meanIc=mean(Ic(fix(toff1+cntoff1/4):fix(ton2-cntoff1/4))); %¼ÆËãIcµçÁ÷Ì½Í·Æ«ÖÃ
-meanVce=mean(Vce(fix(ton1+cnton1/4):fix(toff1-cnton1/4)));  %¼ÆËãVceµçÑ¹Ì½Í·Æ«ÖÃ
-Vcetop=zeros(length(Ic),1); %¶¨ÒåÊı×é²¢ÖÃÁã
-Ictop=Vcetop; %¶¨ÒåÊı×é²¢ÖÃÁã
-Vcetop=mean(Vce(fix(toff1+cntoff1/5):fix(ton2-3*cntoff1/4)));%¶¨ÒåÊı×é²¢ÖÃÁã
-[~,cc]=sort(Ic(ton1+fix(cnton1/2):toff1),'descend'); %ÕÒ¿ª¹ØµçÁ÷Öµ1
-tIcm=ton1+fix(cnton1/2)+cc(1)-1;  %ÕÒ¿ª¹ØµçÁ÷Öµ2
-Ictop=mean(Ic(tIcm-10):Ic(tIcm)); %ÕÒ¿ª¹ØµçÁ÷Öµ3
+meanIc=mean(Ic(fix(toff1+cntoff1/4):fix(ton2-cntoff1/4))); %è®¡ç®—Icç”µæµæ¢å¤´åç½®
+meanVce=mean(Vce(fix(ton1+cnton1/4):fix(toff1-cnton1/4)));  %è®¡ç®—Vceç”µå‹æ¢å¤´åç½®
+Vcetop=zeros(length(Ic),1); %å®šä¹‰æ•°ç»„å¹¶ç½®é›¶
+Ictop=Vcetop; %å®šä¹‰æ•°ç»„å¹¶ç½®é›¶
+Vcetop=mean(Vce(fix(toff1+cntoff1/5):fix(ton2-3*cntoff1/4)));%å®šä¹‰æ•°ç»„å¹¶ç½®é›¶
+[~,cc]=sort(Ic(ton1+fix(cnton1/2):toff1),'descend'); %æ‰¾å¼€å…³ç”µæµå€¼1
+tIcm=ton1+fix(cnton1/2)+cc(1)-1;  %æ‰¾å¼€å…³ç”µæµå€¼2
+Ictop=mean(Ic(tIcm-10):Ic(tIcm)); %æ‰¾å¼€å…³ç”µæµå€¼3
 toffIcm90=0;
 toffIcm10=0;
 tonIcm10=0;
 tonIcm90=0;
-for i=tIcm:toff1+100     %ÕÒ¹Ø¶ÏÊ±µçÁ÷Öµ=90%Ê±¿Ì
+for i=tIcm:toff1+100     %æ‰¾å…³æ–­æ—¶ç”µæµå€¼=90%æ—¶åˆ»
     if Ic(i)<Ictop*0.9
         toffIcm90=i;
         break;
     end
 end
-for i=toffIcm90:ton2  %ÕÒ¹Ø¶ÏÊ±µçÁ÷Öµ=10%Ê±¿Ì
+for i=toffIcm90:ton2  %æ‰¾å…³æ–­æ—¶ç”µæµå€¼=10%æ—¶åˆ»
     if Ic(i)<Ictop*0.1
         toffIcm10=i;
         break;
     end
 end
-for i=ton2:toff2  %ÕÒ¿ªÍ¨Ê±µçÁ÷Öµ=10%Ê±¿Ì
+for i=ton2:toff2  %æ‰¾å¼€é€šæ—¶ç”µæµå€¼=10%æ—¶åˆ»
     if Ic(i)>Ictop*0.1
         tonIcm10=i;
         break;
     end
 end
-for i=tonIcm10:toff2  %ÕÒ¿ªÍ¨Ê±µçÁ÷Öµ=90%Ê±¿Ì
+for i=tonIcm10:toff2  %æ‰¾å¼€é€šæ—¶ç”µæµå€¼=90%æ—¶åˆ»
     if Ic(i)>Ictop*0.9
         tonIcm90=i;
         break;
     end
 end
 % ch2=Ic-meanIc;
-Ic=Ic-meanIc; %IcµçÁ÷Ì½Í·½ÏÁã
+Ic=Ic-meanIc; %Icç”µæµæ¢å¤´è¾ƒé›¶
 % ch3=Vce-meanVce;
-Vce=Vce-meanVce;  %VceµçÑ¹Ì½Í·½ÏÁã
+Vce=Vce-meanVce;  %Vceç”µå‹æ¢å¤´è¾ƒé›¶
 
 
 SWon_start=0;
@@ -108,38 +108,38 @@ SWoff_start=0;
 SWoff_stop=0;
 Erec_start=0;
 Erec_stop=0;
-%% £¨1£©
-for i=toff90:1:ton2  %¹Ø¶ÏÆğÊ¼Ê±¿ÌÑ°ÕÒ
+%% ï¼ˆ1ï¼‰
+for i=toff90:1:ton2  %å…³æ–­èµ·å§‹æ—¶åˆ»å¯»æ‰¾
     if Vce(i)>=Vce_c
         SWoff_start=i;
         break;
     end
 end
-for i=SWoff_start:1:ton2  %¹Ø¶Ï½áÊøÊ±¿ÌÑ°ÕÒ
+for i=SWoff_start:1:ton2  %å…³æ–­ç»“æŸæ—¶åˆ»å¯»æ‰¾
     if Ic(i)<=Ictop*0.02
         SWoff_stop=i;
         break;
     end
 end
-for i=fix(ton2-cntoff1/4):1:toff2  %¿ªÍ¨ÆğÊ¼Ê±¿ÌÑ°ÕÒ
+for i=fix(ton2-cntoff1/4):1:toff2  %å¼€é€šèµ·å§‹æ—¶åˆ»å¯»æ‰¾
     if Ic(i)>=Ic_c
         SWon_start=i;
         break;
     end
 end
-for i=SWon_start:1:toff2  %¿ªÍ¨½áÊøÊ±¿ÌÑ°ÕÒ
+for i=SWon_start:1:toff2  %å¼€é€šç»“æŸæ—¶åˆ»å¯»æ‰¾
     if Vce(i)<=Vce_c
         SWon_stop=i;
         break;
     end
 end
-for i=ton2:toff2  %¶ş¼«¹Ü·´Ïò»Ö¸´Ê±¼äÑ°ÕÒ
+for i=ton2:toff2  %äºŒæç®¡åå‘æ¢å¤æ—¶é—´å¯»æ‰¾
     if Id(i)>=0
         Erec_start=i;
         break;
     end
 end
-for i=Erec_start+10:toff2  %¶ş¼«¹Ü·´Ïò»Ö¸´Ê±¼äÑ°ÕÒ
+for i=Erec_start+10:toff2  %äºŒæç®¡åå‘æ¢å¤æ—¶é—´å¯»æ‰¾
     if Id(i)<=0
         Erec_stop=i;
         break;
@@ -168,12 +168,12 @@ end
 % text(time(t_Prrmax),0.5,'Prr','color','red','FontSize',13);
 % hold on
 % grid on
-% title(strcat('Ic=',num2str(fix(Ictop)),' Prr-Erec(¹é1»¯)'));
+% title(strcat('Ic=',num2str(fix(Ictop)),' Prr-Erec(å½’1åŒ–)'));
 % saveas(gcf,[[path,'.\pic\',dataname,'\Prr\'],['Ic=',num2str(fix(Ictop)),'-Prr'],'.png'])
 % close(gcf)
 % hold off
 
-%% £¨2£©
+%% ï¼ˆ2ï¼‰
 Pon=zeros(length(Ic),1);
 Poff=Pon;
 Eon=0;
@@ -196,7 +196,7 @@ text(time(SWon_start-50),0.9,'Vce','color','green','FontSize',13);
 text(time(SWon_start+70),0.9,'Ic','color','blue','FontSize',13);
 hold on
 grid on;
-title(strcat('Ic=',num2str(fix(Ictop)),' ¿ªÍ¨ËğºÄ¼ÆËã(¹é1»¯)'));
+title(strcat('Ic=',num2str(fix(Ictop)),' å¼€é€šæŸè€—è®¡ç®—(å½’1åŒ–)'));
 saveas(gcf,[[path,'.\pic\',dataname,'\Eigbt\'],['Ic=',num2str(fix(Ictop)),'-Eon'],'.png'])
 close(gcf)
 hold off
@@ -218,13 +218,13 @@ text(time(SWoff_start-80),1.1,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
 text(time(SWoff_start),0.45,'Poff','color','red','FontSize',13);
 text(time(SWoff_start+160),0.95,'Vce','color','green','FontSize',13);
 text(time(SWoff_start-30),0.95,'Ic','color','blue','FontSize',13);
-title(strcat('Ic=',num2str(fix(Ictop)),' ¹Ø¶ÏËğºÄ¼ÆËã(¹é1»¯)'));
+title(strcat('Ic=',num2str(fix(Ictop)),' å…³æ–­æŸè€—è®¡ç®—(å½’1åŒ–)'));
 hold on
 grid on;
 saveas(gcf,[[path,'.\pic\',dataname,'\Eigbt\'],['Ic=',num2str(fix(Ictop)),'-Eoff'],'.png'])
 close(gcf);
 hold off;
-%% £¨3£©
+%% ï¼ˆ3ï¼‰
 [~,cemax]=sort(ch2(toff90:fix(toff90+cntoff1/3)),'descend');
 Vcemax=ch2(toff90+cemax(1)-1);
 [~,dmax]=sort(ch4(ton2:toff2),'descend');
@@ -250,7 +250,7 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Vd\'],['Ic=',num2str(fix(Ictop)),'-Vdmax'],'.png'])
 close(gcf);
 hold off
-%% £¨4£©
+%% ï¼ˆ4ï¼‰
 V_10=Vcetop*0.1;
 V_90=Vcetop*0.9;
 I_10=Ictop*0.1;
@@ -306,7 +306,7 @@ text(time(ab+3),ch2(ab),['Vce=',num2str(ch2(ab)),'V',],'FontSize',13);
 text(time(ba+3),ch2(ba),['Vce=',num2str(ch2(ba)),'V'],'FontSize',13);
 text(time(ab-40),Vcemax*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
 text(time(ab-40),Vcemax*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
-title(strcat('Ic=',num2str(fix(Ictop)),' dv/dt¼ÆËã'));
+title(strcat('Ic=',num2str(fix(Ictop)),' dv/dtè®¡ç®—'));
 grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\dvdt\'],['Ic=',num2str(fix(Ictop)),'-dvdt','-Vcetop=',num2str(fix(Vcetop))],'.png'])
 close(gcf);
@@ -324,11 +324,11 @@ text(time(aa+3),ch3(aa),['Ic=',num2str(ch3(aa)),'A'],'FontSize',13);
 text(time(bb+3),ch3(bb),['Ic=',num2str(ch3(bb)),'A'],'FontSize',13);
 text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
 text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
-title(strcat('Ic=',num2str(fix(Ictop)),' di/dt¼ÆËã'));
+title(strcat('Ic=',num2str(fix(Ictop)),' di/dtè®¡ç®—'));
 grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\didt\'],['Ic=',num2str(fix(Ictop)),'-didt'],'.png'])
 close(gcf);
-%% £¨5£©
+%% ï¼ˆ5ï¼‰
 tdoff=(time(toffIcm90)-time(toff90))*10^9;
 tf=(time(toffIcm10)-time(toffIcm90))*10^9;
 plot(time(toff90*0.997:toffIcm10*1.003),ch1(toff90*0.997:toffIcm10*1.003),'g')
@@ -357,7 +357,7 @@ grid on
 title(strcat('Ic=',num2str(fix(Ictop)),'  Ton=',num2str(tr+tdon),'ns'));
 saveas(gcf,[[path,'.\pic\',dataname,'\Ton\'],['Ic=',num2str(fix(Ictop)),'-Ton'],'.png'])
 close(gcf);
-%% £¨6£©
+%% ï¼ˆ6ï¼‰
 output=zeros(16,1);
 output(1)=Vcetop;
 output(2)=Ictop;

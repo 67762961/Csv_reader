@@ -15,6 +15,7 @@ nspd       = Para_mode.nspd     ;       %% csv采样率 ns per dot
 Chmode     = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
+didtmode   = Para_mode.didtmode ;       %% didt模式
 
 % 数据配置
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
@@ -65,7 +66,7 @@ data1=zeros(datend-datstart+1,16);
 %% 数据读取与写入
 for tablenum=datstart:datend
     if Dflag==1
-        data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,Ch_labels,Vgeth,gate_didt,gate_Erec);
+        data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec);
     elseif Dflag==0
         data1(cnt,:)=countE1(location,tablename,tablenum,Ic_c,Vce_c,location,dataname);
     end

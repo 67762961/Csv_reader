@@ -16,6 +16,7 @@ Para_mode.nspd       = 1.6;                                 %% csv采样率     
 Para_mode.Chmode     = 'setch';                             %% 通道分配模式     'setch'或'findch'
 Para_mode.Ch_labels  = {1, 2, 3, 4, 5};                     %% 通道分配         Vge Vce Ic Vd Id对应通道
 Para_mode.dvdtmode   = [10, 90];                            %% dvdt模式选择     额外的dvdt计算起始和结束百分比
+Para_mode.didtmode   = [10, 90];                            %% didt模式选择     新设定didt计算起始和结束百分比
     
 % 数据配置参数    
 Para_data.gate_didt  = 3;                                   %% didt回落容错     didt计算中上升沿过滤毛刺阈值

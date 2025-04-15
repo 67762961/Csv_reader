@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc)
+function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -464,15 +464,15 @@ end
 saveas(gcf, fullfile(path,'pic',dataname,'Prr',[ num,' Ic=',num2str(fix(Ictop)),'A Prr.png']));
 close(gcf);
 hold off
-%% ====================== 动态参数计算(dv/dt & di/dt) ======================
+
+%% dv/dt计算模块
 % 阈值定义
 V_10 = Vcetop * 0.1;
 V_90 = Vcetop * 0.9;
 V_a  = Vcetop * dvdtmode(1)/100;
 V_b  = Vcetop * dvdtmode(2)/100;
 
-% dv/dt计算模块
-% 电压上升沿阈值检测（向量化搜索）
+% 电压上升沿阈值检测
 window_dv_start = max(1, SWoff_start-50);  % 起始索引不低于1
 window_dv_end = min(length(Vce), toff90+cemax_idx-1);  % 终止索引不超过数组长度
 window_dv = window_dv_start : window_dv_end;
@@ -521,13 +521,18 @@ close(gcf);
 hold off
 
 %% di/dt计算模块
-time_step = nspd * 1e-9; 
+
+% 阈值定义
+Ic_a  = Ictop * didtmode(1)/100;
+Ic_b  = Ictop * didtmode(2)/100;
+
 % 状态机参数初始化
 state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
 valid_rise_start = [];
 valid_rise_end = [];
    
 % 动态窗口生成
+time_step = nspd * 1e-9; 
 max_search_length = fix(2e-9 * tdon / time_step);
 window_di = fix(SWon_start - max_search_length): fix(SWon_stop + max_search_length);
 
@@ -538,7 +543,7 @@ for i = window_di
     end
     switch state
         case 0 % 等待触发
-            if ch3(i) >= Ictop*0.1
+            if ch3(i) >= Ic_a
                 valid_rise_start = i;
                 % fprintf('触发值 %f\n',ch3(valid_rise_start))
                 state = 1;
@@ -550,7 +555,7 @@ for i = window_di
                 state = 0; % 发现回落重置
                 valid_rise_start = [];
             else
-                if ch3(i) >= 0.85*Ictop
+                if ch3(i) >= Ic_b
                     valid_rise_end = i;
                     state = 2;
                 end
@@ -583,8 +588,8 @@ plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r')
 plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 
 % 动态标注
-text(time(valid_rise_start+3),ch3(valid_rise_start),['Ic=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
-text(time(valid_rise_end+3),ch3(valid_rise_end),['Ic=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
+text(time(valid_rise_start+3),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
+text(time(valid_rise_end+3),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
 text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
 text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
 

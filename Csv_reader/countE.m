@@ -134,57 +134,8 @@ tIcm = current_interval(1) + max_idx - 1;           % 转换为全局索引
 window_start = max(1, tIcm - 10);                   % 窗口起始：峰值前10点（最小为1）
 Ictop = mean(ch3(window_start:tIcm));                % 计算均值
 
-
 %% ====================== 开通损耗计算（Eon） ======================
-% 初始化并计算开通损耗能量
-%开通起始时刻寻找
-search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
-valid_range = search_start:min(toff2, length(Ic));
-SWon_start_indices = find(Ic(valid_range) >= max(0.1*Ictop, 3), 1, 'first');
-SWon_start = valid_range(1) + SWon_start_indices - 1;
-
-%开通结束时刻寻找 
-SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
-SWon_stop = valid_range(1) + SWon_stop_indices - 1;
-Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start-20):(SWon_stop+20); % 定义计算窗口
-
-% 向量化计算功率和能量
-Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）
-dt = diff(time(windowEon)); % 时间差分
-Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
-
-% 归一化处理
-Ponmax = max(Pon(windowEon));
-Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
-
-% 可视化设置
-% figure;
-plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
-hold on
-plot(time,Vce/Vcetop,'g');
-plot(time,Ic/Ictop,'b');
-xlim([time(SWon_start-100),time(SWon_stop+100)]);
-ylim([-0.2,1.5]);
-
-% 标注和格式设置
-text(time(SWon_start-80),1.1,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
-text(time(SWon_start-30),0.4,'Pon','color','red','FontSize',13);
-text(time(SWon_start-50),0.9,'Vce','color','green','FontSize',13);
-text(time(SWon_start+70),0.9,'Ic','color','blue','FontSize',13);
-legend('P_{on}','V_{ce}','I_c', 'Location','northeast');
-title(sprintf('Ic=%dA 开通损耗分析（归一化）', fix(Ictop)));
-grid on;
-
-
-% 保存结果
-outputDir = fullfile(path, 'pic', dataname, 'Eigbt');
-if ~exist(outputDir, 'dir')
-    mkdir(outputDir);
-end
-saveas(gcf,[[path,'.\pic\',dataname,'\Eigbt\'],[num,' Ic=',num2str(fix(Ictop)),'A Eon'],'.png'])
-close(gcf)
-hold off
+[Eon] = count_Eon_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
@@ -530,7 +481,17 @@ Ic_b  = Ictop * didtmode(2)/100;
 state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
 valid_rise_start = [];
 valid_rise_end = [];
-   
+
+%开通起始时刻寻找
+search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
+valid_range = search_start:min(toff2, length(Ic));
+SWon_start_indices = find(Ic(valid_range) >= max(0.1*Ictop, 3), 1, 'first');
+SWon_start = valid_range(1) + SWon_start_indices - 1;
+
+%开通结束时刻寻找 
+SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
+SWon_stop = valid_range(1) + SWon_stop_indices - 1;
+
 % 动态窗口生成
 time_step = nspd * 1e-9; 
 max_search_length = fix(2e-9 * tdon / time_step);

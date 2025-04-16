@@ -135,7 +135,7 @@ window_start = max(1, tIcm - 10);                   % 窗口起始：峰值前10
 Ictop = mean(ch3(window_start:tIcm));                % 计算均值
 
 %% ====================== 开通损耗计算（Eon） ======================
-[Eon] = count_Eon_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
+[Eon] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找

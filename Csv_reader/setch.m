@@ -1,5 +1,24 @@
-function [data_out] = setch(data_in,Ch_labels)
-% 双脉冲测试信号通道设置函数
+function [data_out] = setch(data_in, Ch_labels)
+% 双脉冲测试信号通道重组函数
+%   Inputs:
+%       data_in   : N×6 矩阵 (double)
+%           原始采集数据矩阵
+%       Ch_labels : 1×5 数组 (int) 
+%           通道索引数组，取值范围[1,5]，定义各物理量的原始通道位置：
+%           元素1 - Vge门极电压的原始通道号
+%           元素2 - Vce集射极电压的原始通道号
+%           元素3 - Ic IGBT电流的原始通道号
+%           元素4 - Vd二极管电压的原始通道号
+%           元素5 - Id负载电流的原始通道号
+%   Outputs:
+%       data_out : N×6 矩阵 (double)
+%           标准化排列数据矩阵，各列定义符合IEC 60747-9标准：
+%           第1列 - 时间轴（直接继承输入）
+%           第2列 - 门极驱动电压 Vge (单位：V)
+%           第3列 - 集射极电压 Vce (单位：V)
+%           第4列 - IGBT导通电流 Ic (单位：A)
+%           第5列 - 续流二极管电压 Vd (单位：V)
+%           第6列 - 负载回路电流 Id (单位：A)
 
 data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴

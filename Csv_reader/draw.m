@@ -1,6 +1,40 @@
 function draw(data1,dataname,path,Vmax)
-data1(data1==0)=NaN;
+% 整组数据对比图像绘制函数
+%   本函数用于生成IGBT双脉冲测试的多维度特性曲线，包含开关损耗、电压应力、
+%   电流变化率等核心指标的可视化分析
+%
+%   Inputs:
+%       data1    : N×10 矩阵 (double)
+%           测试数据矩阵，各列含义如下：
+%           第1列 - IGBT电流 Ic (单位：A)
+%           第2列 - 开通损耗 Eon (单位：mJ)
+%           第3列 - 关断损耗 Eoff (单位：mJ)
+%           第4列 - 集射极峰值电压 Vcemax (单位：V)
+%           第5列 - 二极管峰值电压 Vdmax (单位：V)
+%           第6列 - 电压变化率 dv/dt (单位：V/μs)
+%           第7列 - 电流变化率 di/dt (单位：A/μs)
+%           第8列 - 集射极平台电压 Vcetop (单位：V)
+%           第9列 - 反向恢复能量 Erec (单位：mJ)
+%           第10列 - 最大反向恢复功率 Prrmax (单位：kW)
+%       dataname : 字符串 (char)
+%           测试案例名称，用于图表标题和文件命名
+%       path     : 字符串 (char)
+%           结果保存路径，需包含完整目录结构
+%       Vmax     : 标量 (double)
+%           电压安全阈值，用于绘制参考警戒线(单位：V)
+%
+%   Outputs:
+%       无直接返回值，生成以下图像文件：
+%       - Ic-Eigbt.png : 开关损耗特性曲线
+%       - Ic-Vcemax.png: 集射极电压峰值分析
+%       - Ic-Vdmax.png : 二极管电压峰值分析
+%       - Ic-Delta_Vce.png: 集射极电压差分析 
+%       - Ic-didt.png  : 电流变化率特性
+%       - Ic-dvdt.png  : 电压变化率特性
+%       - Ic-Erec.png  : 反向恢复能量特性
+%       - Ic-Prrmax.png: 反向恢复功率峰值
 
+data1(data1==0)=NaN;
 % 参数表传递
 Ic=data1(:,1);
 Eon=data1(:,2);

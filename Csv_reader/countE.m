@@ -450,13 +450,15 @@ text(time(rise_start_idx+3),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_sta
 text(time(rise_end_idx +3),Vce(rise_end_idx ),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
 text(time(rise_start_idx-40),Vcemax*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
 text(time(rise_start_idx-40),Vcemax*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
-if dvdtmode(1) ~= 10 && dvdtmode(2) ~= 90
+if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
     plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
     plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
     text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
     plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
     text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
     text(time(rise_start_idx-40),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(dvdt_a_b),'V/us'],'FontSize',13);
+    % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
+    dvdt = dvdt_a_b;
 end
 % 坐标轴设置
 ylim([0, Vcemax*1.1]);

@@ -33,9 +33,9 @@ ch5 = data(:,6);        % Id（二极管电流）
 % 门极电压：移动中值滤波
 Vge = smoothdata(ch1, 'movmedian', 60);  
 % 集射电压：移动中值滤波
-Vce = smoothdata(ch2, 'movmedian', 30, 'omitnan');
+Vce = smoothdata(ch2, 'movmedian', 10, 'omitnan');
 % 集电极电流：移动平均滤波
-Ic = smoothdata(ch3, 'movmean', 30);  
+Ic = smoothdata(ch3, 'movmean', 10);  
 Vd = smoothdata(ch4, 'movmedian', 5, 'omitnan');
 Id = smoothdata(ch5, 'movmean', 5);  
 

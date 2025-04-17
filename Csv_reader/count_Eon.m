@@ -1,4 +1,4 @@
-function [Eon] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1)
+function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1)
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量

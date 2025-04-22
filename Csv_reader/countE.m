@@ -112,166 +112,39 @@ fprintf('       Id偏移量:%03fA\n',meanId);
 % ====================== Vcetop Ictop 计算 ======================
 [Vcetop,Ictop,ton10,toff90,tIcm] = count_Vcetop_Ictop(Vge,ch2,ch3,ton1,toff1,ton2,toff2,cnton1,cntoff1);
 
+
 % ====================== 开通损耗计算（Eon） ======================
 [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
+
 
 % ====================== 关断损耗计算（Eoff） ======================
 [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90);
 
+
 % ====================== Vcemax Vdmax 计算 ======================
 [Vcemax,Vdmax] = count_Vcemax_Vdmax(num,time,ch2,ch4,Ictop,path,dataname,toff90,cntoff1,ton2,toff2);
+
 
 % ====================== 开通时间（Ton）计算 ======================
 [tdon,tr] = count_Ton(num,nspd,time,ch1,Ic,Ictop,path,dataname,ton10,toff2);
 
+
 % ====================== 关断时间（Toff）计算与绘图 ======================
 [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
+
 
 % ====================== Prr/Erec计算 ======================
 [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
 
-%% dv/dt计算模块
-% 阈值定义
-V_10 = Vcetop * 0.1;
-V_90 = Vcetop * 0.9;
-V_a  = Vcetop * dvdtmode(1)/100;
-V_b  = Vcetop * dvdtmode(2)/100;
 
-% 电压上升沿阈值检测
-window_dv_start = max(1, SWoff_start-50);  % 起始索引不低于1
-window_dv_end = min(length(Vce), SWoff_stop+50);  % 终止索引不超过数组长度
-window_dv = window_dv_start : window_dv_end;
+% ====================== dv/dt计算模块 ======================
+[dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
+% 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
+dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
 
-rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
-rise_end_idx  = find(Vce(rise_start_idx:window_dv(end)) >= V_90, 1, 'first') + rise_start_idx - 1;
-delta_time = (rise_end_idx  - rise_start_idx) * nspd * 1e-9;      % 时间差(ns转秒)
-dvdt = (Vce(rise_end_idx ) - Vce(rise_start_idx)) / delta_time * 1e-6;
 
-rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
-rise_end_idx_b  = find(Vce(rise_start_idx:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx - 1;
-delta_time_a_b = (rise_end_idx_b  - rise_start_idx_a) * nspd * 1e-9;      % 时间差(ns转秒)
-dvdt_a_b = (Vce(rise_end_idx_b) - Vce(rise_start_idx_a)) / delta_time_a_b * 1e-6;
-
-% 保持原始绘图逻辑
-% figure;
-plot(time(rise_start_idx-50:rise_end_idx +50), Vce(rise_start_idx-50:rise_end_idx +50), 'b');
-hold on;
-plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
-plot(time(rise_start_idx), Vce(rise_start_idx), 'ro', 'MarkerFaceColor','r');
-plot(time(rise_end_idx ), Vce(rise_end_idx ), 'ro', 'MarkerFaceColor','r');
-
-text(time(rise_start_idx+3),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
-text(time(rise_end_idx +3),Vce(rise_end_idx ),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
-text(time(rise_start_idx-40),Vcemax*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
-text(time(rise_start_idx-40),Vcemax*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
-if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
-    plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
-    plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
-    plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
-    text(time(rise_start_idx-40),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(dvdt_a_b),'V/us'],'FontSize',13);
-    % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-    dvdt = dvdt_a_b;
-end
-% 坐标轴设置
-ylim([0, Vcemax*1.1]);
-xlim([time(rise_start_idx-50), time(rise_end_idx +50)]);
-title(['Ic=',num2str(fix(Ictop)),'A dv/dt计算']);
-grid on;
-
-% 保存路径处理
-save_dir = fullfile(path, 'pic', dataname, 'dvdt');
-if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A dvdt-Vcetop=',num2str(fix(Vcetop)),'.png']), 'png');
-close(gcf);
-hold off
-
-%% di/dt计算模块
-
-% 阈值定义
-Ic_a  = Ictop * didtmode(1)/100;
-Ic_b  = Ictop * didtmode(2)/100;
-
-% 状态机参数初始化
-state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
-valid_rise_start = [];
-valid_rise_end = [];
-
-% 动态窗口生成
-time_step = nspd * 1e-9; 
-max_search_length = fix(2e-9 * tdon / time_step);
-window_di = fix(SWon_start - max_search_length): fix(SWon_stop + max_search_length);
-
-% 状态机主循环
-for i = window_di
-    if ch3(i) >= 0
-        % fprintf('采样点 %f\n',ch3(i))
-    end
-    switch state
-        case 0 % 等待触发
-            if ch3(i) >= Ic_a
-                valid_rise_start = i;
-                % fprintf('触发值 %f\n',ch3(valid_rise_start))
-                state = 1;
-            end
-            
-        case 1 % 低阈值触发
-            if max(ch3(i:i+gate_didt)) < ch3(i-1)
-                % fprintf('因为 %f < %f 触发回落\n',min(ch3(i:i+10)), ch3(i-1))
-                state = 0; % 发现回落重置
-                valid_rise_start = [];
-            else
-                if ch3(i) >= Ic_b
-                    valid_rise_end = i;
-                    state = 2;
-                end
-            end
-            
-        case 2 % 完成检测
-            break;
-    end
-end
-
-% fprintf('valid_rise_start = %f\nvalid_rise_end = %f\n',ch3(valid_rise_start),ch3(valid_rise_end));
-
-% 带保护的计算逻辑
-if time(valid_rise_end) == time(valid_rise_start)
-    didt = 0;
-else
-    didt = (ch3(valid_rise_end) - ch3(valid_rise_start)) / (time(valid_rise_end)-time(valid_rise_start)) / 1e6;
-end
-
-if isempty(didt)
-    didt = 0;
-end
-
-% 绘图
-% figure;
-plot(time(SWon_start-50:SWon_stop+50), ch3(SWon_start-50:SWon_stop+50), 'b');
-hold on;
-plot(time(valid_rise_start:valid_rise_end), ch3(valid_rise_start:valid_rise_end), 'r', 'LineWidth',1.5);
-plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r');
-plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
-
-% 动态标注
-text(time(valid_rise_start+3),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
-text(time(valid_rise_end+3),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
-text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
-text(time(SWon_start-40),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
-
-% 坐标轴设置
-ylim([-5, max(ch3(SWon_start-50:SWon_stop+50))*1.1]);
-xlim([time(SWon_start-50), time(SWon_stop+50)]);
-title(['Ic=',num2str(fix(Ictop)),'A di/dt计算']);
-grid on;
-
-% 保存处理
-save_dir = fullfile(path, 'pic', dataname, 'didt');
-if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt.png']), 'png');
-close(gcf);
-hold off
+% ====================== di/dt计算模块 ======================
+[didt] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,tdon,SWon_start,SWon_stop);
 
 %% 输出表
 output=zeros(16,1);
@@ -281,7 +154,7 @@ output(2)=Eon;
 output(3)=Eoff;
 output(4)=Vcemax;
 output(5)=Vdmax;
-output(6)=dvdt;
+output(6)=dvdtoutput;
 output(7)=didt;
 output(8)=Vcetop;
 output(9)=Erec;

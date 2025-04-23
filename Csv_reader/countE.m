@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc)
+function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Dflag)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -134,8 +134,12 @@ fprintf('       Id偏移量:%03fA\n',meanId);
 
 
 % ====================== Prr/Erec计算 ======================
-[Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
-
+if Dflag
+    [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
+else
+    Prrmax = 0;
+    Erec = 0;
+end
 
 % ====================== dv/dt计算模块 ======================
 [dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);

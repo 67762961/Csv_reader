@@ -16,13 +16,13 @@ Chmode     = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode   = Para_mode.didtmode ;       %% didt模式
+Dflag     =  Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 
 % 数据配置
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
 gate_Erec  = Para_data.gate_Erec;       %% Erec下降沿检测允许抬升阈值
 
 % 绘图配置参
-Dflag     =  Prra_draw.Dflag    ;       %% 是否有二极管反向恢复测试
 Vgeth     =  Prra_draw.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
 Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 
@@ -32,9 +32,10 @@ clipboard('copy', dataname);
 
 % 定义基础路径结构
 subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr'};
+folders_length = length(subfolders) - 1 + Dflag;
 
 % 批量创建路径
-for i = 1:length(subfolders)
+for i = 1:folders_length
     target_path = fullfile(path, 'pic', dataname, subfolders{i});
     if ~exist(target_path, 'dir')  % 存在性检测方法
         try
@@ -60,26 +61,19 @@ outputtable=strcat([path,'\result\',ouput_table]);
 title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","dv/dt(V/us)","di/dt(A/us)","Vcetop(V)","Erec(mJ)","Prrmax(kW)","T(d)on(ns)", ...
     "T-rise(ns)","Ton(ns)","T(d)off(ns)","T-fall(ns)","Toff(ns)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A1','UseExcel',0)
-cnt=1;
-data1=zeros(datend-datstart+1,16);
 
 %% 数据读取与写入
+cnt=1;
+data1=zeros(datend-datstart+1,16);
 for tablenum=datstart:datend
-    if Dflag==1
-        data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec);
-    elseif Dflag==0
-        data1(cnt,:)=countE1(location,tablename,tablenum,Ic_c,Vce_c,location,dataname);
-    end
+    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Dflag);
     cnt=cnt+1;
 end
 writematrix(data1,outputtable,'sheet',dataname,'range','A2');
 
 %% 绘图
-if Dflag
-    draw(data1,dataname,path,Vmax);
-elseif Dflag==0
-    draw1(data1,dataname,path,Vmax);
-end
+draw(data1,dataname,path,Dflag,Vmax);
+
 %% 曲线拟合
 
 % fit_Eon=polyfit(data1(:,2),data1(:,2),5);

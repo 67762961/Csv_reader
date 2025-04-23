@@ -1,4 +1,4 @@
-function draw(data1,dataname,path,Vmax)
+function draw(data1,dataname,path,Dflag,Vmax)
 % 整组数据对比图像绘制函数
 %   本函数用于生成IGBT双脉冲测试的多维度特性曲线，包含开关损耗、电压应力、
 %   电流变化率等核心指标的可视化分析
@@ -139,32 +139,38 @@ grid on
 saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-dvdt'],'.png'])
 close(gcf);
 
-%% 绘制Erec
-plot(Ic,Erec,'color','#0072BD','LineWidth',2);
-hold on
-xlabel('Ic(A)');
-ylabel('Erec(mJ)');
-legend('Erec','location','southwest');
-legend('boxoff')
-ylim([0,abs(max(Erec)*1.2)]);
-set(gca,'FontSize',12)
-title(strcat(dataname,' Erec'),'FontSize',14);
-grid on
-saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Erec'],'.png'])
-close(gcf);
 
-%% 绘制Prrmax
-plot(Ic,Prrmax,'color','#0072BD','LineWidth',2);
-hold on
-xlabel('Ic(A)');
-ylabel('Prrmax(kW)');
-legend('Prrmax','location','southwest');
-legend('boxoff')
-ylim([0,max(Prrmax)*1.2]);
-set(gca,'FontSize',12)
-title(strcat(dataname,' Prrmax'),'FontSize',14);
-grid on
-saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Prrmax'],'.png'])
-close(gcf);
+
+%%二极管反向回复数据绘图
+if Dflag
+    % 绘制Erec
+    plot(Ic,Erec,'color','#0072BD','LineWidth',2);
+    hold on
+    xlabel('Ic(A)');
+    ylabel('Erec(mJ)');
+    legend('Erec','location','southwest');
+    legend('boxoff')
+    ylim([0,abs(max(Erec)*1.2)]);
+    set(gca,'FontSize',12)
+    title(strcat(dataname,' Erec'),'FontSize',14);
+    grid on
+    saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Erec'],'.png'])
+    close(gcf);
+
+    % 绘制Prrmax
+    plot(Ic,Prrmax,'color','#0072BD','LineWidth',2);
+    hold on
+    xlabel('Ic(A)');
+    ylabel('Prrmax(kW)');
+    legend('Prrmax','location','southwest');
+    legend('boxoff')
+    ylim([0,max(Prrmax)*1.2]);
+    set(gca,'FontSize',12)
+    title(strcat(dataname,' Prrmax'),'FontSize',14);
+    grid on
+    saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Prrmax'],'.png'])
+    close(gcf);
+
+end
 end
 

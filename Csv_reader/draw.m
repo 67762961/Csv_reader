@@ -47,6 +47,15 @@ Vcetop=data1(:,8);
 Erec=data1(:,9);
 Prrmax=data1(:,10);
 
+% 横坐标范围计算
+maxIc = max(Ic);
+if maxIc >= 100 && maxIc <= 140
+    plotend = 120;
+else
+    plotend = 800;
+end
+
+
 % 绘制IGBT开关损耗
 plot(Ic,Eon,'color','#A2142F','LineWidth',2);
 hold on;
@@ -55,6 +64,7 @@ xlabel('Ic(A)');
 ylabel('Eon/Eoff(mJ)');
 legend('Eon','Eoff','location','northwest');
 legend('boxoff')
+xlim([0,plotend])
 set(gca,'FontSize',12)
 title(strcat(dataname,' E-IGBT'),'FontSize',14);
 grid on
@@ -65,11 +75,12 @@ hold off
 %% 绘制Vcemax
 plot(Ic,Vcemax,'color','#0072BD','LineWidth',2);
 hold on
-plot([0,fix(max(Ic)/50+0.5)*50],[Vmax,Vmax],'color','red','LineWidth',2);
+plot([0,plotend],[Vmax,Vmax],'color','red','LineWidth',2);
 xlabel('Ic(A)');
 ylabel('Vcemax(V)');
 legend('Vcemax',[num2str(Vmax),'V'],'location','southwest');
 legend('boxoff')
+xlim([0,plotend])
 ylim([0,Vmax+100]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' Vcemax'),'FontSize',14);
@@ -81,11 +92,12 @@ hold off
 %% 绘制Vdmax
 plot(Ic,Vdmax,'color','#0072BD','LineWidth',2);
 hold on
-plot([0,fix(max(Ic)/50+0.5)*50],[Vmax,Vmax],'color','red','LineWidth',2);
+plot([0,plotend],[Vmax,Vmax],'color','red','LineWidth',2);
 xlabel('Ic(A)');
 ylabel('Vdmax(V)');
 legend('Vdmax',[num2str(Vmax),'V'],'location','southwest');
 legend('boxoff')
+xlim([0,plotend])
 ylim([0,Vmax+100]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' Vdmax'),'FontSize',14);
@@ -115,7 +127,7 @@ xlabel('Ic(A)');
 ylabel('di/dt(A/us)');
 legend('di/dt','location','southwest');
 legend('boxoff')
-xlim([0,max(Ic)]);
+xlim([0,plotend])
 ylim([0,max(didt)+500]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' di/dt'),'FontSize',14);
@@ -131,7 +143,7 @@ xlabel('Ic(A)');
 ylabel('dv/dt(V/us)');
 legend('dv/dt','location','southwest');
 legend('boxoff')
-xlim([0,max(Ic)]);
+xlim([0,plotend])
 ylim([0,max(dvdt)+500]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' dv/dt'),'FontSize',14);
@@ -164,6 +176,7 @@ if Dflag
     ylabel('Prrmax(kW)');
     legend('Prrmax','location','southwest');
     legend('boxoff')
+    xlim([0,plotend])
     ylim([0,max(Prrmax)*1.2]);
     set(gca,'FontSize',12)
     title(strcat(dataname,' Prrmax'),'FontSize',14);

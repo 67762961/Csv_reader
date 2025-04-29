@@ -54,7 +54,8 @@ valid_rise_length = valid_rise_end - valid_rise_start;
 if time(valid_rise_end) == time(valid_rise_start)
     didt = 0;
 else
-    didt = (ch3(valid_rise_end) - ch3(valid_rise_start)) / (time(valid_rise_end)-time(valid_rise_start)) / 1e6;
+    delta_time = (valid_rise_end  - valid_rise_start) * nspd * 1e-9;      % 时间差(ns转秒)
+    didt = (ch3(valid_rise_end) - ch3(valid_rise_start)) / delta_time * 1e-6;
 end
 
 if isempty(didt)

@@ -128,7 +128,6 @@ ylabel('di/dt(A/us)');
 legend('di/dt','location','southwest');
 legend('boxoff')
 xlim([0,plotend])
-ylim([0,max(didt)+500]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' di/dt'),'FontSize',14);
 grid on
@@ -144,7 +143,6 @@ ylabel('dv/dt(V/us)');
 legend('dv/dt','location','southwest');
 legend('boxoff')
 xlim([0,plotend])
-ylim([0,max(dvdt)+500]);
 set(gca,'FontSize',12)
 title(strcat(dataname,' dv/dt'),'FontSize',14);
 grid on

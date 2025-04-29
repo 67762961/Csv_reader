@@ -16,8 +16,8 @@ toff_delay_range = toff90 : toffIcm90;  % 延迟阶段索引
 toff_slope_range = toffIcm90 : toffIcm10;  % 斜率阶段索引
 
 % 时间参数计算（单位：纳秒）
-tdoff = (time(toffIcm90) - time(toff90)) * nspd * 1e9;  
-tf = (time(toffIcm10) - time(toffIcm90)) * nspd * 1e9;
+tdoff = ((toffIcm90 - toff90 > 0)) * (time(toffIcm90) - time(toff90)) * nspd * 1e9;  
+tf = ((toffIcm10 - toffIcm90) > 0) * (time(toffIcm10) - time(toffIcm90)) * nspd * 1e9;
 
 % 绘图优化
 % figure;

@@ -22,8 +22,8 @@ ton_delay_range = ton10 : tonIcm10;
 ton_slope_range = tonIcm10 : tonIcm90;  
 
 % 时间参数计算
-tdon = (time(tonIcm10) - time(ton10)) * nspd * 1e9;  
-tr = (time(tonIcm90) - time(tonIcm10)) * nspd * 1e9;
+tdon = ((tonIcm10 - ton10 > 0)) * (time(tonIcm10) - time(ton10)) * nspd * 1e9;  
+tr = ((tonIcm90 - tonIcm10 > 0)) * (time(tonIcm90) - time(tonIcm10)) * nspd * 1e9;
 
 % 绘图优化（复用结构）
 % figure;

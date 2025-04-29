@@ -13,7 +13,7 @@ SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
 
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));
-windowEoff = (SWoff_start-20):SWoff_stop;
+windowEoff = SWoff_start:SWoff_stop;
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;
@@ -36,8 +36,8 @@ ylim([-0.2,1.5]);
 % 标注
 text(time(SWoff_start-80),1.1,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
 text(time(SWoff_start),0.45,'Poff','color','red','FontSize',13);
-text(time(SWoff_start+160),0.95,'Vce','color','green','FontSize',13);
-text(time(SWoff_start-30),0.95,'Ic','color','blue','FontSize',13);
+text(time(SWoff_stop),0.95,'Vce','color','green','FontSize',13);
+text(time(SWoff_start),0.95,'Ic','color','blue','FontSize',13);
 legend('P_{off}','V_{ce}','I_c', 'Location','northeast');
 title(sprintf('Ic=%dA 关断损耗分析（归一化）', fix(Ictop)));
 grid on;

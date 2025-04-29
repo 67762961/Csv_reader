@@ -12,7 +12,7 @@ SWon_start = valid_range(1) + SWon_start_indices - 1;
 SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
 Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start-20):(SWon_stop+20); % 定义计算窗口
+windowEon = (SWon_start):(SWon_stop); % 定义计算窗口
 
 % 向量化计算功率和能量
 Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）
@@ -35,8 +35,8 @@ ylim([-0.2,1.5]);
 % 标注和格式设置
 text(time(SWon_start-80),1.1,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
 text(time(SWon_start-30),0.4,'Pon','color','red','FontSize',13);
-text(time(SWon_start-50),0.9,'Vce','color','green','FontSize',13);
-text(time(SWon_start+70),0.9,'Ic','color','blue','FontSize',13);
+text(time(SWon_start),0.9,'Vce','color','green','FontSize',13);
+text(time(SWon_stop),0.9,'Ic','color','blue','FontSize',13);
 legend('P_{on}','V_{ce}','I_c', 'Location','northeast');
 title(sprintf('Ic=%dA 开通损耗分析（归一化）', fix(Ictop)));
 grid on;

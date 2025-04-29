@@ -14,7 +14,7 @@ Para_file.datnum     = 16;                                  %% 本组csv文件  
 % 模式配置参数    
 Para_mode.nspd       = 1.6;                                 %% csv采样率        CSV保存时示波器设置ns/pt
 Para_mode.Chmode     = 'setch';                             %% 通道分配模式     'setch'或'findch'
-Para_mode.Ch_labels  = {1, 2, 3, 4, 5};                     %% 通道分配         Vge Vce Ic Vd Id对应通道
+Para_mode.Ch_labels  = {1, 2, 3, 4, 5, 6};                     %% 通道分配         Vge Vce Ic Vd Id对应通道
 Para_mode.dvdtmode   = [10, 90];                            %% dvdt模式选择     额外的dvdt计算起始和结束百分比
 Para_mode.didtmode   = [10, 90];                            %% didt模式选择     新设定didt计算起始和结束百分比
 Para_mode.Dflag      = 1;                                   %% 二极管反向恢复   是否有二极管反向恢复测试

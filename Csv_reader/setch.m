@@ -27,6 +27,8 @@ data_out(:,Ch_labels{2}+1) = data_in(:,3);
 data_out(:,Ch_labels{3}+1) = data_in(:,4);
 data_out(:,Ch_labels{4}+1) = data_in(:,5);
 data_out(:,Ch_labels{5}+1) = data_in(:,6);
+data_out(:,Ch_labels{6}+1) = data_in(:,7);
+
 
 signal_labels = {'Vge', 'Vce', 'Ic', 'Vd', 'Id'};
 fprintf('通道分配结果:\n');

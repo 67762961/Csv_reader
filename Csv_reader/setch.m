@@ -22,12 +22,11 @@ function [data_out] = setch(data_in, Ch_labels)
 
 data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴
-data_out(:,Ch_labels{1}+1) = data_in(:,2);
-data_out(:,Ch_labels{2}+1) = data_in(:,3);
-data_out(:,Ch_labels{3}+1) = data_in(:,4);
-data_out(:,Ch_labels{4}+1) = data_in(:,5);
-data_out(:,Ch_labels{5}+1) = data_in(:,6);
-data_out(:,Ch_labels{6}+1) = data_in(:,7);
+data_out(:,2) = data_in(:,Ch_labels{1}+1);
+data_out(:,3) = data_in(:,Ch_labels{2}+1);
+data_out(:,4) = data_in(:,Ch_labels{3}+1);
+data_out(:,5) = data_in(:,Ch_labels{4}+1);
+data_out(:,6) = data_in(:,Ch_labels{5}+1);
 
 
 signal_labels = {'Vge', 'Vce', 'Ic', 'Vd', 'Id'};

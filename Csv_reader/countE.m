@@ -31,7 +31,7 @@ ch5 = data(:,6);        % Id（二极管电流）
 
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
-Vge = smoothdata(ch1, 'movmedian', 60);  
+Vge = smoothdata(ch1, 'movmedian', 10);  
 % 集射电压：移动中值滤波
 Vce = smoothdata(ch2, 'movmedian', 10, 'omitnan');
 % 集电极电流：移动平均滤波

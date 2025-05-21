@@ -38,6 +38,7 @@ text(time(SWon_start-30),0.4,'Pon','color','red','FontSize',13);
 text(time(SWon_start),0.9,'Vce','color','green','FontSize',13);
 text(time(SWon_stop),0.9,'Ic','color','blue','FontSize',13);
 legend('P_{on}','V_{ce}','I_c', 'Location','northeast');
+legend('boxoff');
 title(sprintf('Ic=%dA 开通损耗分析（归一化）', fix(Ictop)));
 grid on;
 

@@ -83,6 +83,7 @@ text(time(t_Prrmax+5),1.3,'Prrmax','color','red','FontSize',13);
 xlim([time(Erec_start-100),time(Erec_stop+100)]);
 ylim([-1.2,2]);
 legend('I_{d}','V_{d}','E_{rec}(t)','P_{rr}', 'Location','northwest');
+legend('boxoff');
 title(strcat('Ic=',num2str(fix(Ictop)),'A Prr-Erec(归一化)'));
 grid on
 

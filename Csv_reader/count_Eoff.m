@@ -39,6 +39,7 @@ text(time(SWoff_start),0.45,'Poff','color','red','FontSize',13);
 text(time(SWoff_stop),0.95,'Vce','color','green','FontSize',13);
 text(time(SWoff_start),0.95,'Ic','color','blue','FontSize',13);
 legend('P_{off}','V_{ce}','I_c', 'Location','northeast');
+legend('boxoff');
 title(sprintf('Ic=%dA 关断损耗分析（归一化）', fix(Ictop)));
 grid on;
 

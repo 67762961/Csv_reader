@@ -16,7 +16,8 @@ Chmode     = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode   = Para_mode.didtmode ;       %% didt模式
-Dflag     =  Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
+Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
+Drawflag   = Para_mode.Drawflag    ;       %% 是否需要绘图分析
 
 % 数据配置
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
@@ -31,8 +32,13 @@ dataname = [num2str(datstart, '%03d'), '-', dataname];
 clipboard('copy', dataname);
 
 % 定义基础路径结构
-subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr'};
-folders_length = length(subfolders) - 1 + Dflag;
+if(Drawflag)
+    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr'};
+    folders_length = length(subfolders) - 1 + Dflag;
+else
+    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Prr'};
+    folders_length = length(subfolders) - 1 + Dflag;
+end
 
 % 批量创建路径
 for i = 1:folders_length
@@ -72,7 +78,9 @@ end
 writematrix(data1,outputtable,'sheet',dataname,'range','A2');
 
 %% 绘图
-draw(data1,dataname,path,Dflag,Vmax);
+if(Drawflag)
+    draw(data1,dataname,path,Dflag,Vmax);
+end
 
 %% 曲线拟合
 

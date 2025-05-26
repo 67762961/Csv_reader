@@ -5,7 +5,7 @@ function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,pat
 %开通起始时刻寻找
 search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
 valid_range = search_start:min(toff2, length(Ic));
-SWon_start_indices = find(Ic(valid_range) >= max(0.1*Ictop, 3), 1, 'first');
+SWon_start_indices = find(Ic(valid_range) >= max(0.15*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
 
 %开通结束时刻寻找 
@@ -28,9 +28,9 @@ Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
 plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
-plot(time,Ic/Ictop,'b');
+plot(time,Ic/max(Ic),'b');
 xlim([time(SWon_start-100),time(SWon_stop+100)]);
-ylim([-0.2,1.5]);
+ylim([-0.2,1.2]);
 
 % 标注和格式设置
 text(time(SWon_start-80),1.1,['Eon=',num2str(Eon),'mJ'],'FontSize',13);

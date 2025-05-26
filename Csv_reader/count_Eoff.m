@@ -31,7 +31,7 @@ hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/Ictop,'b');
 xlim([time(SWoff_start-100),time(SWoff_stop+100)]);
-ylim([-0.2,1.5]);
+ylim([-0.2,1.2]);
 
 % 标注
 text(time(SWoff_start-80),1.1,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);

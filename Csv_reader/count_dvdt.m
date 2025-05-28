@@ -53,8 +53,8 @@ if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
     text(time(rise_start_idx-40),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(dvdt_a_b),'V/us'],'FontSize',13);
 end
 % 坐标轴设置
-ylim([0, Vcemax*1.1]);
-xlim([time(rise_start_idx-50), time(rise_end_idx +50)]);
+ylim([0, Vcemax]);
+xlim([time(SWoff_start-50), time(SWoff_stop+50)]);
 title(['Ic=',num2str(fix(Ictop)),'A dv/dt计算']);
 grid on;
 

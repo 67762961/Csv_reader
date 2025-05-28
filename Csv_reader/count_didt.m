@@ -77,8 +77,8 @@ text(time(valid_rise_start-3*valid_rise_length+fix(valid_rise_length/10)),max(ch
 text(time(valid_rise_start-3*valid_rise_length+fix(valid_rise_length/10)),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
 
 % 坐标轴设置
-ylim([-5, max(ch3(SWon_start-50:SWon_stop+50))*1.1]);
-xlim([time(valid_rise_start-3*valid_rise_length), time(valid_rise_end+3*valid_rise_length)]);
+ylim([0, max(ch3(SWon_start-50:SWon_stop+50))]);
+xlim([time(SWon_start-50), time(SWon_stop+50)]);
 title(['Ic=',num2str(fix(Ictop)),'A di/dt计算']);
 grid on;
 

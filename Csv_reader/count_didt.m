@@ -64,7 +64,8 @@ end
 
 % 绘图
 % figure;
-plot(time(SWon_start-50:SWon_stop+50), ch3(SWon_start-50:SWon_stop+50), 'b');
+Piclength = fix((SWon_stop - SWon_start)/2);
+plot(time(valid_rise_start - Piclength:valid_rise_end + Piclength), ch3(valid_rise_start - Piclength:valid_rise_end + Piclength), 'b');
 hold on;
 plot(time(valid_rise_start:valid_rise_end), ch3(valid_rise_start:valid_rise_end), 'r', 'LineWidth',1.5);
 plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r');
@@ -73,12 +74,12 @@ plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 % 动态标注
 text(time(valid_rise_start+3),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
 text(time(valid_rise_end+3),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
-text(time(valid_rise_start-3*valid_rise_length+fix(valid_rise_length/10)),max(ch3(SWon_start-50:SWon_stop))*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
-text(time(valid_rise_start-3*valid_rise_length+fix(valid_rise_length/10)),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
+text(time(valid_rise_start-Piclength),max(ch3(SWon_start-50:SWon_stop))*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
+text(time(valid_rise_start-Piclength),max(ch3(SWon_start-50:SWon_stop))*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
 
 % 坐标轴设置
-ylim([0, max(ch3(SWon_start-50:SWon_stop+50))]);
-xlim([time(SWon_start-50), time(SWon_stop+50)]);
+ylim([0, max(ch3(valid_rise_start-50:valid_rise_start+50))]);
+xlim([time(valid_rise_start - Piclength), time(valid_rise_end + Piclength)]);
 title(['Ic=',num2str(fix(Ictop)),'A di/dt计算']);
 grid on;
 

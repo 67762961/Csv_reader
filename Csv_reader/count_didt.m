@@ -1,6 +1,18 @@
-function [didt] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,tdon,SWon_start,SWon_stop)
+function [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ic,Ictop,path,dataname,ton10,SWon_start,SWon_stop)
 
 % ====================== di/dt计算模块 ======================
+
+% 开通时电流=10%时刻（区间：ton2到toff2）
+% 要求连续3个采样点超过阈值（抗噪声）
+debounce_samples = 3;
+for i = ton10:length(Ic)-debounce_samples
+    if all(Ic(i:i+debounce_samples-1) > 0.1*Ictop)
+        tonIcm10 = i;
+        break;
+    end
+end
+
+tdon = ((tonIcm10 - ton10 > 0)) * (time(tonIcm10) - time(ton10)) * nspd * 1e9;  
 
 % 阈值定义
 Ic_a  = Ictop * didtmode(1)/100;
@@ -86,3 +98,6 @@ if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt.png']), 'png');
 close(gcf);
 hold off
+
+tonIcm10 = valid_rise_start;
+tonIcm90 = valid_rise_end;

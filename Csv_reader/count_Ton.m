@@ -1,19 +1,6 @@
-function [tdon,tr] = count_Ton(num,nspd,time,ch1,Ic,Ictop,path,dataname,ton10,toff2)
+function [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90)
 
 %% ================ 开通时间（Ton）计算与绘图 ================
-% 开通时电流=10%时刻（区间：ton2到toff2）
-% 要求连续3个采样点超过阈值（抗噪声）
-debounce_samples = 3;
-for i = ton10:length(Ic)-debounce_samples
-    if all(Ic(i:i+debounce_samples-1) > 0.1*Ictop)
-        tonIcm10 = i;
-        break;
-    end
-end
-
-% 开通时电流=90%时刻（区间：tonIcm10到toff2）
-tonIcm90_indices = find(Ic(tonIcm10:min(toff2, length(Ic))) > Ictop*0.9, 1, 'first');
-tonIcm90 = tonIcm10 + tonIcm90_indices - 1;
 
 % 索引边界保护
 ton_bg_start = max(1, fix(ton10 * 0.997));

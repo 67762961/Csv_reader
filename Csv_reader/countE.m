@@ -131,14 +131,19 @@ end
 % ====================== Vcemax Vdmax 计算 ======================
 [Vcemax,Vdmax] = count_Vcemax_Vdmax(num,time,ch2,ch4,Ictop,path,dataname,toff90,cntoff1,ton2,toff2);
 
+% ====================== dv/dt计算模块 ======================
+[dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
+% 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
+dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
+
+% ====================== di/dt计算模块 ======================
+[didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ic,Ictop,path,dataname,ton10,SWon_start,SWon_stop);
 
 % ====================== 开通时间（Ton）计算 ======================
-[tdon,tr] = count_Ton(num,nspd,time,ch1,Ic,Ictop,path,dataname,ton10,toff2);
-
+[tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
 
 % ====================== 关断时间（Toff）计算与绘图 ======================
 [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
-
 
 % ====================== Prr/Erec计算 ======================
 if Dflag
@@ -148,14 +153,6 @@ else
     Erec = 0;
 end
 
-% ====================== dv/dt计算模块 ======================
-[dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
-% 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
-
-
-% ====================== di/dt计算模块 ======================
-[didt] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,tdon,SWon_start,SWon_stop);
 
 %% 输出表
 output=zeros(16,1);

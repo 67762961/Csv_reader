@@ -34,7 +34,7 @@ end
 
 % 保持原始绘图逻辑
 % figure;
-Piclength = fix((SWoff_stop - SWoff_start)/2);
+Piclength = fix((SWoff_stop - SWoff_start));
 plot(time(rise_start_idx-Piclength:rise_end_idx +Piclength), Vce(rise_start_idx-Piclength:rise_end_idx +Piclength), 'b');
 hold on;
 plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
@@ -43,18 +43,18 @@ plot(time(rise_end_idx ), Vce(rise_end_idx ), 'ro', 'MarkerFaceColor','r');
 
 text(time(rise_start_idx+3),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
 text(time(rise_end_idx +3),Vce(rise_end_idx ),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
-text(time(rise_start_idx-Piclength),Vcemax*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
-text(time(rise_start_idx-Piclength),Vcemax*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
+text(time(rise_start_idx-fix(Piclength*0.9)),Vcemax*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
+text(time(rise_start_idx-fix(Piclength*0.9)),Vcemax*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
 if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
     plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
     plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
     text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
     plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
     text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
-    text(time(rise_start_idx-Piclength),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(dvdt_a_b),'V/us'],'FontSize',13);
+    text(time(rise_start_idx-fix(Piclength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(dvdt_a_b),'V/us'],'FontSize',13);
 end
 % 坐标轴设置
-ylim([0, Vcemax]);
+ylim([-fix(Vcemax/20), Vcemax]);
 xlim([time(rise_start_idx-Piclength), time(rise_end_idx +Piclength)]);
 title(['Ic=',num2str(fix(Ictop)),'A dv/dt计算']);
 grid on;

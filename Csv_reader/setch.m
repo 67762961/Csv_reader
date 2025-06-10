@@ -22,17 +22,17 @@ function [data_out] = setch(data_in, Ch_labels)
 
 data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴
-data_out(:,2) = data_in(:,Ch_labels(1)+1);
-data_out(:,3) = data_in(:,Ch_labels(2)+1);
-data_out(:,4) = data_in(:,Ch_labels(3)+1);
-data_out(:,5) = data_in(:,Ch_labels(4)+1);
-data_out(:,6) = data_in(:,Ch_labels(5)+1);
 
+for j = 1:length(Ch_labels)
+    if(Ch_labels(j))
+        data_out(:,j+1) = data_in(:,Ch_labels(j)+1);
+    end
+end
 
-signal_labels = ['Vge', 'Vce', 'Ic', 'Vd', 'Id'];
+signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id"];
 fprintf('通道分配结果:\n');
 fprintf('       ');
-for i = 1:5
+for i = 1:length(Ch_labels)
     fprintf('%s(通道%d)', signal_labels(i), Ch_labels(i));
-    if i < 5, fprintf('   '); else, fprintf('\n'); end
+    if i < length(Ch_labels), fprintf('   '); else, fprintf('\n'); end
 end

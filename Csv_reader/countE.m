@@ -27,7 +27,9 @@ ch1 = data(:,2);        % Vge（门极电压）
 ch2 = data(:,3);        % Vce（集射极电压）
 ch3 = data(:,4);        % Ic（集电极电流）
 ch4 = data(:,5);        % Vd（二极管电压）
-ch5 = data(:,6);        % Id（二极管电流）
+if (length(Ch_labels)>=5)
+    ch5 = data(:,6);        % Id（二极管电流）
+end
 
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
@@ -37,7 +39,10 @@ Vce = smoothdata(ch2, 'movmedian', 10, 'omitnan');
 % 集电极电流：移动平均滤波
 Ic = smoothdata(ch3, 'movmean', 10);  
 Vd = smoothdata(ch4, 'movmedian', 5, 'omitnan');
-Id = smoothdata(ch5, 'movmean', 5);  
+if (length(Ch_labels)>=5)
+    Id = smoothdata(ch5, 'movmean', 5);  
+end
+
 
 %% 开通关断区块划分
 
@@ -91,11 +96,13 @@ fprintf('       Ic偏移量:%03fA\n',meanIc);
 % ch4 = ch4 - meanVd;
 % fprintf('       Vd偏移量:%03fV\n',meanVd);
 
-static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
-meanId = mean(Id(static_id_interval)); 
-Id = Id - meanId;% 电流探头较零
-ch5 = ch5 - meanId;
-fprintf('       Id偏移量:%03fA\n',meanId);
+if (length(Ch_labels)>=5)
+    static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
+    meanId = mean(Id(static_id_interval)); 
+    Id = Id - meanId;% 电流探头较零
+    ch5 = ch5 - meanId;
+    fprintf('       Id偏移量:%03fA\n',meanId);
+end
 
 % % % % % % % % % %
 % % % % 调零调试

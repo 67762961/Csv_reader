@@ -98,7 +98,7 @@ fprintf('       Ic偏移量:%03fA\n',meanIc);
 % ch4 = ch4 - meanVd;
 % fprintf('       Vd偏移量:%03fV\n',meanVd);
 
-if (length(Ch_labels)>=5)
+if (Ch_labels(5)~=0)
     static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
     meanId = mean(Id(static_id_interval)); 
     Id = Id - meanId;% 电流探头较零

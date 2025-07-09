@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Dflag)
+function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Dflag,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -27,20 +27,22 @@ ch1 = data(:,2);        % Vge（门极电压）
 ch2 = data(:,3);        % Vce（集射极电压）
 ch3 = data(:,4);        % Ic（集电极电流）
 ch4 = data(:,5);        % Vd（二极管电压）
-if (length(Ch_labels)>=5)
+
+if (Ch_labels(5)~=0)
     ch5 = data(:,6);        % Id（二极管电流）
 end
 
+
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
-Vge = smoothdata(ch1, 'movmedian', 10);  
+Vge = smoothdata(ch1, 'movmedian', Smooth_Win(1));  
 % 集射电压：移动中值滤波
-Vce = smoothdata(ch2, 'movmedian', 10, 'omitnan');
+Vce = smoothdata(ch2, 'movmedian', Smooth_Win(2), 'omitnan');
 % 集电极电流：移动平均滤波
-Ic = smoothdata(ch3, 'movmean', 10);  
-Vd = smoothdata(ch4, 'movmedian', 5, 'omitnan');
-if (length(Ch_labels)>=5)
-    Id = smoothdata(ch5, 'movmean', 5);  
+Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));  
+Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
+if (Ch_labels(5)~=0)
+    Id = smoothdata(ch5, 'movmean', Smooth_Win(5));  
 end
 
 

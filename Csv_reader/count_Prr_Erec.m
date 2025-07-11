@@ -5,7 +5,7 @@ function [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ic
 Prr_start_indices = find(ch5(ton2:toff2) > min(ch5)*0.1, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) < max(ch4)*0.95, 1, 'first');
+Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.80, 1, 'first');
 Prr_end = Prr_start + Prr_end_indices - 1 + 100;
 
 Prr_length = abs(Prr_end -Prr_start);

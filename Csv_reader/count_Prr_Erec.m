@@ -5,12 +5,14 @@ function [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ic
 Prr_start_indices = find(ch5(ton2:toff2) > min(ch5)*0.1, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.90, 1, 'first');
+Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.80, 1, 'first');
 Prr_end = Prr_start + Prr_end_indices - 1 + 100;
+
+Prr_length = abs(Prr_end -Prr_start);
 % fprintf('%f\n%f\n%f\n',ton2,Prr_start_indices,Prr_end_indices);
 
 % 恢复起始点：首次从负到正跨越零点的位置
-Erec_start = find(diff(ch5(Prr_start:Prr_end) >= 0) == 1, 1, 'first') + Prr_start;
+Erec_start = find(diff(ch5(Prr_start-fix(Prr_length*0.01):Prr_end) >= 0) == 1, 1) + Prr_start;
 Erec_stop = [];
    
 [~, peak_idx] = max(Id(Erec_start:end));

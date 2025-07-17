@@ -29,7 +29,7 @@ ch3 = data(:,4);        % Ic（集电极电流）
 ch4 = data(:,5);        % Vd（二极管电压）
 
 if (Ch_labels(5)~=0)
-    ch5 = data(:,6);        % Id（二极管电流）
+    ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
 end
 
 

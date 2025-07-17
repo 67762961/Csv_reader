@@ -25,7 +25,7 @@ data_out(:,1) = data_in(:,1);           % 保留时间轴
 
 for j = 1:length(Ch_labels)
     if(Ch_labels(j))
-        data_out(:,j+1) = data_in(:,Ch_labels(j)+1);
+        data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
     end
 end
 
@@ -33,6 +33,6 @@ signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id"];
 fprintf('通道分配结果:\n');
 fprintf('       ');
 for i = 1:length(Ch_labels)
-    fprintf('%s(通道%d)', signal_labels(i), Ch_labels(i));
+    fprintf('%s(通道%d)', signal_labels(i), abs(Ch_labels(i)));
     if i < length(Ch_labels), fprintf('   '); else, fprintf('\n'); end
 end

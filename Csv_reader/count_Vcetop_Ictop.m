@@ -14,9 +14,9 @@ ton10_indices = find(Vge(ton2:toff2) > 0.1 * meanVgetop, 1, 'first');
 ton10 = ton2 + ton10_indices - 1;
 
 % 计算Vcetop
-start_idx = fix(toff1 + cntoff1/5);         % 起始索引：关断后1/5周期
-end_idx = fix(ton2 - 3*cntoff1/4);          % 结束索引：下一次导通前3/4周期
-Vcetop = mean(ch2(start_idx:end_idx));      % 使用均值
+start_idx = fix(toff1 + cntoff1/20);         % 起始索引：关断后1/20周期
+end_idx = fix(ton2 - 3*cntoff1/20);          % 结束索引：下一次导通前1/20周期
+Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
 
 % 计算Ictop
 current_interval = ton1 + fix(cnton1/2) : toff1;    % 定义电流峰值搜索区间

@@ -1,18 +1,6 @@
-function [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ic,Ictop,path,dataname,ton10,SWon_start,SWon_stop)
+function [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop)
 
 % ====================== di/dt计算模块 ======================
-
-% 开通时电流=10%时刻（区间：ton2到toff2）
-% 要求连续3个采样点超过阈值（抗噪声）
-debounce_samples = 3;
-for i = ton10:length(Ic)-debounce_samples
-    if all(Ic(i:i+debounce_samples-1) > 0.1*Ictop)
-        tonIcm10 = i;
-        break;
-    end
-end
-
-tdon = ((tonIcm10 - ton10 > 0)) * (time(tonIcm10) - time(ton10)) * nspd * 1e9;  
 
 % 阈值定义
 Ic_a  = Ictop * didtmode(1)/100;
@@ -24,15 +12,16 @@ valid_rise_start = [];
 valid_rise_end = [];
 
 % 动态窗口生成
-time_step = nspd * 1e-9; 
-max_search_length = fix(2e-9 * tdon / time_step);
-window_di = fix(SWon_start - max_search_length): fix(SWon_stop + max_search_length);
+max_search_length = fix((SWon_stop - SWon_start)/3);
+Window_Start = fix(SWon_start - max_search_length);
+Window_Stop = fix(SWon_stop + max_search_length);
+window_di = Window_Start : Window_Stop;
 
 % 状态机主循环
 for i = window_di
-    if ch3(i) >= 0
-        % fprintf('采样点 %f\n',ch3(i))
-    end
+    % if ch3(i) >= 0
+    %     fprintf('采样点 %f\n',ch3(i))
+    % end 
     switch state
         case 0 % 等待触发
             if ch3(i) >= Ic_a
@@ -49,12 +38,10 @@ for i = window_di
             else
                 if ch3(i) >= Ic_b
                     valid_rise_end = i;
-                    state = 2;
+                    % 完成检测
+                    break;
                 end
             end
-            
-        case 2 % 完成检测
-            break;
     end
 end
 
@@ -76,6 +63,7 @@ Piclength = fix((SWon_stop - SWon_start));
 plot(time(valid_rise_start - Piclength:valid_rise_end + Piclength), ch3(valid_rise_start - Piclength:valid_rise_end + Piclength), 'b');
 hold on;
 plot(time(valid_rise_start:valid_rise_end), ch3(valid_rise_start:valid_rise_end), 'r', 'LineWidth',1.5);
+% plot(time(Window_Start:Window_Stop), zeros(Window_Stop-Window_Start+1), 'Black');
 plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r');
 plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 
@@ -87,7 +75,7 @@ text(time(valid_rise_start-fix(Piclength*0.9)),max(ch3(SWon_start-50:SWon_stop))
 
 % 坐标轴设置
 Hlim = max(ch3(valid_rise_start-Piclength:valid_rise_start+Piclength));
-ylim([-fix(Hlim/20), fix(Hlim/20*21)]);
+ylim([-fix(Hlim/20)-1, fix(Hlim/20*21)]);
 xlim([time(valid_rise_start - Piclength), time(valid_rise_end + Piclength)]);
 title(['Ic=',num2str(fix(Ictop)),'A di/dt计算']);
 grid on;

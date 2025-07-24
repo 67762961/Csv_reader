@@ -139,7 +139,7 @@ end
 dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
 
 % ====================== di/dt计算模块 ======================
-[didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ic,Ictop,path,dataname,ton10,SWon_start,SWon_stop);
+[didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
 
 % ====================== 开通时间（Ton）计算 ======================
 [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);

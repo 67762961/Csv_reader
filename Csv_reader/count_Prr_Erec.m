@@ -51,8 +51,10 @@ end
 % fprintf('反向恢复结束点 %f\n',Erec_stop)
 
 % 有效性验证
-assert(~isempty(Prr_start) && ~isempty(Prr_end), '反向恢复时间Prr检测失败');
-assert(~isempty(Erec_start) && ~isempty(Erec_stop), '反向恢复时间Erec检测失败'); 
+assert(~isempty(Prr_start), '反向恢复时间Prr起始点检测失败');
+assert(~isempty(Prr_end), '反向恢复时间Prr结束点检测失败');
+assert(~isempty(Erec_start), '反向恢复时间Erec起始点检测失败');
+assert(~isempty(Erec_stop), '反向恢复时间Erec结束点检测失败');
 
 % 反向恢复能量计算（向量化优化）
 valid_indices = Erec_start:Erec_stop;

@@ -1,5 +1,7 @@
 function main(Para_file,Para_mode,Para_data,Prra_draw)
 
+fprintf('开始读取\n\n')
+
 %% 初始化参数配置
 % 文件路径配置参数
 ouput_table = '数据读取结果.xlsx' ;      %% 输出文件名

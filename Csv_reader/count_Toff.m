@@ -2,7 +2,7 @@ function [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,t
 
 %% ================ 关断时间（Toff）计算与绘图 ================
 % 关断时电流=90%时刻
-toffIcm90_indices = find(Ic(tIcm:min(toff1+50, length(Ic))) < Ictop*0.9, 1, 'first');
+toffIcm90_indices = find(Ic(tIcm-fix(ton2/10):min(toff1+50, length(Ic))) < Ictop*0.9, 1, 'first');
 toffIcm90 = tIcm + toffIcm90_indices - 1;
 
 % 关断时电流=10%时刻
@@ -16,8 +16,17 @@ toff_delay_range = toff90 : toffIcm90;  % 延迟阶段索引
 toff_slope_range = toffIcm90 : toffIcm10;  % 斜率阶段索引
 
 % 时间参数计算（单位：纳秒）
-tdoff = ((toffIcm90 - toff90 > 0)) * (time(toffIcm90) - time(toff90)) * nspd * 1e9;  
-tf = ((toffIcm10 - toffIcm90) > 0) * (time(toffIcm10) - time(toffIcm90)) * nspd * 1e9;
+if (toffIcm90 - toff90 > 0)
+    tdoff = (time(toffIcm90) - time(toff90)) * nspd * 1e9; 
+else
+    tdoff = 0;
+end
+
+if toffIcm10 - toffIcm90 > 0
+    tf = (time(toffIcm10) - time(toffIcm90)) * nspd * 1e9;
+else
+    tf = 0;
+end
 
 % 绘图优化
 % figure;

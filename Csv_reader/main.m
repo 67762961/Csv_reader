@@ -36,10 +36,10 @@ clipboard('copy', dataname);
 
 % 定义基础路径结构
 if(Drawflag)
-    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr'};
+    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr';'Vge_dg'};
     folders_length = length(subfolders) - 1 + Dflag;
 else
-    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Prr'};
+    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Prr';'Vge_dg'};
     folders_length = length(subfolders) - 1 + Dflag;
 end
 
@@ -96,12 +96,12 @@ Para3 = [gate_didt,gate_Erec,Vgeth,Vmax];
 writematrix(Para3,outputtable,'sheet',dataname,'range','A6','UseExcel',0)
 
 title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","dv/dt(V/us)","di/dt(A/us)","Vcetop(V)","Erec(mJ)","Prrmax(kW)","T(d)on(ns)", ...
-    "T-rise(ns)","Ton(ns)","T(d)off(ns)","T-fall(ns)","Toff(ns)"]);  %%定义表头
+    "T-rise(ns)","Ton(ns)","T(d)off(ns)","T-fall(ns)","Toff(ns)","VgeDGmean(V)","VgeDGmax(V)","VgeDGmin(V)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 
 %% 数据读取与写入
 cnt=1;
-data1=zeros(datend-datstart+1,16);
+data1=zeros(datend-datstart+1,19);
 for tablenum=datstart:datend
     data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Dflag,Smooth_Win);
     cnt=cnt+1;

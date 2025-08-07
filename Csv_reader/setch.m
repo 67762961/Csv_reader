@@ -29,7 +29,7 @@ for j = 1:length(Ch_labels)
     end
 end
 
-signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id"];
+signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id", "Vge_dg"];
 fprintf('通道分配结果:\n');
 fprintf('       ');
 for i = 1:length(Ch_labels)

@@ -32,6 +32,9 @@ if (Ch_labels(5)~=0)
     ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
 end
 
+if (Ch_labels(6)~=0)
+    ch6 = data(:,7);        % Id（二极管电流）
+end
 
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
@@ -43,6 +46,9 @@ Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));
 Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
 if (Ch_labels(5)~=0)
     Id = smoothdata(ch5, 'movmean', Smooth_Win(5));  
+end
+if (Ch_labels(6)~=0)
+    Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));  
 end
 
 
@@ -76,7 +82,7 @@ cnton1 = toff1-ton1;
 % 计算两次脉冲间关断时长
 cntoff1 = ton2-toff1; 
 % 计算第二个脉冲开通时长
-% cnton2 = toff2-ton2; 
+cnton2 = toff2-ton2; 
 
 %% 探头偏置校正（静态区间均值）
 static_ic_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
@@ -147,6 +153,9 @@ dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) 
 % ====================== 关断时间（Toff）计算与绘图 ======================
 [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
 
+% ====================== 对管门极监测 Vge_dg ======================
+[Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
+
 % ====================== Prr/Erec计算 ======================
 if Dflag
     [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
@@ -157,7 +166,7 @@ end
 
 
 %% 输出表
-output=zeros(16,1);
+output=zeros(19,1);
 
 output(1)=Ictop;
 output(2)=Eon;
@@ -175,5 +184,8 @@ output(13)=tr+tdon;
 output(14)=tdoff;
 output(15)=tf;
 output(16)=tdoff+tf;
+output(17)=Vge_dg_mean;
+output(18)=Vge_dg_max;
+output(19)=Vge_dg_min;
 
 fprintf('\n');

@@ -11,8 +11,11 @@ SWon_start = valid_range(1) + SWon_start_indices - 1;
 %开通结束时刻寻找 
 SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
+
+Window_width = SWon_stop - SWon_start;
+Window_extend = fix(Window_width/6);
 Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start):(SWon_stop); % 定义计算窗口
+windowEon = (SWon_start - Window_extend):(SWon_stop + Window_extend); % 定义计算窗口
 
 % 向量化计算功率和能量
 Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）

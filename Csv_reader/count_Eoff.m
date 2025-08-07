@@ -13,7 +13,9 @@ SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
 
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));
-windowEoff = SWoff_start:SWoff_stop;
+Window_width = SWoff_stop - SWoff_start;
+Window_extend = fix(Window_width/6);
+windowEoff = (SWoff_start - Window_extend : SWoff_stop + Window_extend);
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;

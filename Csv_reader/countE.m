@@ -154,7 +154,13 @@ dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) 
 [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
 
 % ====================== 对管门极监测 Vge_dg ======================
-[Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
+if (Ch_labels(6)~=0)
+    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
+else
+    Vge_dg_mean = 0;
+    Vge_dg_max = 0;
+    Vge_dg_min = 0;
+end
 
 % ====================== Prr/Erec计算 ======================
 if Dflag

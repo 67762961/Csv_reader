@@ -95,13 +95,12 @@ writematrix(Para2,outputtable,'sheet',dataname,'range','G4','UseExcel',0)
 Para3 = [gate_didt,gate_Erec,Vgeth,Vmax];
 writematrix(Para3,outputtable,'sheet',dataname,'range','A6','UseExcel',0)
 
-title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","dv/dt(V/us)","di/dt(A/us)","Vcetop(V)","Erec(mJ)","Prrmax(kW)","T(d)on(ns)", ...
-    "T-rise(ns)","Ton(ns)","T(d)off(ns)","T-fall(ns)","Toff(ns)","VgeDGmean(V)","VgeDGmax(V)","VgeDGmin(V)"]);  %%定义表头
+title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","T(d)on(ns)","T(d)off(ns)","    ","T rise(ns)","T fall(ns)","VgeDgmean(V)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 
 %% 数据读取与写入
 cnt=1;
-data1=zeros(datend-datstart+1,19);
+data1=zeros(datend-datstart+1,18);
 for tablenum=datstart:datend
     data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Dflag,Smooth_Win);
     cnt=cnt+1;

@@ -172,26 +172,26 @@ end
 
 
 %% 输出表
-output=zeros(19,1);
+output=zeros(17,1);
 
 output(1)=Ictop;
 output(2)=Eon;
 output(3)=Eoff;
 output(4)=Vcemax;
 output(5)=Vdmax;
-output(6)=dvdtoutput;
-output(7)=didt;
-output(8)=Vcetop;
+output(6)=Vcetop;
+output(7)=dvdtoutput;
+output(8)=didt;
 output(9)=Erec;
 output(10)=Prrmax;
-output(11)=tdon;
-output(12)=tr;
-output(13)=tr+tdon;
+output(11)=Vge_dg_max;
+output(12)=Vge_dg_min;
+output(13)=tdon;
 output(14)=tdoff;
-output(15)=tf;
-output(16)=tdoff+tf;
-output(17)=Vge_dg_mean;
-output(18)=Vge_dg_max;
-output(19)=Vge_dg_min;
+
+output(16)=tr;
+output(17)=tf;
+output(18)=Vge_dg_mean;
+
 
 fprintf('\n');

@@ -1,5 +1,7 @@
 function main(Para_file,Para_mode,Para_data,Prra_draw)
 
+Ver = "V2.0.1";
+
 fprintf('开始读取\n\n')
 
 %% 初始化参数配置
@@ -69,31 +71,35 @@ end
 outputtable=strcat([path,'\result\',ouput_table]);
 
 datetime = datestr(now, 'yyyymmdd');
-Paratable1 = char(["日期","路径","器件","表名","起始数","总数","终点数"]);
+Paratable1 = char(["代码版本号","日期","路径","器件","表名","起始数","总数","终点数"]);
 Paratable2 = char(["采样率","通道设置","通道分配","滤波窗口","dvdt模式","didt模式","二极管分析","画图分析"]);
 Paratable3 = char(["didt阈值","Erec阈值","门极阈值","芯片耐压"]);
 writematrix(Paratable1,outputtable,'sheet',dataname,'range','A1','UseExcel',0)
 writematrix(Paratable2,outputtable,'sheet',dataname,'range','A3','UseExcel',0)
 writematrix(Paratable3,outputtable,'sheet',dataname,'range','A5','UseExcel',0)
 
-Para1 = [datstart,datnum,datend];
-writematrix(datetime,outputtable,'sheet',dataname,'range','A2','UseExcel',0)
-writematrix(location,outputtable,'sheet',dataname,'range','B2','UseExcel',0)
-writematrix(tablename,outputtable,'sheet',dataname,'range','C2','UseExcel',0)
-writematrix(dataname,outputtable,'sheet',dataname,'range','D2','UseExcel',0)
-writematrix(Para1,outputtable,'sheet',dataname,'range','E2','UseExcel',0)
+writematrix(Ver,outputtable,'sheet',dataname,'range','A2','UseExcel',0)
+writematrix(datetime,outputtable,'sheet',dataname,'range','B2','UseExcel',0)
+writematrix(location,outputtable,'sheet',dataname,'range','C2','UseExcel',0)
+writematrix(tablename,outputtable,'sheet',dataname,'range','D2','UseExcel',0)
+writematrix(dataname,outputtable,'sheet',dataname,'range','E2','UseExcel',0)
+writematrix(num2str(datstart),outputtable,'sheet',dataname,'range','F2','UseExcel',0)
+writematrix(num2str(datnum),outputtable,'sheet',dataname,'range','G2','UseExcel',0)
+writematrix(num2str(datend),outputtable,'sheet',dataname,'range','H2','UseExcel',0)
 
-Para2 = [Dflag,Drawflag];
-writematrix(nspd,outputtable,'sheet',dataname,'range','A4','UseExcel',0)
+writematrix(num2str(nspd),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
 writematrix(num2str(Chmode),outputtable,'sheet',dataname,'range','B4','UseExcel',0)
 writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','C4','UseExcel',0)
 writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
 writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
 writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
-writematrix(Para2,outputtable,'sheet',dataname,'range','G4','UseExcel',0)
+writematrix(num2str(Dflag),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
+writematrix(num2str(Drawflag),outputtable,'sheet',dataname,'range','H4','UseExcel',0)
 
-Para3 = [gate_didt,gate_Erec,Vgeth,Vmax];
-writematrix(Para3,outputtable,'sheet',dataname,'range','A6','UseExcel',0)
+writematrix(num2str(gate_didt),outputtable,'sheet',dataname,'range','A6','UseExcel',0)
+writematrix(num2str(gate_Erec),outputtable,'sheet',dataname,'range','B6','UseExcel',0)
+writematrix(num2str(Vgeth),outputtable,'sheet',dataname,'range','C6','UseExcel',0)
+writematrix(num2str(Vmax),outputtable,'sheet',dataname,'range','D6','UseExcel',0)
 
 title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","T(d)on(ns)","T(d)off(ns)","    ","T rise(ns)","T fall(ns)","VgeDgmean(V)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)

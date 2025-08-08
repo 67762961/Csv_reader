@@ -21,6 +21,8 @@ end
 % % % writematrix(data,outputtable,'sheet',[tablename, '_', num, '_ALL.csv'],'range','A2');
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
+Ch_labels(5) = Dflag * Ch_labels(5);
+
 % 提取原始信号（假设数据列顺序已校准）
 time = data(:,1);       % 时间序列（单位s）
 ch1 = data(:,2);        % Vge（门极电压）
@@ -163,7 +165,7 @@ else
 end
 
 % ====================== Prr/Erec计算 ======================
-if Dflag
+if (Ch_labels(5)~=0)
     [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
 else
     Prrmax = 0;

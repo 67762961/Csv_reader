@@ -45,6 +45,8 @@ legend('boxoff');
 title(sprintf('Ic=%dA 开通损耗分析（归一化）', fix(Ictop)));
 grid on;
 
-saveas(gcf,[[path,'.\pic\',dataname,'\Eigbt\'],[num,' Ic=',num2str(fix(Ictop)),'A Eon'],'.png'])
+save_dir = fullfile(path, 'pic', dataname, 'Eigbt');
+if ~exist(save_dir, 'dir'), mkdir(save_dir); end
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Eon.png']), 'png');
 close(gcf)
 hold off

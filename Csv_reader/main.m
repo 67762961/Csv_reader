@@ -36,37 +36,6 @@ path=location;
 dataname = [num2str(datstart, '%03d'), '-', dataname];
 clipboard('copy', dataname);
 
-% 定义基础路径结构
-if(Drawflag)
-    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Draw';'Prr';'Vge_dg'};
-    folders_length = length(subfolders) - 1 + Dflag;
-else
-    subfolders = {'Eigbt';'dvdt';'didt';'Vce';'Vd';'Ton';'Toff';'Prr';'Vge_dg'};
-    folders_length = length(subfolders) - 1 + Dflag;
-end
-
-% 批量创建路径
-for i = 1:folders_length
-    target_path = fullfile(path, 'pic', dataname, subfolders{i});
-    if ~exist(target_path, 'dir')  % 存在性检测方法
-        try
-            mkdir(target_path);    % MATLAB自动创建多级目录
-            fprintf('成功创建: %s\n', target_path);
-        catch ME
-            error('路径创建失败: %s\n错误信息: %s', target_path, ME.message);
-        end
-    end
-end
-
-if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法
-    try
-        mkdir(strcat(path,'\result\'));
-        fprintf('成功创建: %s\n', strcat(path,'\result\'));
-    catch ME
-        error('路径创建失败: %s\n错误信息: %s', strcat(path,'\result\'), ME.message);
-    end
-end
-
 %% 表头设定
 outputtable=strcat([path,'\result\',ouput_table]);
 

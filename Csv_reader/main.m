@@ -36,6 +36,15 @@ path=location;
 dataname = [num2str(datstart, '%03d'), '-', dataname];
 clipboard('copy', dataname);
 
+if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法
+    try
+        mkdir(strcat(path,'\result\'));
+        fprintf('成功创建: %s\n', strcat(path,'\result\'));
+    catch ME
+        error('路径创建失败: %s\n错误信息: %s', strcat(path,'\result\'), ME.message);
+    end
+end
+
 %% 表头设定
 outputtable=strcat([path,'\result\',ouput_table]);
 

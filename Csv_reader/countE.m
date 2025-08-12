@@ -174,7 +174,7 @@ end
 
 
 %% 输出表
-output=zeros(17,1);
+% output=zeros(17,1);
 
 output(1)=Ictop;
 output(2)=Eon;
@@ -190,7 +190,7 @@ output(11)=Vge_dg_max;
 output(12)=Vge_dg_min;
 output(13)=tdon;
 output(14)=tdoff;
-
+output(15)=" ";
 output(16)=tr;
 output(17)=tf;
 output(18)=Vge_dg_mean;

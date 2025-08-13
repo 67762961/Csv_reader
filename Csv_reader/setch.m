@@ -23,16 +23,28 @@ function [data_out] = setch(data_in, Ch_labels)
 data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴
 
+[~,n] = size(data_in);
+
+
 for j = 1:length(Ch_labels)
     if(Ch_labels(j))
-        data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
+        if abs(Ch_labels(j))+1 > n
+            for i = 1:10
+                fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
+            end
+            error("参数填写错误");
+        else
+            data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
+        end
     end
 end
 
 signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id", "Vge_dg"];
 fprintf('通道分配结果:\n');
-fprintf('       ');
+fprintf('    ');
 for i = 1:length(Ch_labels)
-    fprintf('%s(通道%d)', signal_labels(i), abs(Ch_labels(i)));
+    if Ch_labels(i) ~= 0
+        fprintf('    %s(通道%d)', signal_labels(i), abs(Ch_labels(i)));
+    end
     if i < length(Ch_labels), fprintf('   '); else, fprintf('\n'); end
 end

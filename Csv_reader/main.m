@@ -21,6 +21,7 @@ Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 Smooth_Win = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
 dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode   = Para_mode.didtmode ;       %% didt模式
+Fuzaimode  = Para_mode.Fuzaimode;
 % Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 Drawflag   = Para_mode.Drawflag ;       %% 是否需要绘图分析
 
@@ -50,7 +51,7 @@ outputtable=strcat([path,'\result\',ouput_table]);
 
 datetime = datestr(now, 'yyyymmdd');
 Paratable1 = char(["代码版本号","日期","路径","器件","表名","起始数","总数","终点数"]);
-Paratable2 = char(["采样率","通道设置","通道分配","滤波窗口","dvdt模式","didt模式","二极管分析","画图分析"]);
+Paratable2 = char(["采样率","通道设置","通道分配","滤波窗口","dvdt模式","didt模式","负载电流模式","画图分析"]);
 Paratable3 = char(["didt阈值","Erec阈值","门极阈值","芯片耐压"]);
 writematrix(Paratable1,outputtable,'sheet',dataname,'range','A1','UseExcel',0)
 writematrix(Paratable2,outputtable,'sheet',dataname,'range','A3','UseExcel',0)
@@ -72,6 +73,7 @@ writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','D4','UseEx
 writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
 writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
 % writematrix(num2str(Dflag),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
+writematrix(num2str(Fuzaimode),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
 writematrix(num2str(Drawflag),outputtable,'sheet',dataname,'range','H4','UseExcel',0)
 
 writematrix(num2str(gate_didt),outputtable,'sheet',dataname,'range','A6','UseExcel',0)
@@ -86,7 +88,7 @@ writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 cnt=1;
 data1=zeros(datend-datstart+1,18);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 writematrix(data1,outputtable,'sheet',dataname,'range','A11');

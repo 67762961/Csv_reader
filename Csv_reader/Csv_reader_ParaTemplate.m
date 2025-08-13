@@ -18,6 +18,7 @@ Para_mode.Ch_labels  = [1, 2, 3, 4, 5, 6];                          %% 通道分
 Para_mode.Smooth_Win = [1, 1, 1, 1, 1, 1];                          %% 通道滤波窗口长度 Vge Vce Ic Vd Id对应数据滤波参数
 Para_mode.dvdtmode   = [10, 90];                                    %% dvdt模式选择     额外的dvdt计算起始和结束百分比
 Para_mode.didtmode   = [10, 90];                                    %% didt模式选择     新设定didt计算起始和结束百分比
+Para_mode.Fuzaimode  = 0;                                           %% 负载电流模式     开启后将只读取尖峰数据 Ic通道处填负载电流通道
 Para_mode.Drawflag   = 0;                                           %% 是否需要绘图分析
 % Para_mode.Dflag      = 1;                                         %% 二极管反向恢复   (已经于2.0.3版本弃用)
     

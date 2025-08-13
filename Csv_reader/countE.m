@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Smooth_Win)
+function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -22,12 +22,20 @@ end
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 % Ch_labels(5) = Dflag * Ch_labels(5);
+if Fuzaimode ~= 0 
+    Ch_labels(3) = 0;
+    ch3 = data(:,4);
+end
 
 % 提取原始信号（假设数据列顺序已校准）
 time = data(:,1);       % 时间序列（单位s）
 ch1 = data(:,2);        % Vge（门极电压）
 ch2 = data(:,3);        % Vce（集射极电压）
-ch3 = data(:,4);        % Ic（集电极电流）
+
+if (Fuzaimode == 0)
+    ch3 = data(:,4);        % Ic（集电极电流）
+end
+
 ch4 = data(:,5);        % Vd（二极管电压）
 
 if (Ch_labels(5)~=0)
@@ -41,14 +49,21 @@ end
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
 Vge = smoothdata(ch1, 'movmedian', Smooth_Win(1));  
+
 % 集射电压：移动中值滤波
 Vce = smoothdata(ch2, 'movmedian', Smooth_Win(2), 'omitnan');
+
 % 集电极电流：移动平均滤波
-Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));  
+if (Ch_labels(3)~=0)
+    Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));    
+end
+
 Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
+
 if (Ch_labels(5)~=0)
     Id = smoothdata(ch5, 'movmean', Smooth_Win(5));  
 end
+
 if (Ch_labels(6)~=0)
     Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));  
 end
@@ -87,24 +102,14 @@ cntoff1 = ton2-toff1;
 cnton2 = toff2-ton2; 
 
 %% 探头偏置校正（静态区间均值）
-static_ic_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
-meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
-Ic = Ic - meanIc; % 电流探头较零
-ch3 = ch3 - meanIc;
-fprintf('探头自动较零:\n');
-fprintf('       Ic偏移量:%03fA\n',meanIc);
-
-% static_vce_interval = fix(ton1 + cnton1/4) : fix(toff1 - cnton1/4);
-% meanVce = mean(Vce(static_vce_interval));  %开通时平均电压视为参考0电压
-% Vce = Vce - meanVce; % 电压探头较零
-% ch2 = ch2 - meanVce;
-% fprintf('       Vce偏移量:%03fV\n',meanVce);
-
-% static_vd_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
-% meanVd = mean(Vd(static_vd_interval)); 
-% Vd = Vd - meanVd; % 电压探头较零
-% ch4 = ch4 - meanVd;
-% fprintf('       Vd偏移量:%03fV\n',meanVd);
+if (Ch_labels(3)~=0)
+    static_ic_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
+    meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
+    Ic = Ic - meanIc; % 电流探头较零
+    ch3 = ch3 - meanIc;
+    fprintf('探头自动较零:\n');
+    fprintf('       Ic偏移量:%03fA\n',meanIc);
+end
 
 if (Ch_labels(5)~=0)
     static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
@@ -114,67 +119,70 @@ if (Ch_labels(5)~=0)
     fprintf('       Id偏移量:%03fA\n',meanId);
 end
 
-% % % % % % % % % %
-% % % % 调零调试
-% % % data(:,1) = time;        % 时间序列（单位s）
-% % % data(:,2) = ch1 ;        % Vge（门极电压）
-% % % data(:,3) = ch2 ;        % Vce（集射极电压）
-% % % data(:,4) = ch3 ;        % Ic（集电极电流）
-% % % data(:,5) = ch4 ;        % Vd（二极管电压）
-% % % data(:,6) = ch5 ;        % Id（二极管电流）
-% % % outputtable = strcat(['D:\_Du_chengzhi\Matlab\CSV读取程序\TestLib','\result\','调零结果.xlsx']);
-% % % writematrix(data,outputtable,'sheet',tablename,'range','A2');
-% % % % % % % % % %
-
+%% 各项数据计算
 % ====================== Vcetop Ictop 计算 ======================
 [Vcetop,Ictop,ton10,toff90,tIcm] = count_Vcetop_Ictop(Vge,ch2,ch3,ton1,toff1,ton2,toff2,cnton1,cntoff1);
 
+if (Ch_labels(3)~=0)
+    % ====================== 开通损耗计算（Eon） ======================
+    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
 
-% ====================== 开通损耗计算（Eon） ======================
-[Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
 
-
-% ====================== 关断损耗计算（Eoff） ======================
-[Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90);
-
+    % ====================== 关断损耗计算（Eoff） ======================
+    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90);
+else
+    Eon = " ";
+    Eoff = " ";
+end
 
 % ====================== Vcemax Vdmax 计算 ======================
 [Vcemax,Vdmax] = count_Vcemax_Vdmax(num,time,ch2,ch4,Ictop,path,dataname,toff90,cntoff1,ton2,toff2);
 
-% ====================== dv/dt计算模块 ======================
-[dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
-% 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
 
-% ====================== di/dt计算模块 ======================
-[didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
 
-% ====================== 开通时间（Ton）计算 ======================
-[tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
+if (Ch_labels(3)~=0)
+    % ====================== dv/dt计算模块 ======================
+    [dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
+    % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
+    dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
 
-% ====================== 关断时间（Toff）计算与绘图 ======================
-[tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
+    % ====================== di/dt计算模块 ======================
+    [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
+
+    % ====================== 开通时间（Ton）计算 ======================
+    [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
+
+    % ====================== 关断时间（Toff）计算与绘图 ======================
+    [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
+else
+    dvdtoutput = " ";
+    didt = " ";
+    tdon = " ";
+    tr = " "; 
+    tdoff = " ";
+    tf = " ";
+end
 
 % ====================== 对管门极监测 Vge_dg ======================
 if (Ch_labels(6)~=0)
     [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
 else
-    Vge_dg_mean = 0;
-    Vge_dg_max = 0;
-    Vge_dg_min = 0;
+    Vge_dg_mean = " ";
+    Vge_dg_max = " ";
+    Vge_dg_min = " ";
 end
 
 % ====================== Prr/Erec计算 ======================
-if (Ch_labels(5)~=0)
+if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
     [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
 else
-    Prrmax = 0;
-    Erec = 0;
+    Prrmax = " ";
+    Erec = " ";
 end
 
 
 %% 输出表
-% output=zeros(17,1);
+output=zeros(17,1);
 
 output(1)=Ictop;
 output(2)=Eon;

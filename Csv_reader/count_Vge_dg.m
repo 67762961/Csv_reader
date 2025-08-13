@@ -21,7 +21,7 @@ hold on;
 plot(time(cemax_idx_max), Vge_dg_max, 'ro', 'MarkerFaceColor','r');
 text(time(Pic_start_max), Vge_dg_mean + Hlim*0.85, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
 text(time(Pic_start_max), Vge_dg_mean + Hlim*0.7, ['V_g_e对管max=',num2str(Vge_dg_max),'V'], 'FontSize',13);
-ylim([Vge_dg_mean - fix(0.7*Hlim), Vge_dg_mean + Hlim]);
+ylim([Vge_dg_mean - Hlim, Vge_dg_mean + Hlim]);
 title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-max']);
 grid on;
 
@@ -42,7 +42,7 @@ hold on;
 plot(time(cemax_idx_min), Vge_dg_min, 'ro', 'MarkerFaceColor','r');
 text(time(Pic_start_min), Vge_dg_mean + Hlim*0.85, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
 text(time(Pic_start_min), Vge_dg_mean + Hlim*0.7, ['V_g_e对管min =',num2str(Vge_dg_min),'V'], 'FontSize',13);
-ylim([Vge_dg_mean - fix(0.7*Hlim), Vge_dg_mean + Hlim]);
+ylim([Vge_dg_mean - Hlim, Vge_dg_mean + Hlim]);
 title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-min']);
 grid on;
 

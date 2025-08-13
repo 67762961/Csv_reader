@@ -152,7 +152,7 @@ close(gcf);
 
 
 %%二极管反向回复数据绘图
-if Dflag
+if Dflag ~= 0
     % 绘制Erec
     plot(Ic,Erec,'color','#0072BD','LineWidth',2);
     hold on

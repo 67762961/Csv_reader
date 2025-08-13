@@ -21,7 +21,7 @@ Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 Smooth_Win = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
 dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode   = Para_mode.didtmode ;       %% didt模式
-Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
+% Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 Drawflag   = Para_mode.Drawflag ;       %% 是否需要绘图分析
 
 % 数据配置
@@ -71,7 +71,7 @@ writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','C4','UseExc
 writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
 writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
 writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
-writematrix(num2str(Dflag),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
+% writematrix(num2str(Dflag),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
 writematrix(num2str(Drawflag),outputtable,'sheet',dataname,'range','H4','UseExcel',0)
 
 writematrix(num2str(gate_didt),outputtable,'sheet',dataname,'range','A6','UseExcel',0)
@@ -86,14 +86,14 @@ writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 cnt=1;
 data1=zeros(datend-datstart+1,18);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Dflag,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 writematrix(data1,outputtable,'sheet',dataname,'range','A11');
 
 %% 绘图
 if(Drawflag)
-    draw(data1,dataname,path,Dflag,Vmax);
+    draw(data1,dataname,path,Ch_labels(5),Vmax);
 end
 
 %% 曲线拟合

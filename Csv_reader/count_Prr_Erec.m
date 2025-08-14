@@ -5,7 +5,7 @@ function [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ic
 Prr_start_indices = find(ch5(ton2:toff2) > min(ch5)*0.1, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.80, 1, 'first');
+Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.70, 1, 'first');
 Prr_end = Prr_start + Prr_end_indices - 1 + 100;
 
 Prr_length = abs(Prr_end -Prr_start);
@@ -44,11 +44,9 @@ for i = window_di
     end
 end
 
-% fprintf('Prr起始点 %f\n',Prr_start)
-% fprintf('Prrmax %f\n',t_Prrmax)
-% fprintf('Prr结束点 %f\n',Prr_end)
-% fprintf('反向恢复起始点 %f\n',Erec_start)
-% fprintf('反向恢复结束点 %f\n',Erec_stop)
+if isempty(Erec_stop)
+    Erec_stop = Prr_end;
+end
 
 % 有效性验证
 assert(~isempty(Prr_start), '反向恢复时间Prr起始点检测失败');

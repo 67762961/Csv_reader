@@ -8,7 +8,7 @@ V_a  = Vcetop * dvdtmode(1)/100;
 V_b  = Vcetop * dvdtmode(2)/100;
 
 % 电压上升沿阈值检测
-window_dv_start = max(1, SWoff_start-50);  % 起始索引不低于1
+window_dv_start = max(1, SWoff_start-500);  % 起始索引不低于1
 window_dv_end = min(length(Vce), SWoff_stop+50);  % 终止索引不超过数组长度
 window_dv = window_dv_start : window_dv_end;
 

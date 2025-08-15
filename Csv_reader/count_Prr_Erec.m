@@ -1,11 +1,11 @@
-function [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff)
+function [Prrmax,Erec] = count_Prr_Erec(num,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2)
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
-Prr_start_indices = find(ch5(ton2:toff2) > min(ch5)*0.1, 1, 'first');
+Prr_start_indices = find(ch5(ton2:toff2) > min(ch5(ton2:toff2))*0.1, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4)*0.70, 1, 'first');
+Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4(ton2:toff2))*0.9, 1, 'first');
 Prr_end = Prr_start + Prr_end_indices - 1 + 100;
 
 Prr_length = abs(Prr_end -Prr_start);
@@ -24,11 +24,8 @@ Prr =  Id.* Vd;
 t_Prrmax = Prr_start + max_idx - 1;
 Prrmax = Prrmax_value / 1000;  % 单位kW
 
-time_step = nspd * 1e-9; 
-
 % 动态窗口生成
-max_search_length = fix(2e-9 * tdoff / time_step);
-window_di = t_Prrmax: fix(t_Prrmax + 2* max_search_length);
+window_di = t_Prrmax: fix(toff2);
 
 for i = window_di
     % fprintf('采样点 %f\n',Prr(i))

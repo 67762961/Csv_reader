@@ -174,7 +174,7 @@ end
 
 % ====================== Prr/Erec计算 ======================
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
-    [Prrmax,Erec] = count_Prr_Erec(num,nspd,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2,tdoff);
+    [Prrmax,Erec] = count_Prr_Erec(num,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2);
 else
     Prrmax = " ";
     Erec = " ";

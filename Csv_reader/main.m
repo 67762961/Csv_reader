@@ -1,6 +1,6 @@
 function main(Para_file,Para_mode,Para_data,Prra_draw)
 
-Ver = "V2.1.2";
+Ver = "V2.1.3";
 
 fprintf('开始读取\n\n')
 

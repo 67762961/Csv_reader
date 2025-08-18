@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Eerc,Smooth_Win)
+function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -172,7 +172,7 @@ end
 
 % ====================== Prr/Erec计算 ======================
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
-    [Prrmax,Erec] = count_Prr_Erec(num,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2);
+    [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2);
 else
     Prrmax = " ";
     Erec = " ";

@@ -1,4 +1,4 @@
-function [Prrmax,Erec] = count_Prr_Erec(num,gate_Eerc,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2)
+function [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2)
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
@@ -33,8 +33,9 @@ for i = window_di
             Erec_stop = i;
             break;
     else
-        if min(Prr(i+1:i+gate_Eerc)) > Prr(i)
-            % fprintf('因为 %f > %f 结束判断\n',Prr(i+1), Prr(i))
+        if min(Prr(i+1:i+gate_Erec)) > Prr(i)
+            % disp(Prr(i+1:i+gate_Erec));
+            % fprintf('因为 窗内最小值 %f > 当前值 %f 结束判断\n',min(Prr(i+1:i+gate_Erec)), Prr(i));
             Erec_stop = i;
             break;
         end
@@ -60,26 +61,37 @@ valid_Prr = Prr(Erec_start:end);         % 瞬时功率向量 [W]
 Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
 
 % 可视化
-% figure;
+PrrLength = fix((Prr_end - Prr_start));
+PicStart = Prr_start - fix(PrrLength/3);
+PicEnd = Prr_end + fix(PrrLength/2);
+PicLength = PicEnd - PicStart;
+PicTop = 2;
+PicBottom = -1;
+PicHeight = PicTop - PicBottom;
+
 plot(time,Id./max(Id)*1.5,'b');
 hold on
 plot(time,Vd./Vcetop,'g');
-plot(time,Erec_t,'c:');
+plot(time,1.5*Erec_t/max(Erec_t),'c:');
 plot(time(Erec_start:Erec_stop),Prr(Erec_start:Erec_stop)/Prrmax/1000,'r',LineWidth=1.5);
-plot(time(Erec_start-100:Erec_start),Prr(Erec_start-100:Erec_start)/Prrmax/1000,'r--');
-plot(time(Erec_stop:Erec_stop+100),Prr(Erec_stop:Erec_stop+100)/Prrmax/1000,'r--');
+plot(time(Prr_start:Erec_start),Prr(Prr_start:Erec_start)/Prrmax/1000,'r--');
+plot(time(Erec_stop:Prr_end),Prr(Erec_stop:Prr_end)/Prrmax/1000,'r--');
 plot(time(t_Prrmax),1,'o','color','red');
 
-% plot(time(Prr_start),1,'o','color','blue');
-% plot(time(Erec_start),1,'o','color','green');
+plot(time(Prr_start),Id(Prr_start)./max(Id)*1.5,'o','color','blue');
+plot(time(Prr_end),Vd(Prr_end)./Vcetop,'o','color','green');
 
-text(time(t_Prrmax+30),0.8,['Prrmax=',num2str(Prrmax),'kW'],'FontSize',13);
-text(time(t_Prrmax+30),1,['Erec=',num2str(Erec),'mJ'],'FontSize',13);
+line([time(Erec_stop-gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrmax/1000,Prr(Erec_stop)/Prrmax/1000],'Color', [0.5 0.5 0.5]);
+line([time(Erec_stop-gate_Erec),time(Erec_stop-gate_Erec)],[Prr(Erec_stop)/Prrmax/1000-0.05, Prr(Erec_stop)/Prrmax/1000+0.05], 'Color', [0.5 0.5 0.5]);
+line([time(Erec_stop+gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrmax/1000-0.05, Prr(Erec_stop)/Prrmax/1000+0.05], 'Color', [0.5 0.5 0.5]);
+
+text(time(PicStart+fix(PicLength*0.03)),PicBottom+PicHeight*0.9,['Prrmax=',num2str(Prrmax),'kW'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)),PicBottom+PicHeight*0.8,['Erec=',num2str(Erec),'mJ'],'FontSize',13);
 text(time(t_Prrmax+5),1.3,'Prrmax','color','red','FontSize',13);
 
-xlim([time(Erec_start-100),time(Erec_stop+100)]);
-ylim([-1.2,2]);
-legend('I_{d}','V_{d}','E_{rec}(t)','P_{rr}', 'Location','northwest');
+xlim([time(PicStart),time(PicEnd)]);
+ylim([PicBottom,PicTop]);
+legend('I_{d}','V_{d}','E_{rec}(t)','P_{rr}', 'Location','southeast');
 legend('boxoff');
 title(strcat('Ic=',num2str(fix(Ictop)),'A Prr-Erec(归一化)'));
 grid on

@@ -120,8 +120,10 @@ if (Ch_labels(5)~=0)
 end
 
 %% 各项数据计算
-% ====================== Vcetop Ictop 计算 ======================
-[Vcetop,Ictop,ton10,toff90,tIcm] = count_Vcetop_Ictop(Vge,ch2,ch3,ton1,toff1,ton2,toff2,cnton1,cntoff1);
+% ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
+[Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+[Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
+[Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);
 
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================
@@ -134,10 +136,6 @@ else
     Eon = " ";
     Eoff = " ";
 end
-
-% ====================== Vcemax Vdmax 计算 ======================
-[Vcemax,Vdmax] = count_Vcemax_Vdmax(num,time,ch2,ch4,Ictop,path,dataname,toff90,cntoff1,ton2,toff2);
-
 
 
 if (Ch_labels(3)~=0)
@@ -182,7 +180,7 @@ end
 
 
 %% 输出表
-output=zeros(17,1);
+output=zeros(20,1);
 
 output(1)=Ictop;
 output(2)=Eon;
@@ -199,9 +197,10 @@ output(12)=Vge_dg_min;
 output(13)=tdon;
 output(14)=tdoff;
 output(15)=" ";
-output(16)=tr;
-output(17)=tf;
-output(18)=Vge_dg_mean;
+output(16)=Icmax;
+output(17)=tr;
+output(18)=tf;
+output(19)=Vge_dg_mean;
 
 
 fprintf('\n');

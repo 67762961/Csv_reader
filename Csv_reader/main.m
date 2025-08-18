@@ -81,12 +81,12 @@ writematrix(num2str(gate_Erec),outputtable,'sheet',dataname,'range','B6','UseExc
 writematrix(num2str(Vgeth),outputtable,'sheet',dataname,'range','C6','UseExcel',0)
 writematrix(num2str(Vmax),outputtable,'sheet',dataname,'range','D6','UseExcel',0)
 
-title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","T(d)on(ns)","T(d)off(ns)","    ","T rise(ns)","T fall(ns)","VgeDgmean(V)"]);  %%定义表头
+title=char(["Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","T(d)on(ns)","T(d)off(ns)","    ","Icmax(A)","T rise(ns)","T fall(ns)","VgeDgmean(V)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 
 %% 数据读取与写入
 cnt=1;
-data1=zeros(datend-datstart+1,18);
+data1=zeros(datend-datstart+1,20);
 for tablenum=datstart:datend
     data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;

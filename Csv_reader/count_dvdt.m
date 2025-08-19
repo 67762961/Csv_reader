@@ -41,7 +41,7 @@ PicEnd = rise_end_idx + Riselength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
-% PicHeight = PicTop - PicBottom;
+PicHeight = PicTop - PicBottom;
 
 plot(time(rise_start_idx-Riselength:rise_end_idx +Riselength), Vce(rise_start_idx-Riselength:rise_end_idx +Riselength), 'b');
 hold on;
@@ -51,8 +51,8 @@ plot(time(rise_end_idx ), Vce(rise_end_idx ), 'ro', 'MarkerFaceColor','r');
 
 text(time(rise_start_idx+3),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
 text(time(rise_end_idx +3),Vce(rise_end_idx ),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicTop*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicTop*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop=',num2str(Vcetop),'V'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt=',num2str(dvdt),'V/us'],'FontSize',13);
 if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
     plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
     plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');

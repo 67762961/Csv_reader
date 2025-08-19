@@ -14,7 +14,7 @@ text(time(dmax_idx)+0.02*range(time(ton2:toff2)), Vdmax-0.1*range(ch4), ...
 title(['Ic=',num2str(fix(Ictop)),' A Vdmax']);
 grid on;
 
-save_dir = fullfile(path, 'pic', dataname, 'Vdmax');
+save_dir = fullfile(path, 'pic', dataname, '03 Vdmax');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A Vdmax.png']), 'png');
 close(gcf);

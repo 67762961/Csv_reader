@@ -97,9 +97,8 @@ title(strcat('Ic=',num2str(fix(Ictop)),'A Prr-Erec(归一化)'));
 grid on
 
 % 保存
-if ~exist(fullfile(path,'pic',dataname,'Prr'), 'dir')
-    mkdir(fullfile(path,'pic',dataname,'Prr')); 
-end
-saveas(gcf, fullfile(path,'pic',dataname,'Prr',[ num,' Ic=',num2str(fix(Ictop)),'A Prr.png']));
+save_dir = fullfile(path, 'pic', dataname, '09 Prr & Erec');
+if ~exist(save_dir, 'dir'), mkdir(save_dir); end
+saveas(gcf, fullfile(save_dir,[ num,' Ic=',num2str(fix(Ictop)),'A Prr.png']));
 close(gcf);
 hold off

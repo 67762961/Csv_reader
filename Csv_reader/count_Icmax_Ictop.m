@@ -21,7 +21,7 @@ text(time(Icmax_idx)+0.02*range(time(ton2:toff2)), Icmax-0.1*range(ch3), ...
 title(['Ic=',num2str(fix(Ictop)),' A Icmax']);
 grid on;
 
-save_dir = fullfile(path, 'pic', dataname, 'Icmax');
+save_dir = fullfile(path, 'pic', dataname, '01 Icmax');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A Icmax.png']), 'png');
 close(gcf);

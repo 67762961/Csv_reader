@@ -9,7 +9,7 @@ fprintf('开始读取\n\n')
 ouput_table = '数据读取结果.xlsx' ;      %% 输出文件名
 location    = Para_file.location ;      %% 路径
 tablename   = Para_file.tablename;      %% csv文件名   
-dataname    = Para_file.dataname ;      %% 数据标签 
+Dataname    = Para_file.dataname ;      %% 数据标签 
 datstart    = Para_file.datstart ;      %% csv文件序号起始点  
 datnum      = Para_file.datnum   ;      %% csv文件序号组数
 datend      = datstart + datnum-1;      %% csv文件序号终止点
@@ -34,13 +34,13 @@ Vgeth     =  Prra_draw.Vgeth    ;       %% 门极开关门槛值 依据器件手
 Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 
 path=location;
-dataname = [num2str(datstart, '%03d'), '-', dataname];
+dataname = [num2str(datstart, '%03d'), '-', Dataname];
 clipboard('copy', dataname);
 
 if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法
     try
         mkdir(strcat(path,'\result\'));
-        fprintf('成功创建: %s\n', strcat(path,'\result\'));
+        fprintf('成功创建: %s\n\n', strcat(path,'\result\'));
     catch ME
         error('路径创建失败: %s\n错误信息: %s', strcat(path,'\result\'), ME.message);
     end
@@ -61,7 +61,7 @@ writematrix(Ver,outputtable,'sheet',dataname,'range','A2','UseExcel',0)
 writematrix(datetime,outputtable,'sheet',dataname,'range','B2','UseExcel',0)
 writematrix(location,outputtable,'sheet',dataname,'range','C2','UseExcel',0)
 writematrix(tablename,outputtable,'sheet',dataname,'range','D2','UseExcel',0)
-writematrix(dataname,outputtable,'sheet',dataname,'range','E2','UseExcel',0)
+writematrix(Dataname,outputtable,'sheet',dataname,'range','E2','UseExcel',0)
 writematrix(num2str(datstart),outputtable,'sheet',dataname,'range','F2','UseExcel',0)
 writematrix(num2str(datnum),outputtable,'sheet',dataname,'range','G2','UseExcel',0)
 writematrix(num2str(datend),outputtable,'sheet',dataname,'range','H2','UseExcel',0)

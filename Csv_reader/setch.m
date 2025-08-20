@@ -3,7 +3,7 @@ function [data_out] = setch(data_in, Ch_labels)
 %   Inputs:
 %       data_in   : N×6 矩阵 (double)
 %           原始采集数据矩阵
-%       Ch_labels : 1×5 数组 (int) 
+%       Ch_labels : 1×5 数组 (int)
 %           通道索引数组，取值范围[1,5]，定义各物理量的原始通道位置：
 %           元素1 - Vge门极电压的原始通道号
 %           元素2 - Vce集射极电压的原始通道号

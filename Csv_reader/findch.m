@@ -35,8 +35,8 @@ max_vals = max(abs(data_in(:, raw_columns)), [], 1);  % 仅处理列2-6
 vge_col_raw = raw_columns(min_idx);  % 直接映射到原始列号（无需+1）
 data_out(:,2) = data_in(:, vge_col_raw);
 CH(1) = vge_col_raw - 1;  % 输出物理通道号（CH2→1，CH3→2等）
-if Print 
-    fprintf('门极通道（原始列%d → CH%d）\n', vge_col_raw, CH(1)); 
+if Print
+    fprintf('门极通道（原始列%d → CH%d）\n', vge_col_raw, CH(1));
 end
 data_in(:, vge_col_raw) = NaN;
 
@@ -48,7 +48,7 @@ diff_vals = max_vals - min_vals;
 [~, sorted_idx] = sort(diff_vals, 'descend');
 high_voltage_cols_raw = valid_columns(sorted_idx(1:2));  % 直接取原始列号
 high_voltage_cols = high_voltage_cols_raw - 1;  % 转换为物理通道号
-if Print 
+if Print
     fprintf('高压通道（原始列%s → CH%s）\n', mat2str(high_voltage_cols_raw), mat2str(high_voltage_cols));
 end
 
@@ -56,7 +56,7 @@ end
 current_cols_raw = setdiff(raw_columns, [vge_col_raw, high_voltage_cols_raw]);
 current_cols = current_cols_raw - 1; % 转换为物理通道号
 assert(numel(current_cols_raw)==2, '电流通道异常：实际=%d', numel(current_cols_raw));
-if Print 
+if Print
     fprintf('电流通道（原始列%s → CH%s）\n', mat2str(current_cols_raw), mat2str(current_cols));
 end
 
@@ -68,13 +68,13 @@ cntsw = length(cntVge);
 %第一次开通时间点
 ton1=cntVge(cntsw-3);
 %第一次关断时间点
-toff1=cntVge(cntsw-2); 
+toff1=cntVge(cntsw-2);
 %第二次开通时间点
-ton2=cntVge(cntsw-1); 
+ton2=cntVge(cntsw-1);
 %计算第一开通时长
-cnton1 = toff1-ton1; 
+cnton1 = toff1-ton1;
 %计算两次脉冲间关断时长
-cntoff1 = ton2-toff1; 
+cntoff1 = ton2-toff1;
 
 
 %% ==================== 第二阶段：高压信号处理 ====================
@@ -104,7 +104,7 @@ end
 
 % 映射到物理通道号（列号-1）
 CH(2) = vce_candidate_raw - 1;  % 例如：数据列3 → CH2
-if Print 
+if Print
     fprintf('Vce → 数据列%d → 物理通道CH%d\n', vce_candidate_raw, CH(2));
 end
 data_out(:,3) = data_in(:,vce_candidate_raw);
@@ -115,15 +115,15 @@ remaining_voltage_raw = setdiff(high_voltage_cols_raw, vce_candidate_raw);
 assert(~isempty(remaining_voltage_raw), '未找到有效Vd通道');
 
 % 直接分配剩余高压通道（数据列号优先）[3](@ref)
-vd_candidate_raw = remaining_voltage_raw(1);  
+vd_candidate_raw = remaining_voltage_raw(1);
 CH(4) = vd_candidate_raw - 1;  % 例如：数据列5 → CH4
-if Print 
+if Print
     fprintf('Vd → 数据列%d → 物理通道CH%d\n', vd_candidate_raw, CH(4));
 end
 
 % 输出处理与极性验证
 data_out(:,5) = data_in(:,vd_candidate_raw);
-data_in(:,vd_candidate_raw) = NaN;  
+data_in(:,vd_candidate_raw) = NaN;
 %% ==================== 第三阶段：电流信号处理 ====================
 % 3.1 Ic识别（基于导通态电流特征）
 % 数据列2-6对应物理通道CH1-CH5（列号-1）
@@ -148,8 +148,8 @@ for i_raw = current_cols_raw  % 遍历原始列号（数据列2-6）
 end
 
 % 映射到物理通道号
-CH(3) = ic_candidate_raw - 1;  
-if Print 
+CH(3) = ic_candidate_raw - 1;
+if Print
     fprintf('Ic → 数据列%d → 物理通道CH%d\n', ic_candidate_raw, CH(3));
 end
 data_out(:,4) = data_in(:,ic_candidate_raw);
@@ -164,25 +164,25 @@ CH(5) = id_candidate_raw - 1;  % 转换为物理通道号
 
 % --- 续流期方向判断（二极管导通方向应为负） ---
 % 定义续流期：Vce高压期（二极管导通）且Vd低压期（二极管导通）
-t_vd_off = find(data_out(:,3) > 0.8*max(data_out(:,3)) & data_out(:,5) < 0.2*max(data_out(:,5))); 
+t_vd_off = find(data_out(:,3) > 0.8*max(data_out(:,3)) & data_out(:,5) < 0.2*max(data_out(:,5)));
 if ~isempty(t_vd_off)
     % 续流期电流极性校验
-    if mean(data_in(t_vd_off, id_candidate_raw)) > mean(data_in( : , id_candidate_raw))  
+    if mean(data_in(t_vd_off, id_candidate_raw)) > mean(data_in( : , id_candidate_raw))
         data_out(:,6) = -data_in(:,id_candidate_raw);  % 强制反向
         warning('通道%d续流期方向异常：均值=%.1fA   已反向校正', CH(5), mean(data_in(t_vd_off, id_candidate_raw)));
     else
         data_out(:,6) = data_in(:,id_candidate_raw);
     end
     
-%     % 二次验证（续流期电流均值应<0）
-%     if mean(data_out(t_vd_off,6)) > -0.001 * max(abs(data_out(:,6)))
-%         warning('通道%d续流期方向异常：均值=%.1fA     %.0f', CH(5), mean(data_out(t_vd_off,6)),-0.1 * max(abs(data_out(:,6))));
-%     end
+    %     % 二次验证（续流期电流均值应<0）
+    %     if mean(data_out(t_vd_off,6)) > -0.001 * max(abs(data_out(:,6)))
+    %         warning('通道%d续流期方向异常：均值=%.1fA     %.0f', CH(5), mean(data_out(t_vd_off,6)),-0.1 * max(abs(data_out(:,6))));
+    %     end
 else
     error('未检测到续流期，请检查Vce/Vd信号识别');
 end
 
-if Print 
+if Print
     fprintf('Id → 数据列%d → 物理通道CH%d\n', id_candidate_raw, CH(5));
 end
 

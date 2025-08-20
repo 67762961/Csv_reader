@@ -14,7 +14,7 @@ Prr_length = abs(Prr_end -Prr_start);
 % 恢复起始点：首次从负到正跨越零点的位置
 Erec_start = find(diff(ch5(Prr_start-fix(Prr_length*0.01):Prr_end) >= 0) == 1, 1) + Prr_start;
 Erec_stop = [];
-   
+
 [~, peak_idx] = max(Id(Erec_start:end));
 threshold = 0.1 * Id(Erec_start + peak_idx - 1);
 
@@ -30,8 +30,8 @@ window_di = t_Prrmax: fix(toff2);
 for i = window_di
     % fprintf('采样点 %f\n',Prr(i))
     if Prr(i) < threshold
-            Erec_stop = i;
-            break;
+        Erec_stop = i;
+        break;
     else
         if min(Prr(i+1:i+gate_Erec)) > Prr(i)
             % disp(Prr(i+1:i+gate_Erec));

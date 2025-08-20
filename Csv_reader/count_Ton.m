@@ -5,8 +5,8 @@ function [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIc
 % 索引边界保护
 ton_bg_start = max(1, fix(ton10 * 0.997));
 ton_bg_end = min(length(time), fix(tonIcm90 * 1.003));
-ton_delay_range = ton10 : tonIcm10;  
-ton_slope_range = tonIcm10 : tonIcm90;  
+ton_delay_range = ton10 : tonIcm10;
+ton_slope_range = tonIcm10 : tonIcm90;
 
 % 时间参数计算
 if tonIcm10 - ton10 > 0

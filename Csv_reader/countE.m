@@ -2,7 +2,7 @@ function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvd
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
-num = num2str(tablenum, '%03d');  
+num = num2str(tablenum, '%03d');
 filename = fullfile(locate, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
 data0 = readmatrix(filename, 'NumHeaderLines', 20);                 % 跳过CSV头部元数据
 fprintf('%s\n',filename);
@@ -22,7 +22,7 @@ end
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 % Ch_labels(5) = Dflag * Ch_labels(5);
-if Fuzaimode ~= 0 
+if Fuzaimode ~= 0
     Ch_labels(3) = 0;
     ch3 = data(:,4);
 end
@@ -48,24 +48,24 @@ end
 
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
-Vge = smoothdata(ch1, 'movmedian', Smooth_Win(1));  
+Vge = smoothdata(ch1, 'movmedian', Smooth_Win(1));
 
 % 集射电压：移动中值滤波
 Vce = smoothdata(ch2, 'movmedian', Smooth_Win(2), 'omitnan');
 
 % 集电极电流：移动平均滤波
 if (Ch_labels(3)~=0)
-    Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));    
+    Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));
 end
 
 Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
 
 if (Ch_labels(5)~=0)
-    Id = smoothdata(ch5, 'movmean', Smooth_Win(5));  
+    Id = smoothdata(ch5, 'movmean', Smooth_Win(5));
 end
 
 if (Ch_labels(6)~=0)
-    Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));  
+    Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));
 end
 
 
@@ -74,7 +74,7 @@ end
 % Vge过零点位置记录
 cntVge = indzer(Vge,Vgeth);
 % Vge过零点次数记录
-cntsw = length(cntVge); 
+cntsw = length(cntVge);
 if cntsw ~= 6
     warning('Vge过零点位置不等于六处 可能出现开关状态判断异常')
 end
@@ -82,24 +82,24 @@ end
 % 第0次开通时间点
 ton0=cntVge(cntsw-5);
 % 第0次关断时间点
-toff0=cntVge(cntsw-4); 
+toff0=cntVge(cntsw-4);
 % 第一次开通时间点
 ton1=cntVge(cntsw-3);
 % 第一次关断时间点
-toff1=cntVge(cntsw-2); 
+toff1=cntVge(cntsw-2);
 % 第二次开通时间点
-ton2=cntVge(cntsw-1); 
+ton2=cntVge(cntsw-1);
 % 第二次关断时间点
-toff2=cntVge(cntsw); 
+toff2=cntVge(cntsw);
 
 % 计算第0开通时长
-cnton0 = toff0-ton0; 
+cnton0 = toff0-ton0;
 % 计算第一开通时长
-cnton1 = toff1-ton1; 
+cnton1 = toff1-ton1;
 % 计算两次脉冲间关断时长
-cntoff1 = ton2-toff1; 
+cntoff1 = ton2-toff1;
 % 计算第二个脉冲开通时长
-cnton2 = toff2-ton2; 
+cnton2 = toff2-ton2;
 
 %% 探头偏置校正（静态区间均值）
 if (Ch_labels(3)~=0)
@@ -113,7 +113,7 @@ end
 
 if (Ch_labels(5)~=0)
     static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
-    meanId = mean(Id(static_id_interval)); 
+    meanId = mean(Id(static_id_interval));
     Id = Id - meanId;% 电流探头较零
     ch5 = ch5 - meanId;
     fprintf('       Id偏移量:%03fA\n',meanId);
@@ -128,8 +128,8 @@ end
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================
     [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
-
-
+    
+    
     % ====================== 关断损耗计算（Eoff） ======================
     [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90);
 else
@@ -143,20 +143,20 @@ if (Ch_labels(3)~=0)
     [dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
     % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
     dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
-
+    
     % ====================== di/dt计算模块 ======================
     [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
-
+    
     % ====================== 开通时间（Ton）计算 ======================
     [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
-
+    
     % ====================== 关断时间（Toff）计算与绘图 ======================
     [tdoff,tf] = count_Toff(num,nspd,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
 else
     dvdtoutput = " ";
     didt = " ";
     tdon = " ";
-    tr = " "; 
+    tr = " ";
     tdoff = " ";
     tf = " ";
 end

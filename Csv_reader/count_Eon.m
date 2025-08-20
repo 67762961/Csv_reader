@@ -8,7 +8,7 @@ valid_range = search_start:min(toff2, length(Ic));
 SWon_start_indices = find(Ic(valid_range) >= max(0.15*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
 
-%开通结束时刻寻找 
+%开通结束时刻寻找
 SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
 

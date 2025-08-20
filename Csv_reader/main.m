@@ -8,9 +8,9 @@ fprintf('开始读取\n\n')
 % 文件路径配置参数
 ouput_table = '数据读取结果.xlsx' ;      %% 输出文件名
 location    = Para_file.location ;      %% 路径
-tablename   = Para_file.tablename;      %% csv文件名   
-Dataname    = Para_file.dataname ;      %% 数据标签 
-datstart    = Para_file.datstart ;      %% csv文件序号起始点  
+tablename   = Para_file.tablename;      %% csv文件名
+Dataname    = Para_file.dataname ;      %% 数据标签
+datstart    = Para_file.datstart ;      %% csv文件序号起始点
 datnum      = Para_file.datnum   ;      %% csv文件序号组数
 datend      = datstart + datnum-1;      %% csv文件序号终止点
 

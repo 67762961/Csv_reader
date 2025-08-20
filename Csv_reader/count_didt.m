@@ -21,7 +21,7 @@ window_di = Window_Start : Window_Stop;
 for i = window_di
     % if ch3(i) >= 0
     %     fprintf('采样点 %f\n',ch3(i))
-    % end 
+    % end
     switch state
         case 0 % 等待触发
             if ch3(i) >= Ic_a

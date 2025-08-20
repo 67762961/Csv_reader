@@ -17,7 +17,7 @@ toff_slope_range = toffIcm90 : toffIcm10;  % 斜率阶段索引
 
 % 时间参数计算（单位：纳秒）
 if (toffIcm90 - toff90 > 0)
-    tdoff = (time(toffIcm90) - time(toff90)) * nspd * 1e9; 
+    tdoff = (time(toffIcm90) - time(toff90)) * nspd * 1e9;
 else
     tdoff = 0;
 end
@@ -32,11 +32,11 @@ end
 % figure;
 hold on;
 % 背景区间（绿色）
-plot(time(toff_bg_start:toff_bg_end), ch1(toff_bg_start:toff_bg_end), 'Color', [0.2 0.8 0.2]); 
+plot(time(toff_bg_start:toff_bg_end), ch1(toff_bg_start:toff_bg_end), 'Color', [0.2 0.8 0.2]);
 % 延迟阶段（红色）
-plot(time(toff_delay_range), ch1(toff_delay_range), 'r', 'LineWidth', 1.8); 
+plot(time(toff_delay_range), ch1(toff_delay_range), 'r', 'LineWidth', 1.8);
 % 斜率阶段（蓝色）
-plot(time(toff_slope_range), ch1(toff_slope_range), 'b', 'LineWidth', 1.8); 
+plot(time(toff_slope_range), ch1(toff_slope_range), 'b', 'LineWidth', 1.8);
 
 text(time(toff90)*0.999,ch1(toff90)+1.5,['t(d)off=',num2str(tdoff),'ns'],'FontSize',13,'color','red');
 text(time(toffIcm90)*1.0007,ch1(toffIcm90)-1,['tf=',num2str(tf),'ns'],'FontSize',13,'color','blue');

@@ -28,7 +28,7 @@ function draw(data1,dataname,path,Dflag,Vmax)
 %       - Ic-Eigbt.png : 开关损耗特性曲线
 %       - Ic-Vcemax.png: 集射极电压峰值分析
 %       - Ic-Vdmax.png : 二极管电压峰值分析
-%       - Ic-Delta_Vce.png: 集射极电压差分析 
+%       - Ic-Delta_Vce.png: 集射极电压差分析
 %       - Ic-didt.png  : 电流变化率特性
 %       - Ic-dvdt.png  : 电压变化率特性
 %       - Ic-Erec.png  : 反向恢复能量特性
@@ -166,7 +166,7 @@ if Dflag ~= 0
     grid on
     saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Erec'],'.png'])
     close(gcf);
-
+    
     % 绘制Prrmax
     plot(Ic,Prrmax,'color','#0072BD','LineWidth',2);
     hold on
@@ -181,7 +181,7 @@ if Dflag ~= 0
     grid on
     saveas(gcf,[[path,'.\pic\',dataname,'\Draw\'],['Ic','-Prrmax'],'.png'])
     close(gcf);
-
+    
 end
 end
 

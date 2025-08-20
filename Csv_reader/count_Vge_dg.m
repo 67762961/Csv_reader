@@ -8,7 +8,7 @@ function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,
 % 找出全局最小值
 [Vge_dg_min, cemax_idx_min] = min(ch6);
 
-Vge_dg_mean = mean(Vge_dg); 
+Vge_dg_mean = mean(Vge_dg);
 
 % 最大值绘图
 Win_Width = fix(cnton2/4);

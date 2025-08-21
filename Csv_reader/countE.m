@@ -6,13 +6,20 @@ num = num2str(tablenum, '%03d');
 filename = fullfile(locate, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
 data0 = readmatrix(filename, 'NumHeaderLines', 20);                 % 跳过CSV头部元数据
 fprintf('%s\n',filename);
+
+if Fuzaimode ~= 0
+    Ch_labels(4) = 0;
+    Ch_labels(5) = 0;
+end
+
 % 通道修正
 if strcmp(Chmode,'findch')
     data = findch(data0,0);
 elseif strcmp(Chmode,'setch')
-    data = setch(data0,Ch_labels);
+    data = setch(data0,Ch_labels,Fuzaimode);
 else
-    error('通道分配模式参数填写错误')
+    print('通道分配模式参数填写错误')
+    quit
 end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -22,21 +29,19 @@ end
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 % Ch_labels(5) = Dflag * Ch_labels(5);
-if Fuzaimode ~= 0
-    Ch_labels(3) = 0;
-    ch3 = data(:,4);
-end
 
 % 提取原始信号（假设数据列顺序已校准）
 time = data(:,1);       % 时间序列（单位s）
 ch1 = data(:,2);        % Vge（门极电压）
 ch2 = data(:,3);        % Vce（集射极电压）
 
-if (Fuzaimode == 0)
-    ch3 = data(:,4);        % Ic（集电极电流）
+if Fuzaimode ~= 0
+    I_fuzai = data(:,10);
 end
 
+ch3 = data(:,4);        % Ic（集电极电流）
 ch4 = data(:,5);        % Vd（二极管电压）
+
 
 if (Ch_labels(5)~=0)
     ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
@@ -121,7 +126,12 @@ end
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+if (Fuzaimode == 0)
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+else
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+end
+
 [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
 [Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);
 
@@ -203,4 +213,4 @@ output(18)=tf;
 output(19)=Vge_dg_mean;
 
 
-fprintf('\n');
+fprintf('\n\n\n');

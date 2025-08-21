@@ -1,4 +1,4 @@
-function [data_out] = setch(data_in, Ch_labels)
+function [data_out] = setch(data_in, Ch_labels,Fuzaimode)
 % 双脉冲测试信号通道重组函数
 %   Inputs:
 %       data_in   : N×6 矩阵 (double)
@@ -25,6 +25,16 @@ data_out(:,1) = data_in(:,1);           % 保留时间轴
 
 [~,n] = size(data_in);
 
+if(Fuzaimode ~=  0)
+    if isempty(data_in(:,Fuzaimode+1))
+        for i = 1:10
+            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  Fuzaimode+1);
+        end
+        quit;
+    end
+    data_out(:,10) = data_in(:,Fuzaimode+1);
+end
+
 
 for j = 1:length(Ch_labels)
     if(Ch_labels(j))
@@ -32,7 +42,7 @@ for j = 1:length(Ch_labels)
             for i = 1:10
                 fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
             end
-            error("参数填写错误");
+            quit;
         else
             data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
         end
@@ -46,5 +56,10 @@ for i = 1:length(Ch_labels)
     if Ch_labels(i) ~= 0
         fprintf('    %s(通道%d)', signal_labels(i), abs(Ch_labels(i)));
     end
-    if i < length(Ch_labels), fprintf('   '); else, fprintf('\n'); end
+    if i >= length(Ch_labels)
+        if (Fuzaimode ~= 0)
+            fprintf('    %s(通道%d)', "I_fuzai", Fuzaimode);
+        end
+        fprintf('\n');
+    end
 end

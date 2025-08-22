@@ -85,8 +85,8 @@ line([time(Erec_stop-gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrma
 line([time(Erec_stop-gate_Erec),time(Erec_stop-gate_Erec)],[Prr(Erec_stop)/Prrmax/1000-0.05, Prr(Erec_stop)/Prrmax/1000+0.05], 'Color', [0.5 0.5 0.5]);
 line([time(Erec_stop+gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrmax/1000-0.05, Prr(Erec_stop)/Prrmax/1000+0.05], 'Color', [0.5 0.5 0.5]);
 
-text(time(PicStart+fix(PicLength*0.03)),PicBottom+PicHeight*0.9,['Prrmax=',num2str(Prrmax),'kW'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.03)),PicBottom+PicHeight*0.8,['Erec=',num2str(Erec),'mJ'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.95,['Prrmax=',num2str(Prrmax),'kW'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.87,['Erec=',num2str(Erec),'mJ'],'FontSize',13);
 text(time(t_Prrmax+5),1.3,'Prrmax','color','red','FontSize',13);
 
 xlim([time(PicStart),time(PicEnd)]);

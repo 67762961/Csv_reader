@@ -61,7 +61,7 @@ end
 % figure;
 SWonlength = fix((SWon_stop - SWon_start));
 
-PicStart = valid_rise_start - SWonlength;
+PicStart = valid_rise_start - fix(SWonlength*2/3);
 PicEnd = valid_rise_end + SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
@@ -76,8 +76,8 @@ plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r')
 plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 
 % 动态标注
-text(time(valid_rise_start+3),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
-text(time(valid_rise_end+3),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
+text(time(fix(valid_rise_start+0.03*PicLength)),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
+text(time(fix(valid_rise_end+0.03*PicLength)),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop=',num2str(Ictop),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt=',num2str(didt),'A/us'],'FontSize',13);
 

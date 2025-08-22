@@ -11,13 +11,20 @@ Ictop = mean(ch3(window_start:tIcm));               % 计算均值
 [Icmax, Icmax_idx] = max(ch3(ton2:toff2));
 Icmax_idx = ton2 + Icmax_idx - 1;
 
+PicStart = fix((ton2 + toff2)/2 - 11*(toff2 - ton2)/20);
+PicEnd = fix((ton2 + toff2)/2 + 11*(toff2 - ton2)/20);
+PicLength = PicEnd - PicStart;
+PicTop = fix(1.1*Icmax);
+PicBottom = fix(-0.1*PicTop);
+PicHeight = PicTop - PicBottom;
+
 % 绘图
-% figure;
 plot(time(ton2:toff2), ch3(ton2:toff2), 'b');
 hold on;
 plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
-text(time(Icmax_idx)+0.02*range(time(ton2:toff2)), Icmax-0.1*range(ch3), ...
-    ['Icmax=',num2str(Icmax),'V'], 'FontSize',13);
+text(time(Icmax_idx+fix(PicLength*0.05)),PicBottom + fix(PicHeight*0.9),['Icmax=',num2str(Icmax),'A'], 'FontSize',13);
+ylim([PicBottom, PicTop]);
+xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),' A Icmax']);
 grid on;
 

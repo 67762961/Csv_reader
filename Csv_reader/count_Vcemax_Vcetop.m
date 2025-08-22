@@ -24,12 +24,20 @@ Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
 cemax_idx = toff90 + cemax_idx - 1;  % 转换为全局索引
 
 % 绘图
-% figure;
+
+PicStart = fix((ton2 + toff90)/2 - 11*(ton2 - toff90)/20);
+PicEnd = fix((ton2 + toff90)/2 + 11*(ton2 - toff90)/20);
+PicLength = PicEnd - PicStart;
+PicTop = fix(1.15*Vcemax);
+PicBottom = fix(-0.1*PicTop);
+PicHeight = PicTop - PicBottom;
+
 plot(time(toff90:ton2), ch2(toff90:ton2), 'b');
 hold on;
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(cemax_idx)+0.02*range(time(toff90:ton2)), Vcemax-0.1*range(ch2), ...
-    ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13);
+text((time(fix(cemax_idx+0.05*PicLength))), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13);
+ylim([PicBottom, PicTop]);
+xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);
 grid on;
 

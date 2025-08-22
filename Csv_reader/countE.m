@@ -173,7 +173,7 @@ end
 
 % ====================== 对管门极监测 Vge_dg ======================
 if (Ch_labels(6)~=0)
-    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
+    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,nspd,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
 else
     Vge_dg_mean = " ";
     Vge_dg_max = " ";
@@ -213,4 +213,4 @@ output(18)=tf;
 output(19)=Vge_dg_mean;
 
 
-fprintf('\n\n\n');
+fprintf('\n');

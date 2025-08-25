@@ -87,6 +87,7 @@ line([time(Erec_stop+gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrma
 
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.95,['Prrmax=',num2str(Prrmax),'kW'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.87,['Erec=',num2str(Erec),'mJ'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.80, num2str(2*gate_Erec), 'FontSize', 9,'Color', [0.5 0.5 0.5]);
 text(time(t_Prrmax+5),1.3,'Prrmax','color','red','FontSize',13);
 
 xlim([time(PicStart),time(PicEnd)]);

@@ -30,7 +30,7 @@ barheight = 0.01*PicHeight;
 line([time(cemax_idx_max-barlength),time(cemax_idx_max+barlength)],[Vge_dg_max,Vge_dg_max],'Color', [0.5 0.5 0.5]);
 line([time(cemax_idx_max-barlength),time(cemax_idx_max-barlength)],[Vge_dg_max-barheight, Vge_dg_max+barheight], 'Color', [0.5 0.5 0.5]);
 line([time(cemax_idx_max+barlength),time(cemax_idx_max+barlength)],[Vge_dg_max-barheight, Vge_dg_max+barheight], 'Color', [0.5 0.5 0.5]);
-text(time(cemax_idx_max+barlength+5), Vge_dg_max, [num2str(bartimelength),'ns'], 'FontSize', 9,'Color', [0.5 0.5 0.5]);
+text(time(cemax_idx_max+barlength+5), Vge_dg_max, [num2str(2*bartimelength),'ns'], 'FontSize', 9,'Color', [0.5 0.5 0.5]);
 
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);

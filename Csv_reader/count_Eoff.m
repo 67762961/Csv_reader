@@ -27,16 +27,23 @@ Poffmax = max(Poff(windowEoff));
 Poff_normalized = Poff(windowEoff) / Poffmax / 2;
 
 % 可视化
-% figure;
+
+PicStart = SWoff_start - 2*Window_extend;
+PicEnd = SWoff_stop + 2*Window_extend;
+PicLength = PicEnd - PicStart;
+PicTop = 1.2;
+PicBottom = -0.2;
+PicHeight = PicTop - PicBottom;
+
 plot(time(windowEoff), Poff_normalized, 'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/Ictop,'b');
-xlim([time(SWoff_start-100),time(SWoff_stop+100)]);
-ylim([-0.2,1.2]);
+xlim([time(PicStart),time(PicEnd)]);
+ylim([PicBottom,PicTop]);
 
 % 标注
-text(time(SWoff_start-80),1.1,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
 text(time(SWoff_start),0.45,'Poff','color','red','FontSize',13);
 text(time(SWoff_stop),0.95,'Vce','color','green','FontSize',13);
 text(time(SWoff_start),0.95,'Ic','color','blue','FontSize',13);

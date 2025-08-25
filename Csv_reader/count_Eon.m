@@ -27,16 +27,23 @@ Ponmax = max(Pon(windowEon));
 Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
 
 % 可视化设置
-% figure;
+
+PicStart = SWon_start - 2*Window_extend;
+PicEnd = SWon_stop + 2*Window_extend;
+PicLength = PicEnd - PicStart;
+PicTop = 1.2;
+PicBottom = -0.2;
+PicHeight = PicTop - PicBottom;
+
 plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/max(Ic),'b');
-xlim([time(SWon_start-100),time(SWon_stop+100)]);
-ylim([-0.2,1.2]);
+xlim([time(PicStart),time(PicEnd)]);
+ylim([PicBottom,PicTop]);
 
 % 标注和格式设置
-text(time(SWon_start-80),1.1,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
 text(time(SWon_start-30),0.4,'Pon','color','red','FontSize',13);
 text(time(SWon_start),0.9,'Vce','color','green','FontSize',13);
 text(time(SWon_stop),0.9,'Ic','color','blue','FontSize',13);

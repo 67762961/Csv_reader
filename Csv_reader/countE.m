@@ -117,7 +117,7 @@ if (Ch_labels(3)~=0)
 end
 
 if (Ch_labels(5)~=0)
-    static_id_interval = fix(ton0 + cnton0/4) : fix(toff0 - cnton0/4);
+    static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
     meanId = mean(Id(static_id_interval));
     Id = Id - meanId;% 电流探头较零
     ch5 = ch5 - meanId;
@@ -211,6 +211,7 @@ output(16)=Icmax;
 output(17)=tr;
 output(18)=tf;
 output(19)=Vge_dg_mean;
+output(20)=Length_ton0;
 
 
 fprintf('\n');

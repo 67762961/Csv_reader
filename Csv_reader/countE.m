@@ -188,30 +188,11 @@ else
     Erec = " ";
 end
 
+Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
 
 %% 输出表
-output=zeros(20,1);
-
-output(1)=Ictop;
-output(2)=Eon;
-output(3)=Eoff;
-output(4)=Vcemax;
-output(5)=Vdmax;
-output(6)=Vcetop;
-output(7)=dvdtoutput;
-output(8)=didt;
-output(9)=Erec;
-output(10)=Prrmax;
-output(11)=Vge_dg_max;
-output(12)=Vge_dg_min;
-output(13)=tdon;
-output(14)=tdoff;
-output(15)=" ";
-output(16)=Icmax;
-output(17)=tr;
-output(18)=tf;
-output(19)=Vge_dg_mean;
-output(20)=Length_ton0;
+% output=zeros(Data_num,1);
+output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max,Vge_dg_min,tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean];
 
 
 fprintf('\n');

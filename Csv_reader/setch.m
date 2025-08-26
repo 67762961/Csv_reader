@@ -30,7 +30,7 @@ if(Fuzaimode ~=  0)
         for i = 1:10
             fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  Fuzaimode+1);
         end
-        quit;
+        error('参数填写错误');
     end
     data_out(:,10) = data_in(:,Fuzaimode+1);
 end
@@ -42,7 +42,7 @@ for j = 1:length(Ch_labels)
             for i = 1:10
                 fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
             end
-            quit;
+            error('参数填写错误');
         else
             data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
         end

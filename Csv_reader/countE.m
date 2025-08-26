@@ -18,8 +18,8 @@ if strcmp(Chmode,'findch')
 elseif strcmp(Chmode,'setch')
     data = setch(data0,Ch_labels,Fuzaimode);
 else
-    print('通道分配模式参数填写错误')
-    quit
+    fprintf('\n 通道分配模式参数填写错误 \n')
+    error('通道分配异常')
 end
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -81,7 +81,8 @@ cntVge = indzer(Vge,Vgeth);
 % Vge过零点次数记录
 cntsw = length(cntVge);
 if cntsw ~= 6
-    warning('Vge过零点位置不等于六处 可能出现开关状态判断异常')
+    fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
+    error('过零点判断异常')
 end
 % fprintf('%d\n',cntsw);
 % 第0次开通时间点

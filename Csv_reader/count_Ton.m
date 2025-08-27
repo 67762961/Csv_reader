@@ -1,4 +1,4 @@
-function [tdon,tr] = count_Ton(num,nspd,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90)
+function [tdon,tr] = count_Ton(num,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90)
 
 %% ================ 开通时间（Ton）计算与绘图 ================
 
@@ -10,13 +10,13 @@ ton_slope_range = tonIcm10 : tonIcm90;
 
 % 时间参数计算
 if tonIcm10 - ton10 > 0
-    tdon = (time(tonIcm10) - time(ton10)) * nspd * 1e9;
+    tdon = (time(tonIcm10) - time(ton10))* 1e9;
 else
     tdon = 0;
 end
 
 if tonIcm90 - tonIcm10 > 0
-    tr = (time(tonIcm90) - time(tonIcm10)) * nspd * 1e9;
+    tr = (time(tonIcm90) - time(tonIcm10)) * 1e9;
 else
     tr = 0;
 end

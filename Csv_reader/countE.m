@@ -39,7 +39,10 @@ if Fuzaimode ~= 0
     I_fuzai = data(:,10);
 end
 
-ch3 = data(:,4);        % Ic（集电极电流）
+if (Ch_labels(3)~=0)
+    ch3 = Ch_labels(3)/abs(Ch_labels(3))*data(:,4);       % Ic（集电极电流）
+end
+
 ch4 = data(:,5);        % Vd（二极管电压）
 
 

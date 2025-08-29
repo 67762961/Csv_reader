@@ -15,7 +15,7 @@ datnum      = Para_file.datnum   ;      %% csv文件序号组数
 datend      = datstart + datnum-1;      %% csv文件序号终止点
 
 % 模式配置参
-nspd       = Para_mode.nspd     ;       %% csv采样率 ns per dot
+% nspd       = Para_mode.nspd     ;       %% csv采样率 ns per dot
 Chmode     = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
 Smooth_Win = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
@@ -66,7 +66,7 @@ writematrix(num2str(datstart),outputtable,'sheet',dataname,'range','F2','UseExce
 writematrix(num2str(datnum),outputtable,'sheet',dataname,'range','G2','UseExcel',0)
 writematrix(num2str(datend),outputtable,'sheet',dataname,'range','H2','UseExcel',0)
 
-writematrix(num2str(nspd),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
+% writematrix(num2str(nspd),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
 writematrix(num2str(Chmode),outputtable,'sheet',dataname,'range','B4','UseExcel',0)
 writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','C4','UseExcel',0)
 writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
@@ -90,7 +90,7 @@ Data_num = Data_size(3);
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,nspd,location,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 writematrix(data1,outputtable,'sheet',dataname,'range','A11');

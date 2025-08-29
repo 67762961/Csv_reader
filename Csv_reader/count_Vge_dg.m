@@ -1,4 +1,4 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,nspd,time,ch6,Vge_dg,Ictop,path,dataname,cnton2)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2)
 
 %% 对管门极监测
 % 找出全局最大值
@@ -24,8 +24,9 @@ plot(time(cemax_idx_max), Vge_dg_max, 'ro', 'MarkerFaceColor','r');
 text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.9, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.8, ['V_g_e对管max=',num2str(Vge_dg_max),'V'], 'FontSize',13);
 
+nspd = time(2)-time(1);
 barlength = fix(cnton2/50);
-bartimelength = barlength + nspd * 1e-9;
+bartimelength = barlength * nspd * 1e-9;
 barheight = 0.01*PicHeight;
 line([time(cemax_idx_max-barlength),time(cemax_idx_max+barlength)],[Vge_dg_max,Vge_dg_max],'Color', [0.5 0.5 0.5]);
 line([time(cemax_idx_max-barlength),time(cemax_idx_max-barlength)],[Vge_dg_max-barheight, Vge_dg_max+barheight], 'Color', [0.5 0.5 0.5]);

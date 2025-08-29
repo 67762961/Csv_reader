@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,nspd,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function output = countE(locate,tablename,tablenum,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -75,7 +75,6 @@ end
 if (Ch_labels(6)~=0)
     Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));
 end
-
 
 %% 开通关断区块划分
 
@@ -154,12 +153,12 @@ end
 
 if (Ch_labels(3)~=0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
+    [dvdt,dvdt_a_b] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
     % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
     dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
     
     % ====================== di/dt计算模块 ======================
-    [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
+    [didt,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
     
     % ====================== 开通时间（Ton）计算 ======================
     [tdon,tr] = count_Ton(num,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
@@ -177,7 +176,7 @@ end
 
 % ====================== 对管门极监测 Vge_dg ======================
 if (Ch_labels(6)~=0)
-    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,nspd,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
+    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
 else
     Vge_dg_mean = " ";
     Vge_dg_max = " ";
@@ -192,6 +191,8 @@ else
     Erec = " ";
 end
 
+% 脉宽长度计算
+nspd = (time(2)-time(1))*1e9;
 Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
 
 %% 输出表

@@ -1,4 +1,4 @@
-function [didt,tonIcm10,tonIcm90] = count_didt(num,nspd,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop)
+function [didt,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop)
 
 % ====================== di/dt计算模块 ======================
 
@@ -49,7 +49,7 @@ end
 if time(valid_rise_end) == time(valid_rise_start)
     didt = 0;
 else
-    delta_time = (valid_rise_end  - valid_rise_start) * nspd * 1e-9;      % 时间差(ns转秒)
+    delta_time = time(valid_rise_end) - time(valid_rise_start); % 时间差(ns转秒)
     didt = (ch3(valid_rise_end) - ch3(valid_rise_start)) / delta_time * 1e-6;
 end
 

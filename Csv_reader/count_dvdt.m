@@ -1,4 +1,4 @@
-function [dvdt,dvdt_a_b] = count_dvdt(num,nspd,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop)
+function [dvdt,dvdt_a_b] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop)
 
 %% dv/dt计算模块
 % 阈值定义
@@ -14,7 +14,8 @@ window_dv = window_dv_start : window_dv_end;
 
 rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
 rise_end_idx  = find(Vce(rise_start_idx:window_dv(end)) >= V_90, 1, 'first') + rise_start_idx - 1;
-delta_time = (rise_end_idx  - rise_start_idx) * nspd * 1e-9;      % 时间差(ns转秒)
+delta_time = time(rise_end_idx) - time(rise_start_idx); % 时间差(ns转秒)
+
 if (rise_end_idx - rise_start_idx)>0
     dvdt = (Vce(rise_end_idx ) - Vce(rise_start_idx)) / delta_time * 1e-6;
 else
@@ -24,7 +25,8 @@ end
 
 rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
 rise_end_idx_b  = find(Vce(rise_start_idx:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx - 1;
-delta_time_a_b = (rise_end_idx_b  - rise_start_idx_a) * nspd * 1e-9;      % 时间差(ns转秒)
+delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
+
 if (rise_end_idx - rise_start_idx)>0
     dvdt_a_b = (Vce(rise_end_idx_b) - Vce(rise_start_idx_a)) / delta_time_a_b * 1e-6;
 else

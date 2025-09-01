@@ -61,9 +61,9 @@ valid_Prr = Prr(Erec_start:end);         % 瞬时功率向量 [W]
 Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
 
 % 可视化
-PrrLength = fix((Prr_end - Prr_start));
-PicStart = Prr_start - fix(PrrLength/3);
-PicEnd = Prr_end + fix(PrrLength/2);
+PrrLength = fix((Erec_stop - Erec_start));
+PicStart = Erec_start - fix(PrrLength/3);
+PicEnd = Erec_stop + fix(PrrLength/2);
 PicLength = PicEnd - PicStart;
 PicTop = 2;
 PicBottom = -1;

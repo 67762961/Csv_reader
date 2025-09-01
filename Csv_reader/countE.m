@@ -136,7 +136,12 @@ else
 end
 
 [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
-[Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);
+
+if (Ch_labels(4)~=0)
+    [Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);
+else
+    Vdmax = "   ";
+end
 
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================

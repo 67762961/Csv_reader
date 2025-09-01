@@ -81,7 +81,7 @@ writematrix(num2str(gate_Erec),outputtable,'sheet',dataname,'range','B6','UseExc
 writematrix(num2str(Vgeth),outputtable,'sheet',dataname,'range','C6','UseExcel',0)
 writematrix(num2str(Vmax),outputtable,'sheet',dataname,'range','D6','UseExcel',0)
 
-title=char(["CSV","脉宽长(us)","Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","Tdon(ns)","Tdoff(ns)","    ","Icmax(A)","Trise(ns)","Tfall(ns)","VgeDgmean(V)"]);  %%定义表头
+title=char(["CSV","脉宽长(us)","Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","Tdon(ns)","Tdoff(ns)","    ","Icmax(A)","Trise(ns)","Tfall(ns)","VgeDgmean(V)","PrrPROMAX(kW)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 Data_size = size(title);
 Data_num = Data_size(3);

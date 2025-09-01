@@ -191,13 +191,23 @@ else
     Erec = " ";
 end
 
-% 脉宽长度计算
+% ====================== 脉宽长度计算 ======================
 nspd = (time(2)-time(1))*1e9;
 Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
 
+% ====================== 反向恢复极限功率 ======================
+if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
+    Delta_Ic = Icmax - Ictop;
+    PrrPROMAX = Delta_Ic * Vdmax / 1000; % 单位kW
+else
+    PrrPROMAX = " ";
+end
+
+
+
 %% 输出表
 % output=zeros(Data_num,1);
-output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max,Vge_dg_min,tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean];
+output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max,Vge_dg_min,tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean,PrrPROMAX];
 
 
 fprintf('\n');

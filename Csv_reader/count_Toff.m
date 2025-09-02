@@ -4,10 +4,18 @@ function [tdoff,tf] = count_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,
 % 关断时电流=90%时刻
 toffIcm90_indices = find(Ic(tIcm-fix(ton2/10):min(toff1+50, length(Ic))) < Ictop*0.9, 1, 'first');
 toffIcm90 = tIcm + toffIcm90_indices - 1;
+if isempty(toffIcm90_indices)
+    print('关断时电流=90%时刻识别失败')
+    error('关断时电流=90%时刻识别失败')
+end
 
 % 关断时电流=10%时刻
 toffIcm10_indices = find(Ic(toffIcm90:min(ton2, length(Ic))) < Ictop*0.1, 1, 'first');
 toffIcm10 = toffIcm90 + toffIcm10_indices - 1;
+if isempty(toffIcm90_indices)
+    print('关断时电流=10%时刻识别失败')
+    error('关断时电流=10%时刻识别失败')
+end
 
 % 动态索引边界保护
 toff_bg_start = max(1, fix(toff90 * 0.997));

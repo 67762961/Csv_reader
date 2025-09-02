@@ -13,8 +13,17 @@ window_dv_end = min(length(Vce), SWoff_stop+50);  % 终止索引不超过数组�
 window_dv = window_dv_start : window_dv_end;
 
 rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
+if isempty(rise_start_idx)
+    print('dvdt起始点识别失败')
+    error('dvdt起始点识别失败')
+end
 rise_end_idx  = find(Vce(rise_start_idx:window_dv(end)) >= V_90, 1, 'first') + rise_start_idx - 1;
+if isempty(rise_end_idx)
+    print('dvdt结束点识别失败')
+    error('dvdt结束点识别失败')
+end
 delta_time = time(rise_end_idx) - time(rise_start_idx); % 时间差(ns转秒)
+
 
 if (rise_end_idx - rise_start_idx)>0
     dvdt = (Vce(rise_end_idx ) - Vce(rise_start_idx)) / delta_time * 1e-6;
@@ -24,7 +33,15 @@ else
 end
 
 rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
+if isempty(rise_start_idx_a)
+    print('dvdt起始点识别失败')
+    error('dvdt起始点识别失败')
+end
 rise_end_idx_b  = find(Vce(rise_start_idx:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx - 1;
+if isempty(rise_end_idx_b)
+    print('dvdt结束点识别失败')
+    error('dvdt结束点识别失败')
+end
 delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
 
 if (rise_end_idx - rise_start_idx)>0

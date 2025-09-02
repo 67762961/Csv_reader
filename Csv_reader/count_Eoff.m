@@ -5,11 +5,19 @@ function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop
 valid_range = toff90:min(ton2, length(Vce));
 SWoff_start_indices = find(Vce(valid_range) >= Vcetop*0.1, 1, 'first');
 SWoff_start = valid_range(1) + SWoff_start_indices - 1;
+if isempty(SWoff_start_indices)
+    print('Eoff计算起点识别失败')
+    error('Eoff计算起点识别失败')
+end
 
 %关断结束时刻寻找
 valid_range = SWoff_start:min(ton2, length(Ic));
 SWoff_stop_indices = find(Ic(valid_range) <= Ictop*0.02, 1, 'first');
 SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
+if isempty(SWoff_stop_indices)
+    print('Eoff计算终点识别失败')
+    error('Eoff计算终点识别失败')
+end
 
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));

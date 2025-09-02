@@ -3,14 +3,23 @@ function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,pat
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量
 %开通起始时刻寻找
+cnton2 = toff2 - ton2;
 search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
-valid_range = search_start:min(toff2, length(Ic));
+valid_range = search_start:min(toff2+cnton2, length(Ic));
 SWon_start_indices = find(Ic(valid_range) >= max(0.15*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
+if isempty(SWon_start_indices)
+    print('Eon计算起点识别失败')
+    error('Eon计算起点识别失败')
+end
 
 %开通结束时刻寻找
 SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.1, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
+if isempty(SWon_stop_indices)
+    print('Eon计算终点识别失败')
+    error('Eon计算终点识别失败')
+end
 
 Window_width = SWon_stop - SWon_start;
 Window_extend = fix(Window_width/6);

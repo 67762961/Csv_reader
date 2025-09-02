@@ -1,19 +1,20 @@
 function [Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2)
 
 %% ================ Vdmax计算 ================
-[Vdmax, dmax_idx] = max(ch4(ton2:toff2));
-dmax_idx = ton2 + dmax_idx - 1;
+cnton2 = toff2 - ton2;
+[Vdmax, dmax_idx] = max(ch4(ton2 - cnton2:toff2));
+dmax_idx = ton2 - cnton2 + dmax_idx - 1;
 
 % 绘图
 
-PicStart = fix((ton2 + toff2)/2 - 11*(toff2 - ton2)/20);
-PicEnd = fix((ton2 + toff2)/2 + 11*(toff2 - ton2)/20);
+PicStart = fix(dmax_idx - cnton2/4);
+PicEnd = fix(dmax_idx + cnton2/2);
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.2*Vdmax);
 PicBottom = fix(-0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
-plot(time(ton2:toff2), ch4(ton2:toff2), 'b');
+plot(time(PicStart:PicEnd), ch4(PicStart:PicEnd), 'b');
 hold on;
 plot(time(dmax_idx), Vdmax, 'ro', 'MarkerFaceColor','r');
 text(time(fix(dmax_idx+0.05*PicLength)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13);

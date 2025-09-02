@@ -59,16 +59,16 @@ end
 
 % 绘图
 % figure;
-SWonlength = fix((SWon_stop - SWon_start));
+SWonlength = fix((valid_rise_end - valid_rise_start));
 
-PicStart = valid_rise_start - fix(SWonlength*2/3);
-PicEnd = valid_rise_end + SWonlength;
+PicStart = valid_rise_start - SWonlength;
+PicEnd = valid_rise_end + 2*SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.05*PicTop);
 PicHeight = PicTop - PicBottom;
 
-plot(time(PicStart:valid_rise_end + SWonlength), ch3(PicStart:valid_rise_end + SWonlength), 'b');
+plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'b');
 hold on;
 plot(time(valid_rise_start:valid_rise_end), ch3(valid_rise_start:valid_rise_end), 'r', 'LineWidth',1.5);
 % plot(time(Window_Start:Window_Stop), zeros(Window_Stop-Window_Start+1), 'Black');

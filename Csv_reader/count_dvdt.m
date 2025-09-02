@@ -36,16 +36,16 @@ end
 
 % 保持原始绘图逻辑
 % figure;
-Riselength = fix((SWoff_stop - SWoff_start));
+Riselength = fix((rise_end_idx - rise_start_idx));
 
-PicStart = rise_start_idx - fix(Riselength*2/3);
-PicEnd = rise_end_idx + Riselength;
+PicStart = rise_start_idx - Riselength;
+PicEnd = rise_end_idx + 2*Riselength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
 PicHeight = PicTop - PicBottom;
 
-plot(time(rise_start_idx-Riselength:rise_end_idx +Riselength), Vce(rise_start_idx-Riselength:rise_end_idx +Riselength), 'b');
+plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
 plot(time(rise_start_idx), Vce(rise_start_idx), 'ro', 'MarkerFaceColor','r');

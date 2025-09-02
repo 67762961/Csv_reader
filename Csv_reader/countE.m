@@ -198,7 +198,11 @@ end
 
 % ====================== 脉宽长度计算 ======================
 nspd = (time(2)-time(1))*1e9;
-Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
+if(Ch_labels(3)~=0)
+    Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
+else
+    Length_ton0 = 2*fix((cnton0/nspd) /(2000/nspd) + 0.5);
+end
 
 % ====================== 反向恢复极限功率 ======================
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)

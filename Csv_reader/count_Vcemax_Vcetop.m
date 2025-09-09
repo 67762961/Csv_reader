@@ -2,9 +2,15 @@ function [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ict
 
 %% Vcetop Ictop 计算
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-vge_high_interval = fix(ton1 + cnton1/4) : fix(toff1 - cnton1/4);
+[Vgemax,T_Vgemax] = max(Vge(ton1:ton2));
+T_Vgemax = ton1 + T_Vgemax - 1; % 转换为全局索引
+vge_high_interval = fix(T_Vgemax - cnton1/10) : fix(T_Vgemax);
 meanVgetop = median(Vge(vge_high_interval)); % 中值滤波
-
+if (meanVgetop < 0.9*Vgemax)
+    fprintf('Vgetop检测:\n')
+    fprintf('       Vgetop(%03f) 小于0.9倍 Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',meanVgetop,Vgemax)
+    meanVgetop = 0.9*Vgemax;
+end
 % 寻找关断时Vge=90%的时间点
 toff90_indices = find(Vge(toff1:-1:ton1) > 0.9 * meanVgetop, 1, 'first');
 toff90 = toff1 - toff90_indices + 1; % 转换为原始索引

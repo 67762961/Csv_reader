@@ -8,7 +8,7 @@ vge_high_interval = fix(T_Vgemax - cnton1/10) : fix(T_Vgemax);
 meanVgetop = median(Vge(vge_high_interval)); % 中值滤波
 if (meanVgetop < 0.9*Vgemax)
     fprintf('Vgetop检测:\n')
-    fprintf('       Vgetop(%03f) 小于0.9倍 Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',meanVgetop,Vgemax)
+    fprintf('       Vgetop(%03f) 小于 0.9*Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',meanVgetop,0.9*Vgemax)
     meanVgetop = 0.9*Vgemax;
 end
 % 寻找关断时Vge=90%的时间点

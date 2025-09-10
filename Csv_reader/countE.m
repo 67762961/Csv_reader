@@ -149,7 +149,7 @@ if (Ch_labels(3)~=0)
     
     
     % ====================== 关断损耗计算（Eoff） ======================
-    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90);
+    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,ton1,cnton1);
 else
     Eon = " ";
     Eoff = " ";

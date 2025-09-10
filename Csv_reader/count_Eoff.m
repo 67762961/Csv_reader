@@ -1,8 +1,8 @@
-function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff90)
+function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,ton1,cnton1)
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
-valid_range = toff90:min(ton2, length(Vce));
+valid_range = (ton1+fix(0.7*cnton1)):min(ton2, length(Vce));
 SWoff_start_indices = find(Vce(valid_range) >= Vcetop*0.1, 1, 'first');
 SWoff_start = valid_range(1) + SWoff_start_indices - 1;
 if isempty(SWoff_start_indices)
@@ -22,8 +22,8 @@ end
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));
 Window_width = SWoff_stop - SWoff_start;
-Window_extend = fix(Window_width/6);
-windowEoff = (SWoff_start - Window_extend : SWoff_stop + Window_extend);
+Window_extend = fix(Window_width/10);
+windowEoff = (SWoff_start : SWoff_stop);
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;

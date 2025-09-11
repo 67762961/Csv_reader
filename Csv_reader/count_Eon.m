@@ -18,6 +18,9 @@ SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.02, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
 for i = 1:18
     if ~isempty(SWon_stop_indices)
+        if(i~=1)
+            fprintf('       未找到 0.02 Vcetop 作为 Eon 计算结束点 放宽至 %0.2f Vcetop \n', (0.02+(i-1)/100));
+        end
         break;
     end
     SWon_stop_indices = find(Vce(valid_range) <= Vcetop*(0.02+i/100), 1, 'first');
@@ -25,7 +28,6 @@ for i = 1:18
     if i == 1
         fprintf('Eon计算:\n')
     end
-    fprintf('       未找到 0.02 Vcetop 作为 Eon 计算结束点 放宽至 %0.2f Vcetop \n', (0.02+i/100));
 end
 if isempty(SWon_stop_indices)
     print('Eon计算终点识别失败')

@@ -16,6 +16,9 @@ SWoff_stop_indices = find(Ic(valid_range) <= Ictop*0.02, 1, 'first');
 SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
 for i = 1:18
     if ~isempty(SWoff_stop_indices)
+        if(i~=1)
+            fprintf('       未找到 0.02 Ictop 作为 Eoff 计算结束点 放宽至 %0.2f Ictop \n', (0.02+(i-1)/100));
+        end
         break;
     end
     SWoff_stop_indices = find(Ic(valid_range) <= Ictop*(0.02+i/100), 1, 'first');
@@ -23,7 +26,6 @@ for i = 1:18
     if i == 1
         fprintf('Eon计算:\n')
     end
-    fprintf('       未找到 0.02 Ictop 作为 Eoff 计算结束点 放宽至 %0.2f Ictop \n', (0.02+i/100));
 end
 if isempty(SWoff_stop_indices)
     print('Eoff计算终点识别失败')

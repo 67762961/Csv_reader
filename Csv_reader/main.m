@@ -16,14 +16,15 @@ datend      = datstart + datnum-1;      %% csv文件序号终止点
 
 % 模式配置参
 % nspd       = Para_mode.nspd     ;       %% csv采样率 ns per dot
-Chmode     = Para_mode.Chmode   ;       %% 通道分配模式
-Ch_labels  = Para_mode.Ch_labels;       %% 通道分配
-Smooth_Win = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
-dvdtmode   = Para_mode.dvdtmode ;       %% dvdt模式
-didtmode   = Para_mode.didtmode ;       %% didt模式
-Fuzaimode  = Para_mode.Fuzaimode;
+Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
+Ch_labels   = Para_mode.Ch_labels;       %% 通道分配
+Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
+dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
+didtmode    = Para_mode.didtmode ;       %% didt模式
+Fuzaimode   = Para_mode.Fuzaimode;
+Duiguanmode = Para_mode.Duiguanmode;
 % Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
-Drawflag   = Para_mode.Drawflag ;       %% 是否需要绘图分析
+Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
 
 % 数据配置
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
@@ -51,7 +52,7 @@ outputtable=strcat([path,'\result\',ouput_table]);
 
 datetime = datestr(now, 'yyyymmdd');
 Paratable1 = char(["代码版本号","日期","路径","器件","表名","起始数","总数","终点数"]);
-Paratable2 = char(["采样率","通道设置","通道分配","滤波窗口","dvdt模式","didt模式","负载电流模式","画图分析"]);
+Paratable2 = char(["通道设置","通道分配","滤波窗口","dvdt模式","didt模式","对管门极监测","负载电流模式","画图分析"]);
 Paratable3 = char(["didt阈值","Erec阈值","门极阈值","芯片耐压"]);
 writematrix(Paratable1,outputtable,'sheet',dataname,'range','A1','UseExcel',0)
 writematrix(Paratable2,outputtable,'sheet',dataname,'range','A3','UseExcel',0)
@@ -66,13 +67,12 @@ writematrix(num2str(datstart),outputtable,'sheet',dataname,'range','F2','UseExce
 writematrix(num2str(datnum),outputtable,'sheet',dataname,'range','G2','UseExcel',0)
 writematrix(num2str(datend),outputtable,'sheet',dataname,'range','H2','UseExcel',0)
 
-% writematrix(num2str(nspd),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
-writematrix(num2str(Chmode),outputtable,'sheet',dataname,'range','B4','UseExcel',0)
-writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','C4','UseExcel',0)
-writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
-writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
-writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
-% writematrix(num2str(Dflag),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
+writematrix(num2str(Chmode),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
+writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','B4','UseExcel',0)
+writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','C4','UseExcel',0)
+writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
+writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
+writematrix(num2str(Duiguanmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
 writematrix(num2str(Fuzaimode),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
 writematrix(num2str(Drawflag),outputtable,'sheet',dataname,'range','H4','UseExcel',0)
 
@@ -81,7 +81,7 @@ writematrix(num2str(gate_Erec),outputtable,'sheet',dataname,'range','B6','UseExc
 writematrix(num2str(Vgeth),outputtable,'sheet',dataname,'range','C6','UseExcel',0)
 writematrix(num2str(Vmax),outputtable,'sheet',dataname,'range','D6','UseExcel',0)
 
-title=char(["CSV","脉宽长(us)","Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDGmax(V)","VgeDGmin(V)","Tdon(ns)","Tdoff(ns)","    ","Icmax(A)","Trise(ns)","Tfall(ns)","VgeDgmean(V)","PrrPROMAX(kW)"]);  %%定义表头
+title=char(["CSV","脉宽长(us)","Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDG1max(V)","VgeDG1min(V)","Tdon(ns)","Tdoff(ns)","    ","Icmax(A)","Trise(ns)","Tfall(ns)","VgeDg1mean(V)","PrrPROMAX(kW)","VgeDG2max(V)","VgeDG2min(V)","VgeDg2mean(V)"]);  %%定义表头
 writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
 Data_size = size(title);
 Data_num = Data_size(3);
@@ -90,7 +90,7 @@ Data_num = Data_size(3);
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 writematrix(data1,outputtable,'sheet',dataname,'range','A11');

@@ -1,4 +1,4 @@
-function [data_out] = setch(data_in, Ch_labels,Fuzaimode)
+function [data_out] = setch(data_in, Ch_labels, Duiguanmode, Fuzaimode)
 % 双脉冲测试信号通道重组函数
 %   Inputs:
 %       data_in   : N×6 矩阵 (double)
@@ -23,13 +23,9 @@ function [data_out] = setch(data_in, Ch_labels,Fuzaimode)
 data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴
 
-[~,n] = size(data_in);
-
 if(Fuzaimode ~=  0)
     if isempty(data_in(:,Fuzaimode+1))
-        for i = 1:10
-            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  Fuzaimode+1);
-        end
+        fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  Fuzaimode+1);
         error('参数填写错误');
     end
     data_out(:,10) = data_in(:,Fuzaimode+1);
@@ -38,10 +34,8 @@ end
 
 for j = 1:length(Ch_labels)
     if(Ch_labels(j))
-        if abs(Ch_labels(j))+1 > n
-            for i = 1:10
-                fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
-            end
+        if isempty(data_in(:,Ch_labels(j)+1))
+            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
             error('参数填写错误');
         else
             data_out(:,j+1) = data_in(:,abs(Ch_labels(j))+1);
@@ -49,7 +43,18 @@ for j = 1:length(Ch_labels)
     end
 end
 
-signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id", "Vge_dg"];
+for j = 1:length(Duiguanmode)
+    if(Duiguanmode(j) ~= 0)
+        if isempty(data_in(:,Duiguanmode(j)+1))
+            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n', Duiguanmode(j)+1);
+            error('参数填写错误');
+        else
+            data_out(:,6+j) = data_in(:,Duiguanmode(j)+1);
+        end
+    end
+end
+
+signal_labels = ["Vge", "Vce", "Ic", "Vd", "Id"];
 fprintf('通道分配结果:\n');
 fprintf('    ');
 for i = 1:length(Ch_labels)
@@ -59,6 +64,12 @@ for i = 1:length(Ch_labels)
     if i >= length(Ch_labels)
         if (Fuzaimode ~= 0)
             fprintf('    %s(通道%d)', "I_fuzai", Fuzaimode);
+        end
+        if (Duiguanmode(1) ~= 0)
+            fprintf('    %s(通道%d)', "Vge_dg", Duiguanmode(1));
+        end
+        if (Duiguanmode(2) ~= 0)
+            fprintf('    %s(通道%d)', "Vge_dg", Duiguanmode(2));
         end
         fprintf('\n');
     end

@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,path,dataname,Chmode,dvdtmode,didtmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function output = countE(locate,tablename,tablenum,path,dataname,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -16,7 +16,7 @@ end
 if strcmp(Chmode,'findch')
     data = findch(data0,0);
 elseif strcmp(Chmode,'setch')
-    data = setch(data0,Ch_labels,Fuzaimode);
+    data = setch(data0,Ch_labels,Duiguanmode,Fuzaimode);
 else
     fprintf('\n 通道分配模式参数填写错误 \n')
     error('通道分配异常')
@@ -50,8 +50,11 @@ if (Ch_labels(5)~=0)
     ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
 end
 
-if (Ch_labels(6)~=0)
-    ch6 = data(:,7);        % Id（二极管电流）
+Vge_dg = zeros(length(data(:,1)),length(Duiguanmode));
+for j = 1:length(Duiguanmode)
+    if (Duiguanmode(j)~=0)
+        Vge_dg(:,j) = data(:,6+j); % 对管门极电压
+    end
 end
 
 % 信号滤波（抑制噪声）
@@ -70,10 +73,6 @@ Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
 
 if (Ch_labels(5)~=0)
     Id = smoothdata(ch5, 'movmean', Smooth_Win(5));
-end
-
-if (Ch_labels(6)~=0)
-    Vge_dg = smoothdata(ch6, 'movmean', Smooth_Win(6));
 end
 
 %% 开通关断区块划分
@@ -180,12 +179,18 @@ else
 end
 
 % ====================== 对管门极监测 Vge_dg ======================
-if (Ch_labels(6)~=0)
-    [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2);
-else
-    Vge_dg_mean = " ";
-    Vge_dg_max = " ";
-    Vge_dg_min = " ";
+Vge_dg_mean = strings(1,length(Duiguanmode));
+Vge_dg_max = strings(1,length(Duiguanmode));
+Vge_dg_min = strings(1,length(Duiguanmode));
+
+for gd_num = 1:length(Duiguanmode)
+    if (Duiguanmode(gd_num)~=0)
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cnton2,gd_num);
+    else
+        Vge_dg_mean(gd_num) = " ";
+        Vge_dg_max(gd_num) = " ";
+        Vge_dg_min(gd_num) = " ";
+    end
 end
 
 % ====================== Prr/Erec计算 ======================
@@ -216,7 +221,7 @@ end
 
 %% 输出表
 % output=zeros(Data_num,1);
-output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max,Vge_dg_min,tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean,PrrPROMAX];
+output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max(1),Vge_dg_min(1),tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean(1),PrrPROMAX,Vge_dg_max(2),Vge_dg_min(2),Vge_dg_mean(2)];
 
 
 fprintf('\n');

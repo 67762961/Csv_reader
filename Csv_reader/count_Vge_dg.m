@@ -1,12 +1,12 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,ch6,Vge_dg,Ictop,path,dataname,cnton2)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,Vge_dg,Ictop,path,dataname,cnton2,gd_num)
 
 %% 对管门极监测
 % 找出全局最大值
-[Vge_dg_max, cemax_idx_max] = max(ch6);
+[Vge_dg_max, cemax_idx_max] = max(Vge_dg);
 
 
 % 找出全局最小值
-[Vge_dg_min, cemax_idx_min] = min(ch6);
+[Vge_dg_min, cemax_idx_min] = min(Vge_dg);
 
 Vge_dg_mean = mean(Vge_dg);
 
@@ -18,7 +18,7 @@ PicHeight = 2*abs(Vge_dg_max - Vge_dg_min);
 PicTop = Vge_dg_mean + PicHeight*2/3;
 PicBottom = Vge_dg_mean - PicHeight/3;
 
-plot(time(PicStart:PicEnd), ch6(PicStart:PicEnd), 'b');
+plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_max), Vge_dg_max, 'ro', 'MarkerFaceColor','r');
 text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.9, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
@@ -41,7 +41,7 @@ grid on;
 % 路径构建优化
 save_dir = fullfile(path, 'pic', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_max.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'_max.png']), 'png');
 close(gcf);
 hold off
 
@@ -51,7 +51,7 @@ PicStart = cemax_idx_min - fix(PicLength/2);
 PicEnd =  cemax_idx_min + fix(PicLength/2);
 PicHeight = 2*abs(Vge_dg_max - Vge_dg_min);
 
-plot(time(PicStart:PicEnd), ch6(PicStart:PicEnd), 'b');
+plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_min), Vge_dg_min, 'ro', 'MarkerFaceColor','r');
 text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.9, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
@@ -64,6 +64,6 @@ grid on;
 % 路径构建优化
 save_dir = fullfile(path, 'pic', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_min.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'min.png']), 'png');
 close(gcf);
 hold off

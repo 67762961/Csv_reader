@@ -14,13 +14,17 @@ end
 valid_range = SWoff_start:min(ton2, length(Ic));
 SWoff_stop_indices = find(Ic(valid_range) <= Ictop*0.02, 1, 'first');
 SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
-if isempty(SWoff_stop_indices)
-    SWoff_stop_indices = find(Ic(valid_range) <= Ictop*0.05, 1, 'first');
+for i = 1:18
+    if ~isempty(SWoff_stop_indices)
+        break;
+    end
+    SWoff_stop_indices = find(Ic(valid_range) <= Ictop*(0.02+i/100), 1, 'first');
     SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
-    fprintf('Eoff计算:\n')
-    fprintf('       未找到 0.02 Ictop 作为Eoff计算结束点,放宽至 0.05 Ictop \n')
+    if i == 1
+        fprintf('Eon计算:\n')
+    end
+    fprintf('       未找到 0.02 Ictop 作为 Eoff 计算结束点 放宽至 %0.2f Ictop \n', (0.02+i/100));
 end
-
 if isempty(SWoff_stop_indices)
     print('Eoff计算终点识别失败')
     error('Eoff计算终点识别失败')

@@ -16,11 +16,16 @@ end
 %开通结束时刻寻找
 SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.02, 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
-if isempty(SWon_stop_indices)
-    SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.05, 1, 'first');
+for i = 1:18
+    if ~isempty(SWon_stop_indices)
+        break;
+    end
+    SWon_stop_indices = find(Vce(valid_range) <= Vcetop*(0.02+i/100), 1, 'first');
     SWon_stop = valid_range(1) + SWon_stop_indices - 1;
-    fprintf('Eon计算:\n')
-    fprintf('       未找到 0.2 Vcetop 作为Eon计算结束点,放宽至 0.05 Vcetop \n')
+    if i == 1
+        fprintf('Eon计算:\n')
+    end
+    fprintf('       未找到 0.02 Vcetop 作为 Eon 计算结束点 放宽至 %0.2f Vcetop \n', (0.02+i/100));
 end
 if isempty(SWon_stop_indices)
     print('Eon计算终点识别失败')

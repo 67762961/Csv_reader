@@ -49,51 +49,55 @@ end
 
 %% 表头设定
 outputtable=strcat([path,'\result\',ouput_table]);
-
 datetime = datestr(now, 'yyyymmdd');
-Paratable1 = char(["代码版本号","日期","路径","器件","表名","起始数","总数","终点数"]);
-Paratable2 = char(["通道设置","通道分配","滤波窗口","dvdt模式","didt模式","对管门极监测","负载电流模式","画图分析"]);
-Paratable3 = char(["didt阈值","Erec阈值","门极阈值","芯片耐压"]);
-writematrix(Paratable1,outputtable,'sheet',dataname,'range','A1','UseExcel',0)
-writematrix(Paratable2,outputtable,'sheet',dataname,'range','A3','UseExcel',0)
-writematrix(Paratable3,outputtable,'sheet',dataname,'range','A5','UseExcel',0)
 
-writematrix(Ver,outputtable,'sheet',dataname,'range','A2','UseExcel',0)
-writematrix(datetime,outputtable,'sheet',dataname,'range','B2','UseExcel',0)
-writematrix(location,outputtable,'sheet',dataname,'range','C2','UseExcel',0)
-writematrix(tablename,outputtable,'sheet',dataname,'range','D2','UseExcel',0)
-writematrix(Dataname,outputtable,'sheet',dataname,'range','E2','UseExcel',0)
-writematrix(num2str(datstart),outputtable,'sheet',dataname,'range','F2','UseExcel',0)
-writematrix(num2str(datnum),outputtable,'sheet',dataname,'range','G2','UseExcel',0)
-writematrix(num2str(datend),outputtable,'sheet',dataname,'range','H2','UseExcel',0)
+Paratable1 = {'代码版本号', '日期', '路径', '器件', '表名', '起始数', '总数', '终点数'};
+Paradata1 = {Ver,datetime,location,tablename,Dataname,num2str(datstart),num2str(datnum),num2str(datend)};
 
-writematrix(num2str(Chmode),outputtable,'sheet',dataname,'range','A4','UseExcel',0)
-writematrix(num2str(Ch_labels),outputtable,'sheet',dataname,'range','B4','UseExcel',0)
-writematrix(num2str(Smooth_Win),outputtable,'sheet',dataname,'range','C4','UseExcel',0)
-writematrix(num2str(dvdtmode),outputtable,'sheet',dataname,'range','D4','UseExcel',0)
-writematrix(num2str(didtmode),outputtable,'sheet',dataname,'range','E4','UseExcel',0)
-writematrix(num2str(Duiguanmode),outputtable,'sheet',dataname,'range','F4','UseExcel',0)
-writematrix(num2str(Fuzaimode),outputtable,'sheet',dataname,'range','G4','UseExcel',0)
-writematrix(num2str(Drawflag),outputtable,'sheet',dataname,'range','H4','UseExcel',0)
+Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管门极监测', '负载电流模式', '画图分析'};
+Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(Duiguanmode), num2str(Fuzaimode), num2str(Drawflag)};
 
-writematrix(num2str(gate_didt),outputtable,'sheet',dataname,'range','A6','UseExcel',0)
-writematrix(num2str(gate_Erec),outputtable,'sheet',dataname,'range','B6','UseExcel',0)
-writematrix(num2str(Vgeth),outputtable,'sheet',dataname,'range','C6','UseExcel',0)
-writematrix(num2str(Vmax),outputtable,'sheet',dataname,'range','D6','UseExcel',0)
+Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压'};
+Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax)};
 
-title=char(["CSV","脉宽长(us)","Ic(A)","Eon(mJ)","Eoff(mJ)","VceMAX(V)","VdMAX(V)","Vcetop(V)","dv/dt(V/us)","di/dt(A/us)","Erec(mJ)","Prrmax(kW)","VgeDG1max(V)","VgeDG1min(V)","Tdon(ns)","Tdoff(ns)","    ","Icmax(A)","Trise(ns)","Tfall(ns)","VgeDg1mean(V)","PrrPROMAX(kW)","VgeDG2max(V)","VgeDG2min(V)","VgeDg2mean(V)"]);  %%定义表头
-writematrix(title,outputtable,'sheet',dataname,'range','A10','UseExcel',0)
-Data_size = size(title);
-Data_num = Data_size(3);
+title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'VgeDG1max(V)', 'VgeDG1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'VgeDg1mean(V)', 'PrrPROMAX(kW)', 'VgeDG2max(V)', 'VgeDG2min(V)', 'VgeDg2mean(V)'};
+Data_num = length(title);
 
-%% 数据读取与写入
+%% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 for tablenum=datstart:datend
     data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
-writematrix(data1,outputtable,'sheet',dataname,'range','A11');
+
+%% 数据写入
+totalRows = 10 + size(data1, 1);
+% 总列数: 取所有单元格数组和数值矩阵中最大的列数
+maxCols = max([length(Paratable1), length(Paradata1), ...
+    length(Paratable2), length(Paradata2), ...
+    length(Paratable3), length(Paradata3), ...
+    length(title), size(data1, 2)]);
+
+% 创建一个足够大的空单元格数组，用于存放所有数据
+combinedCell = cell(totalRows, maxCols);
+
+% 将数据按原布局依次放入 combinedCell 的指定行
+combinedCell(1, 1:length(Paratable1)) = Paratable1; % A1
+combinedCell(2, 1:length(Paradata1)) = Paradata1;   % A2
+combinedCell(3, 1:length(Paratable2)) = Paratable2; % A3
+combinedCell(4, 1:length(Paradata2)) = Paradata2;    % A4
+combinedCell(5, 1:length(Paratable3)) = Paratable3;  % A5
+combinedCell(6, 1:length(Paradata3)) = Paradata3;    % A6
+% 第7,8,9行保持为空 (A7-A9)
+combinedCell(10, 1:length(title)) = title;          % A10
+% 将数值矩阵 data1 转换为单元格数组，并放入第11行及后续行
+combinedCell(11:size(data1,1)+10, 1:size(data1,2)) = num2cell(data1); % A11开始
+
+% 使用 writecell 一次性写入整个单元格数组到Excel[1,3,6](@ref)
+outputtable_backup = strcat([path,'\pic\',dataname,'\',dataname,'.xlsx']);
+writecell(combinedCell, outputtable, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
+writecell(combinedCell, outputtable_backup, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
 
 %% 绘图
 if(Drawflag)

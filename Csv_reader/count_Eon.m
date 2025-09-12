@@ -47,9 +47,10 @@ Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
 % 归一化处理
 Ponmax = max(Pon(windowEon));
 Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
+[Pon_max,Pon_max_t]=max(Pon_normalized);
+Pon_max_t = Pon_max_t+SWon_start-1;
 
 % 可视化设置
-
 PicStart = SWon_start - 2*Window_extend;
 PicEnd = SWon_stop + 2*Window_extend;
 PicLength = PicEnd - PicStart;
@@ -66,7 +67,7 @@ ylim([PicBottom,PicTop]);
 
 % 标注和格式设置
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
-text(time(SWon_start-30),0.4,'Pon','color','red','FontSize',13);
+text(time(Pon_max_t-fix(PicLength/30)),Pon_max+fix(PicHeight)/20,'Pon','color','red','FontSize',13);
 text(time(SWon_start),0.9,'Vce','color','green','FontSize',13);
 text(time(SWon_stop),0.9,'Ic','color','blue','FontSize',13);
 legend('P_{on}','V_{ce}','I_c', 'Location','northeast');

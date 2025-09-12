@@ -46,6 +46,8 @@ Eoff = sum(Poff(windowEoff(2:end)) .* dt_off);
 % 归一化处理
 Poffmax = max(Poff(windowEoff));
 Poff_normalized = Poff(windowEoff) / Poffmax / 2;
+[Poff_max,Poff_max_t]=max(Poff_normalized);
+Poff_max_t = Poff_max_t+SWoff_start-1;
 
 % 可视化
 
@@ -65,7 +67,7 @@ ylim([PicBottom,PicTop]);
 
 % 标注
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
-text(time(SWoff_start),0.45,'Poff','color','red','FontSize',13);
+text(time(Poff_max_t-fix(PicLength/50)),Poff_max+fix(PicHeight)/20,'Poff','color','red','FontSize',13);
 text(time(SWoff_stop),0.95,'Vce','color','green','FontSize',13);
 text(time(SWoff_start),0.95,'Ic','color','blue','FontSize',13);
 legend('P_{off}','V_{ce}','I_c', 'Location','northeast');

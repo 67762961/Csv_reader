@@ -50,17 +50,18 @@ end
 %% 表头设定
 outputtable=strcat([path,'\result\',ouput_table]);
 datetime = datestr(now, 'yyyymmdd');
+time = datestr(now, 'HH:MM:SS');
 
-Paratable1 = {'代码版本号', '日期', '路径', '器件', '表名', '起始数', '总数', '终点数'};
-Paradata1 = {Ver,datetime,location,tablename,Dataname,num2str(datstart),num2str(datnum),num2str(datend)};
+Paratable1 = {'代码版本', '日期', '时间', '路径', '器件', '起始数', '总数', '终点数'};
+Paradata1 = {Ver,datetime,time,location,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
-Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管门极监测', '负载电流模式', '画图分析'};
+Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管门极', '负载电流', '画图分析'};
 Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(Duiguanmode), num2str(Fuzaimode), num2str(Drawflag)};
 
 Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压'};
 Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax)};
 
-title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'VgeDG1max(V)', 'VgeDG1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'VgeDg1mean(V)', 'PrrPROMAX(kW)', 'VgeDG2max(V)', 'VgeDG2min(V)', 'VgeDg2mean(V)'};
+title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'Vgedg1mean(V)', 'PrrPROMAX(kW)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 Data_num = length(title);
 
 %% 数据读取与计算

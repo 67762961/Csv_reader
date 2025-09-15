@@ -24,9 +24,14 @@ Para_mode.Drawflag      = 0;                                            %% 是�
 Para_data.gate_didt  = 3;                                               %% didt回落容错     didt计算中上升沿过滤毛刺阈值
 Para_data.gate_Erec  = 10;                                              %% Erec抬升容错     Erec计算中下降沿过滤毛刺阈值
 
+% 输出数据配置
+% Para_out.title = {'脉宽长(us)', 'CSV', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
+% Para_out.title = {'脉宽长(us)', 'CSV', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)',  'Tdon(ns)', 'Trise(ns)'};
+Para_out.title = {'脉宽长(us)', 'CSV', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+
 % 绘图配置参数
 Prra_draw.Vgeth      = 0;                                               %% 门极开关阈值     Vge开通阈值 器件手册提供 一般为0
 Prra_draw.Vmax       = 1350;                                            %% IGBT极限电压     Vce最大耐压值 器件手册提供
 
 %% 主函数运行
-main(Para_file,Para_mode,Para_data,Prra_draw)
+main(Para_file,Para_mode,Para_data,Para_out,Prra_draw)

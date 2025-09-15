@@ -1,4 +1,4 @@
-function main(Para_file,Para_mode,Para_data,Prra_draw)
+function main(Para_file,Para_mode,Para_data,Para_out,Prra_draw)
 
 Ver = "V2.1.9";
 
@@ -30,10 +30,15 @@ Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
 gate_Erec  = Para_data.gate_Erec;       %% Erec下降沿检测允许抬升阈值
 
+% 输出数据配置
+title = Para_out.title;
+Data_num = length(title);
+
 % 绘图配置参
 Vgeth     =  Prra_draw.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
 Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 
+%% 文件夹建立
 path=location;
 dataname = [num2str(datstart, '%03d'), '-', Dataname];
 clipboard('copy', dataname);
@@ -61,14 +66,13 @@ Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(d
 Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压'};
 Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax)};
 
-title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'Vgedg1mean(V)', 'PrrPROMAX(kW)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
-Data_num = length(title);
+% title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'Vgedg1mean(V)', 'PrrPROMAX(kW)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 
 %% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 

@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,path,dataname,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function output = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -217,11 +217,43 @@ else
     PrrPROMAX = " ";
 end
 
+% 创建datamap数据字典
+dataMap = containers.Map;
+dataMap('脉宽长(us)') = Length_ton0;
+dataMap('CSV') = tablenum;
+dataMap('Ic(A)') = Ictop;
+dataMap('Icmax(A)') = Icmax;
+dataMap('Eon(mJ)') = Eon;
+dataMap('Eoff(mJ)') = Eoff;
+dataMap('VceMAX(V)') = Vcemax;
+dataMap('VdMAX(V)') = Vdmax;
+dataMap('Vcetop(V)') = Vcetop;
+dataMap('dv/dt(V/us)') = dvdtoutput;
+dataMap('di/dt(A/us)') = didt;
+dataMap('Erec(mJ)') = Erec;
+dataMap('Prrmax(kW)') = Prrmax;
+dataMap('PrrPROMAX(kW)') = PrrPROMAX;
+dataMap('Vgedg1max(V)') = Vge_dg_max(1);
+dataMap('Vgedg1min(V)') = Vge_dg_min(1);
+dataMap('Vgedg1mean(V)') = Vge_dg_mean(1);
+dataMap('Vgedg2max(V)') = Vge_dg_max(2);
+dataMap('Vgedg2min(V)') = Vge_dg_min(2);
+dataMap('Vgedg2mean(V)') = Vge_dg_mean(2);
+dataMap('Tdon(ns)') = tdon;
+dataMap('Trise(ns)') = tdoff;
+dataMap('Tdoff(ns)') = tr;
+dataMap('Tfall(ns)') = tf;
+dataMap('    ') = " ";
 
 
 %% 输出表
-% output=zeros(Data_num,1);
-output = [num,Length_ton0,Ictop,Eon,Eoff,Vcemax,Vdmax,Vcetop,dvdtoutput,didt,Erec,Prrmax,Vge_dg_max(1),Vge_dg_min(1),tdon,tdoff," ",Icmax,tr,tf,Vge_dg_mean(1),PrrPROMAX,Vge_dg_max(2),Vge_dg_min(2),Vge_dg_mean(2)];
-
+output=zeros(length(title),1);
+for i = 1:length(title)
+    currentKey = title{i};
+    currentValue = dataMap(currentKey);
+    
+    % disp(i + " : " + currentKey + " : " + currentValue);
+    output(i) = currentValue;
+end
 
 fprintf('\n');

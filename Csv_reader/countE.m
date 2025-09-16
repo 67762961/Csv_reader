@@ -220,7 +220,7 @@ end
 % 创建datamap数据字典
 dataMap = containers.Map;
 dataMap('脉宽长(us)') = Length_ton0;
-dataMap('CSV') = tablenum;
+dataMap('  CSV  ') = tablenum;
 dataMap('Ic(A)') = Ictop;
 dataMap('Icmax(A)') = Icmax;
 dataMap('Eon(mJ)') = Eon;

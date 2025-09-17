@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function output = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -16,7 +16,7 @@ end
 if strcmp(Chmode,'findch')
     data = findch(data0,0);
 elseif strcmp(Chmode,'setch')
-    data = setch(data0,Ch_labels,Duiguanmode,Fuzaimode);
+    data = setch(data0,Ch_labels,DuiguanCH,Fuzaimode);
 else
     fprintf('\n 通道分配模式参数填写错误 \n')
     error('通道分配异常')
@@ -50,9 +50,9 @@ if (Ch_labels(5)~=0)
     ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
 end
 
-Vge_dg = zeros(length(data(:,1)),length(Duiguanmode));
-for j = 1:length(Duiguanmode)
-    if (Duiguanmode(j)~=0)
+Vge_dg = zeros(length(data(:,1)),length(DuiguanCH));
+for j = 1:length(DuiguanCH)
+    if (DuiguanCH(j)~=0)
         Vge_dg(:,j) = data(:,6+j); % 对管门极电压
     end
 end
@@ -179,12 +179,12 @@ else
 end
 
 % ====================== 对管门极监测 Vge_dg ======================
-Vge_dg_mean = strings(1,length(Duiguanmode));
-Vge_dg_max = strings(1,length(Duiguanmode));
-Vge_dg_min = strings(1,length(Duiguanmode));
+Vge_dg_mean = strings(1,length(DuiguanCH));
+Vge_dg_max = strings(1,length(DuiguanCH));
+Vge_dg_min = strings(1,length(DuiguanCH));
 
-for gd_num = 1:length(Duiguanmode)
-    if (Duiguanmode(gd_num)~=0)
+for gd_num = 1:length(DuiguanCH)
+    if (DuiguanCH(gd_num)~=0)
         [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cnton2,gd_num);
     else
         Vge_dg_mean(gd_num) = " ";

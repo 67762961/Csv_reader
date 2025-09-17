@@ -22,7 +22,8 @@ Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
 dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode    = Para_mode.didtmode ;       %% didt模式
 Fuzaimode   = Para_mode.Fuzaimode;
-Duiguanmode = Para_mode.Duiguanmode;
+DuiguanMARK = Para_mode.DuiguanMARK;
+DuiguanCH   = Para_mode.DuiguanCH;
 % Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
 
@@ -61,20 +62,28 @@ Paratable1 = {'代码版本', '日期', '时间', '路径', '器件', '起始数
 Paradata1 = {Ver,datetime,time,location,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
 Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管门极', '负载电流', '画图分析'};
-Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(Duiguanmode), num2str(Fuzaimode), num2str(Drawflag)};
+Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanCH), num2str(Fuzaimode), num2str(Drawflag)};
 
 Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压'};
 Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax)};
 
-% title = {'CSV', '脉宽长(us)', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Tdon(ns)', 'Tdoff(ns)', '    ', 'Icmax(A)', 'Trise(ns)', 'Tfall(ns)', 'Vgedg1mean(V)', 'PrrPROMAX(kW)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+% {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
 
 %% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,Duiguanmode,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
+% 表头修正
+title_fix = strrep(title    , 'Vgedg1max(V)', ['VgemaxT',num2str(DuiguanMARK(1)),'(V)']);
+title_fix = strrep(title_fix, 'Vgedg1min(V)', ['VgeminT',num2str(DuiguanMARK(1)),'(V)']);
+title_fix = strrep(title_fix, 'Vgedg1mean(V)',['VgemeanT',num2str(DuiguanMARK(1)),'(V)']);
+title_fix = strrep(title_fix, 'Vgedg2max(V)', ['VgemaxT',num2str(DuiguanMARK(2)),'(V)']);
+title_fix = strrep(title_fix, 'Vgedg2min(V)', ['VgeminT',num2str(DuiguanMARK(2)),'(V)']);
+title_fix = strrep(title_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)),'(V)']);
+
 
 %% 数据写入
 totalRows = 10 + size(data1, 1);
@@ -95,7 +104,7 @@ combinedCell(4, 1:length(Paradata2)) = Paradata2;    % A4
 combinedCell(5, 1:length(Paratable3)) = Paratable3;  % A5
 combinedCell(6, 1:length(Paradata3)) = Paradata3;    % A6
 % 第7,8,9行保持为空 (A7-A9)
-combinedCell(10, 1:length(title)) = title;          % A10
+combinedCell(10, 1:length(title)) = title_fix;          % A10
 % 将数值矩阵 data1 转换为单元格数组，并放入第11行及后续行
 combinedCell(11:size(data1,1)+10, 1:size(data1,2)) = num2cell(data1); % A11开始
 

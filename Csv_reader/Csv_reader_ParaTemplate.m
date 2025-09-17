@@ -16,7 +16,8 @@ Para_mode.Ch_labels     = [1, 2, 3, 0, 5];                              %% 通�
 Para_mode.Smooth_Win    = [1, 1, 1, 1, 1];                              %% 通道滤波窗口长度 Vge Vce Ic Vd Id对应数据滤波参数
 Para_mode.dvdtmode      = [10, 90];                                     %% dvdt模式选择     额外的dvdt计算起始和结束百分比
 Para_mode.didtmode      = [10, 90];                                     %% didt模式选择     新设定didt计算起始和结束百分比
-Para_mode.Duiguanmode   = [6, 4];                                       %% 对管门极监测 最多两个通道
+Para_mode.DuiguanMARK   = [2, 3];                                       %% 对管门极监测标记 最多两个通道
+Para_mode.DuiguanCH     = [6, 4];                                       %% 对管门极监测对应通道
 Para_mode.Fuzaimode     = 0;
 Para_mode.Drawflag      = 0;                                            %% 是否需要绘图分析
 
@@ -28,9 +29,9 @@ Para_data.gate_Erec  = 10;                                              %% Erec�
 % 全部参数
 % Para_out.title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
 % 基础模式
-Para_out.title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)',  'Tdon(ns)', 'Tdoff(ns)', '    ','    ','    '};
+% Para_out.title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)',  'Tdon(ns)', 'Tdoff(ns)', '    ','    ','    '};
 % 对管监测模式
-% Para_out.title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    '};
+Para_out.title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    '};
 
 % 绘图配置参数
 Prra_draw.Vgeth      = 0;                                               %% 门极开关阈值     Vge开通阈值 器件手册提供 一般为0

@@ -1,4 +1,4 @@
-function [data_out] = setch(data_in, Ch_labels, Duiguanmode, Fuzaimode)
+function [data_out] = setch(data_in, Ch_labels, DuiguanCH, Fuzaimode)
 % 双脉冲测试信号通道重组函数
 %   Inputs:
 %       data_in   : N×6 矩阵 (double)
@@ -43,13 +43,13 @@ for j = 1:length(Ch_labels)
     end
 end
 
-for j = 1:length(Duiguanmode)
-    if(Duiguanmode(j) ~= 0)
-        if isempty(data_in(:,Duiguanmode(j)+1))
-            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n', Duiguanmode(j)+1);
+for j = 1:length(DuiguanCH)
+    if(DuiguanCH(j) ~= 0)
+        if isempty(data_in(:,DuiguanCH(j)+1))
+            fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n', DuiguanCH(j)+1);
             error('参数填写错误');
         else
-            data_out(:,6+j) = data_in(:,Duiguanmode(j)+1);
+            data_out(:,6+j) = data_in(:,DuiguanCH(j)+1);
         end
     end
 end
@@ -65,11 +65,11 @@ for i = 1:length(Ch_labels)
         if (Fuzaimode ~= 0)
             fprintf('    %s(通道%d)', "I_fuzai", Fuzaimode);
         end
-        if (Duiguanmode(1) ~= 0)
-            fprintf('    %s(通道%d)', "Vge_dg", Duiguanmode(1));
+        if (DuiguanCH(1) ~= 0)
+            fprintf('    %s(通道%d)', "Vge_dg", DuiguanCH(1));
         end
-        if (Duiguanmode(2) ~= 0)
-            fprintf('    %s(通道%d)', "Vge_dg", Duiguanmode(2));
+        if (DuiguanCH(2) ~= 0)
+            fprintf('    %s(通道%d)', "Vge_dg", DuiguanCH(2));
         end
         fprintf('\n');
     end

@@ -129,9 +129,9 @@ end
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 if (Fuzaimode == 0)
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2);
 else
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2);
 end
 
 [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);

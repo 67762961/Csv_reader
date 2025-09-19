@@ -1,4 +1,4 @@
-function [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2)
+function [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Vd_flag,ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2)
 
 %% Vcetop Ictop 计算
 % 计算Vge高电平电压（使用中值避免噪声干扰）
@@ -58,8 +58,11 @@ text(time(fix(cemax_idx+0.05*PicLength)),Vcetop - fix(PicHeight*0.1),['Vcetop ='
 
 % Vcemax绘图
 plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
+if 0 ~= Vd_flag
+    plot(time(PicStart:PicEnd), ch4(PicStart:PicEnd), 'g');
+end
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(fix(cemax_idx+0.05*PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13);
+text(time(fix(cemax_idx+0.05*PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);

@@ -134,7 +134,7 @@ else
     [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2);
 end
 
-[Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
+[Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
 
 if (Ch_labels(4)~=0)
     [Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);

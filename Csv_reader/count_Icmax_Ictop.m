@@ -79,7 +79,7 @@ Icmax_idx = ton2 + Icmax_idx - 1;
 
 % 绘图
 plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
-text(time(Icmax_idx+fix(PicLength*0.05)),PicBottom + fix(PicHeight*0.9),['Icmax=',num2str(Icmax),'A'], 'FontSize',13);
+text(time(Icmax_idx+fix(PicLength*0.05)),PicBottom + fix(PicHeight*0.9),['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop_out)),' A Icmax']);

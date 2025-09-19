@@ -28,8 +28,8 @@ if isempty(ton10_indices)
 end
 
 % 计算Vcetop
-start_idx = fix(toff1 + cntoff1/20);         % 起始索引：关断后1/20周期
-end_idx = fix(ton2 - 3*cntoff1/20);          % 结束索引：下一次导通前1/20周期
+start_idx = fix(toff1 + cntoff1/4);         % 起始索引：关断后1/20周期
+end_idx = fix(ton2 - cntoff1/4);          % 结束索引：下一次导通前1/20周期
 Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
 
 %% Vcemax计算
@@ -39,25 +39,34 @@ cnton2 = toff2 - ton2;
 cemax_idx = toff90 - cnton2 + cemax_idx - 1;  % 转换为全局索引
 
 % 绘图
-
-PicStart = fix(cemax_idx - cnton2/2);
-PicEnd = fix(cemax_idx + cnton2);
-PicLength = PicEnd - PicStart;
-PicTop = fix(1.15*Vcemax);
-PicBottom = fix(-0.1*PicTop);
+PicLength = toff2 - ton1;
+PicStart = ton1-fix(1*PicLength/5);
+PicEnd = toff2+fix(1*PicLength/5);
+PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
+PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
-plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
+% Vcetop校准线及标注
+barStart = start_idx;
+barEnd = end_idx;
+barheight = 0.02*PicHeight;
+line([time(barStart),time(barEnd)],[Vcetop,Vcetop],'Color', [0.5 0.5 0.5],'LineStyle','--');
 hold on;
+line([time(barStart),time(barStart)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
+line([time(barEnd),time(barEnd)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
+text(time(fix(cemax_idx+0.05*PicLength)),Vcetop - fix(PicHeight*0.1),['Vcetop =',num2str(Vcetop),'V'], 'FontSize',13,'Color','b');
+
+% Vcemax绘图
+plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text((time(fix(cemax_idx+0.05*PicLength))), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13);
+text(time(fix(cemax_idx+0.05*PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13);
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);
 grid on;
 
 % 路径构建优化
-save_dir = fullfile(path, 'pic', dataname, '02 Vcemax');
+save_dir = fullfile(path, 'pic', dataname, '02 Vcemax & Vcetop');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vcemax.png']), 'png');
 close(gcf);

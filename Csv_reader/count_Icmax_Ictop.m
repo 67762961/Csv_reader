@@ -1,4 +1,4 @@
-function [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2)
+function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2)
 
 %% 计算Ictop
 nspd = (time(2)-time(1))*1e9;
@@ -16,36 +16,77 @@ Ictop = mean(ch3(window_start:tIcm));               % 计算均值
 % plot(time(tIcm), ch3(tIcm), 'ro', 'MarkerFaceColor','r');
 % error('1')
 
+PicLength = toff2 - ton1;
+PicStart = ton1-fix(1*PicLength/5);
+PicEnd = toff2+fix(1*PicLength/5);
+PicTop = fix(1.1*max(ch3(PicStart:PicEnd)));
+PicBottom = fix(1.5*min(ch5(PicStart:PicEnd)));
+PicHeight = PicTop - PicBottom;
+
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0
     static_id_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
     Idbase =  mean(ch5(static_id_interval)); % 关断时平均Id作为Ictop
-    Ictop = -1*Idbase;
+    Ictop_out = -1*Idbase;
+    
+    barheight = 0.02*PicHeight;
+    barStart =fix(toff1 + cntoff1/4);
+    barEnd = fix(ton2 - cntoff1/4);
+    % Idbase水平线及标注
+    line([time(barStart),time(barEnd)],[Idbase,Idbase],'Color', [0.5 0.5 0.5],'LineStyle','--');
+    hold on;
+    line([time(barStart),time(barStart)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);
+    line([time(barEnd),time(barEnd)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);
+    text(time(fix(toff1)),Idbase - fix(PicHeight*0.1),['Idbase =',num2str(Idbase),'A'], 'FontSize',13,'Color','b');
+    
+    % Id校准线及标注
+    barStart = fix(ton1 + cnton1/2);
+    barEnd = fix(toff1 - cnton1/4);
+    line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
+    line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+    line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+    
+    plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
+else
+    Ictop_out = Ictop;
 end
+% Ic校准线及标注
+barStart = fix(toff1 + cntoff1/4);
+barEnd = fix(ton2 - cntoff1/4);
+line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
+line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+% Ic绘图
+plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
+hold on;
+plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
+text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
+
+% ylim([PicBottom, PicTop]);
+% xlim([time(PicStart), time(PicEnd)]);
+% title(['Ic=',num2str(fix(Ictop_out)),' A']);
+% grid on;
+
+% save_dir = fullfile(path, 'pic', dataname, '01 Icmax & Ictop');
+% if ~exist(save_dir, 'dir'), mkdir(save_dir); end
+% saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop_out)),'A.png']), 'png');
+% close(gcf);
+% hold off
 
 %% Icmax 计算
 [Icmax, Icmax_idx] = max(ch3(ton2:toff2));
 Icmax_idx = ton2 + Icmax_idx - 1;
 
-PicStart = fix((ton2 + toff2)/2 - 11*(toff2 - ton2)/20);
-PicEnd = fix((ton2 + toff2)/2 + 11*(toff2 - ton2)/20);
-PicLength = PicEnd - PicStart;
-PicTop = fix(1.1*Icmax);
-PicBottom = fix(-0.1*PicTop);
-PicHeight = PicTop - PicBottom;
-
 % 绘图
-plot(time(ton2:toff2), ch3(ton2:toff2), 'b');
-hold on;
 plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
 text(time(Icmax_idx+fix(PicLength*0.05)),PicBottom + fix(PicHeight*0.9),['Icmax=',num2str(Icmax),'A'], 'FontSize',13);
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
-title(['Ic=',num2str(fix(Ictop)),' A Icmax']);
+title(['Ic=',num2str(fix(Ictop_out)),' A Icmax']);
 grid on;
 
-save_dir = fullfile(path, 'pic', dataname, '01 Icmax');
+save_dir = fullfile(path, 'pic', dataname, '01 Icmax & Ictop');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A Icmax.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop_out)),'A Icmax.png']), 'png');
 close(gcf);
 hold off

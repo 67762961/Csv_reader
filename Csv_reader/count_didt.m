@@ -87,7 +87,7 @@ title(['Ic=',num2str(fix(Ictop)),'A di/dt计算']);
 grid on;
 
 % 保存处理
-save_dir = fullfile(path, 'pic', dataname, '06 didt');
+save_dir = fullfile(path, 'result', dataname, '06 didt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt.png']), 'png');
 close(gcf);

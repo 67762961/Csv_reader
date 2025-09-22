@@ -42,7 +42,7 @@ ylabel('Voltage (V)');
 xlim([time(ton_bg_start),time(ton_bg_end)]);
 
 % 标准化保存路径
-save_dir = fullfile(path, 'pic', dataname, '07 Ton & Toff');
+save_dir = fullfile(path, 'result', dataname, '07 Ton & Toff');
 if ~exist(save_dir, 'dir')
     mkdir(save_dir);
 end

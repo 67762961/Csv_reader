@@ -67,7 +67,7 @@ text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'Fon
 % title(['Ic=',num2str(fix(Ictop_out)),' A']);
 % grid on;
 
-% save_dir = fullfile(path, 'pic', dataname, '01 Icmax & Ictop');
+% save_dir = fullfile(path, 'result', dataname, '01 Icmax & Ictop');
 % if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 % saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop_out)),'A.png']), 'png');
 % close(gcf);
@@ -85,7 +85,7 @@ xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop_out)),' A Icmax']);
 grid on;
 
-save_dir = fullfile(path, 'pic', dataname, '01 Icmax & Ictop');
+save_dir = fullfile(path, 'result', dataname, '01 Icmax & Ictop');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop_out)),'A Icmax.png']), 'png');
 close(gcf);

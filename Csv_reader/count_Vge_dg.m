@@ -39,7 +39,7 @@ title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-max']);
 grid on;
 
 % 路径构建优化
-save_dir = fullfile(path, 'pic', dataname, '08 Vge_dg');
+save_dir = fullfile(path, 'result', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'_max.png']), 'png');
 close(gcf);
@@ -62,7 +62,7 @@ title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-min']);
 grid on;
 
 % 路径构建优化
-save_dir = fullfile(path, 'pic', dataname, '08 Vge_dg');
+save_dir = fullfile(path, 'result', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'min.png']), 'png');
 close(gcf);

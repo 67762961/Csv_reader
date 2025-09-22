@@ -124,9 +124,54 @@ combinedCell(10, 1:length(title)) = title_fix;          % A10
 combinedCell(11:size(data1,1)+10, 1:size(data1,2)) = num2cell(data1); % A11开始
 
 % 使用 writecell 一次性写入整个单元格数组到Excel[1,3,6](@ref)
-outputtable_backup = strcat([path,'\pic\',dataname,'\',dataname,'.xlsx']);
+outputtable_backup = strcat([path,'\result\',dataname,'\',dataname,'.xlsx']);
 writecell(combinedCell, outputtable, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
 writecell(combinedCell, outputtable_backup, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
+
+%% 复制参数表到文件路径
+% 获取调用堆栈信息
+stack = dbstack('-completenames');
+
+% 检查堆栈深度，确保有调用者
+if length(stack) < 2
+    warning('未在函数调用环境中执行，无法复制调用文件。');
+    return;
+end
+
+% stack(1) 是当前函数（yourFunction）本身
+% stack(2) 是调用当前函数的文件（调用者）的信息
+callerInfo = stack(2);
+callerFullPath = callerInfo.file; % 调用者文件的完整路径
+
+% 指定目标目录 - 请修改为你的实际路径，例如 'D:\Backups\'
+targetDirectory = strcat([path,'\result\',dataname]);
+
+% 确保目标目录存在
+if ~exist(targetDirectory, 'dir')
+    mkdir(targetDirectory);
+end
+
+% (可选)生成时间戳字符串 (格式: 年月日_时分秒)
+timeStamp = datestr(now, 'yyyymmdd_HHMMSS');
+
+% 从完整路径中获取调用者的文件名和扩展名
+[~, callerName, callerExt] = fileparts(callerFullPath);
+
+% 构建新文件名 (可选: 原文件名_时间戳.扩展名)
+newFileName = [callerName, '_', timeStamp, callerExt]; % 包含时间戳
+
+% 构建新文件的完整保存路径
+newFileFullPath = fullfile(targetDirectory, newFileName);
+
+% 执行复制操作
+[copySuccess, message] = copyfile(callerFullPath, newFileFullPath);
+
+% 检查复制操作是否成功
+if copySuccess
+    fprintf('调用文件已成功复制至: %s\n\n', newFileFullPath);
+else
+    warning('文件复制失败: %s', message);
+end
 
 %% 绘图
 if(Drawflag)

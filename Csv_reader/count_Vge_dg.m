@@ -14,9 +14,10 @@ Vge_dg_mean = mean(Vge_dg);
 PicLength = fix(cnton2/2);
 PicStart = cemax_idx_max - fix(PicLength/2);
 PicEnd =  cemax_idx_max + fix(PicLength/2);
-PicHeight = 2*abs(Vge_dg_max - Vge_dg_min);
-PicTop = Vge_dg_mean + PicHeight*2/3;
-PicBottom = Vge_dg_mean - PicHeight/3;
+PicHeight = abs(Vge_dg_max - Vge_dg_min);
+PicTop = Vge_dg_max + PicHeight*2/3;
+PicBottom = Vge_dg_min - PicHeight*2/3;
+PicHeight = PicTop - PicBottom;
 
 plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
@@ -41,7 +42,7 @@ grid on;
 % 路径构建优化
 save_dir = fullfile(path, 'result', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'_max.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_T',num2str(gd_num),'_max.png']), 'png');
 close(gcf);
 hold off
 
@@ -49,7 +50,6 @@ hold off
 % 最小值绘图
 PicStart = cemax_idx_min - fix(PicLength/2);
 PicEnd =  cemax_idx_min + fix(PicLength/2);
-PicHeight = 2*abs(Vge_dg_max - Vge_dg_min);
 
 plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
@@ -64,6 +64,6 @@ grid on;
 % 路径构建优化
 save_dir = fullfile(path, 'result', dataname, '08 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_',num2str(gd_num),'min.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_T',num2str(gd_num),'min.png']), 'png');
 close(gcf);
 hold off

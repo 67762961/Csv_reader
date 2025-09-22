@@ -32,8 +32,8 @@ gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
 gate_Erec  = Para_data.gate_Erec;       %% Erec下降沿检测允许抬升阈值
 
 % 输出数据配置
-title = Para_out.title;
-Data_num = length(title);
+titlemode   = Para_out.titlemode;
+title_Manual= Para_out.title_Manual;
 
 % 绘图配置参
 Vgeth     =  Prra_draw.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
@@ -61,14 +61,29 @@ time = datestr(now, 'HH:MM:SS');
 Paratable1 = {'代码版本', '日期', '时间', '路径', '器件', '起始数', '总数', '终点数'};
 Paradata1 = {Ver,datetime,time,location,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
-Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管门极', '负载电流', '画图分析'};
-Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanCH), num2str(Fuzaimode), num2str(Drawflag)};
+Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管标记', '对管通道', '负载电流'};
+Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH), num2str(Fuzaimode)};
 
-Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压'};
-Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax)};
+Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
+Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
 
-% {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
+titleMap = containers.Map;
+titleMap('Full') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
+titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)',  'Tdon(ns)', 'Tdoff(ns)','    ','    ','    ','    ','    ','    ','    ','    '};
+titleMap('2Duiguan') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    ','    ','    ','    '};
+titleMap('Manual') = title_Manual;
 
+defaultMode = 'Full';
+% 检查 titlemode 是否是 titleMap 的键
+if titleMap.isKey(titlemode)
+    title = titleMap(titlemode);
+else
+    fprintf('表头定义:\n')
+    fprintf('       titlemode "%s" 无效，已使用默认模式 "%s"\n' , titlemode, defaultMode); % 输出
+    title = titleMap(defaultMode);
+end
+
+Data_num    = length(title);
 %% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);

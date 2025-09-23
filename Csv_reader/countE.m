@@ -240,8 +240,8 @@ dataMap('Vgedg2max(V)') = Vge_dg_max(2);
 dataMap('Vgedg2min(V)') = Vge_dg_min(2);
 dataMap('Vgedg2mean(V)') = Vge_dg_mean(2);
 dataMap('Tdon(ns)') = tdon;
-dataMap('Trise(ns)') = tdoff;
-dataMap('Tdoff(ns)') = tr;
+dataMap('Trise(ns)') = tr;
+dataMap('Tdoff(ns)') = tdoff;
 dataMap('Tfall(ns)') = tf;
 dataMap('    ') = " ";
 

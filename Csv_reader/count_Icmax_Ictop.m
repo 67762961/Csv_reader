@@ -37,7 +37,7 @@ if Id_flag~=0
     hold on;
     line([time(barStart),time(barStart)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);
-    text(time(fix(toff1)),Idbase - fix(PicHeight*0.1),['Idbase =',num2str(Idbase),'A'], 'FontSize',13,'Color','b');
+    text(time(fix(toff1)),Idbase - fix(PicHeight*0.05),['Idbase =',num2str(Idbase),'A'], 'FontSize',13,'Color','b');
     
     % Id校准线及标注
     barStart = fix(ton1 + cnton1/2);

@@ -1,4 +1,4 @@
-function output = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -251,9 +251,14 @@ output=zeros(length(title),1);
 for i = 1:length(title)
     currentKey = title{i};
     currentValue = dataMap(currentKey);
-    
-    % disp(i + " : " + currentKey + " : " + currentValue);
     output(i) = currentValue;
 end
 
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
+output_backup = zeros(length(Full_title),1);
+for i = 1:length(Full_title)
+    currentKey = Full_title{i};
+    currentValue = dataMap(currentKey);
+    output_backup(i) = currentValue;
+end
 fprintf('\n');

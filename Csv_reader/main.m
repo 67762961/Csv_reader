@@ -69,8 +69,8 @@ Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vma
 
 titleMap = containers.Map;
 titleMap('Full') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
-titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)',  'Tdon(ns)', 'Tdoff(ns)','    ','    ','    ','    ','    ','    ','    ','    '};
-titleMap('2Duiguan') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    ','    ','    ','    '};
+titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Tdon(ns)', 'Tdoff(ns)','    ','    ','    ','    ','    ','    ','    '};
+titleMap('2Duiguan') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    ','    ','    '};
 titleMap('Manual') = title_Manual;
 
 defaultMode = 'Full';
@@ -87,8 +87,9 @@ Data_num    = length(title);
 %% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
+data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    data1(cnt,:)=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
     cnt=cnt+1;
 end
 % 表头修正
@@ -106,7 +107,7 @@ totalRows = 10 + size(data1, 1);
 maxCols = max([length(Paratable1), length(Paradata1), ...
     length(Paratable2), length(Paradata2), ...
     length(Paratable3), length(Paradata3), ...
-    length(title), size(data1, 2)]);
+    length(title), size(data1, 2), size(data_backup, 2)]);
 
 % 创建一个足够大的空单元格数组，用于存放所有数据
 combinedCell = cell(totalRows, maxCols);
@@ -122,6 +123,9 @@ combinedCell(6, 1:length(Paradata3)) = Paradata3;    % A6
 combinedCell(10, 1:length(title)) = title_fix;          % A10
 % 将数值矩阵 data1 转换为单元格数组，并放入第11行及后续行
 combinedCell(11:size(data1,1)+10, 1:size(data1,2)) = num2cell(data1); % A11开始
+
+combinedCell(21+datnum, 1:length(titleMap('Full'))) = titleMap('Full');
+combinedCell(22+datnum:size(data_backup,1)+21+datnum, 1:size(data_backup,2)) = num2cell(data_backup);
 
 % 使用 writecell 一次性写入整个单元格数组到Excel[1,3,6](@ref)
 outputtable_backup = strcat([path,'\result\',dataname,'\',dataname,'.xlsx']);
@@ -151,14 +155,14 @@ if ~exist(targetDirectory, 'dir')
     mkdir(targetDirectory);
 end
 
-% (可选)生成时间戳字符串 (格式: 年月日_时分秒)
-timeStamp = datestr(now, 'yyyymmdd_HHMMSS');
-
 % 从完整路径中获取调用者的文件名和扩展名
 [~, callerName, callerExt] = fileparts(callerFullPath);
 
+% (可选)生成时间戳字符串 (格式: 年月日_时分秒)
+% timeStamp = datestr(now, 'yyyymmdd_HHMMSS');
 % 构建新文件名 (可选: 原文件名_时间戳.扩展名)
-newFileName = [callerName, '_', timeStamp, callerExt]; % 包含时间戳
+% newFileName = [callerName, '_', timeStamp, callerExt]; % 包含时间戳
+newFileName = [callerName, callerExt]; % 不包含时间戳
 
 % 构建新文件的完整保存路径
 newFileFullPath = fullfile(targetDirectory, newFileName);

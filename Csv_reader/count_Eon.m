@@ -37,21 +37,23 @@ end
 Window_width = SWon_stop - SWon_start;
 Window_extend = fix(Window_width/10);
 Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start):(SWon_stop); % 定义计算窗口
+windowEon = (SWon_start-3*Window_extend):(SWon_stop); % 定义计算窗口
 
 % 向量化计算功率和能量
 Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）
+Pon_full = Vce .* Ic * 1000; % 功率计算（mW）
 dt = diff(time(windowEon)); % 时间差分
 Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
 
 % 归一化处理
 Ponmax = max(Pon(windowEon));
 Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
+Pon_full_normalized=Pon_full / Ponmax / 2;
 [Pon_max,Pon_max_t]=max(Pon_normalized);
 Pon_max_t = Pon_max_t+SWon_start-1;
 
 % 可视化设置
-PicStart = SWon_start - 2*Window_extend;
+PicStart = windowEon(1) - 2*Window_extend;
 PicEnd = SWon_stop + 2*Window_extend;
 PicLength = PicEnd - PicStart;
 PicTop = 1.2;
@@ -62,6 +64,9 @@ plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/max(Ic),'b');
+plot(time(windowEon(1)), Pon_full_normalized(windowEon(1)),'o','color','red');
+plot(time(windowEon(end)), Pon_full_normalized(windowEon(end)),'o','color','red');
+plot(time(PicStart:PicEnd),Pon_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
 xlim([time(PicStart),time(PicEnd)]);
 ylim([PicBottom,PicTop]);
 

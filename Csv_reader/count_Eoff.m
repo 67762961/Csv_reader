@@ -36,22 +36,24 @@ end
 Poff = zeros(size(time));
 Window_width = SWoff_stop - SWoff_start;
 Window_extend = fix(Window_width/10);
-windowEoff = (SWoff_start : SWoff_stop);
+windowEoff = (SWoff_start-3*Window_extend: SWoff_stop);
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;
+Poff_full = Vce .* Ic * 1000; % 功率计算（mW）
 dt_off = diff(time(windowEoff));
 Eoff = sum(Poff(windowEoff(2:end)) .* dt_off);
 
 % 归一化处理
 Poffmax = max(Poff(windowEoff));
 Poff_normalized = Poff(windowEoff) / Poffmax / 2;
+Poff_full_normalized = Poff_full / Poffmax / 2;
 [Poff_max,Poff_max_t]=max(Poff_normalized);
 Poff_max_t = Poff_max_t+SWoff_start-1;
 
 % 可视化
 
-PicStart = SWoff_start - 2*Window_extend;
+PicStart = windowEoff(1) - 2*Window_extend;
 PicEnd = SWoff_stop + 2*Window_extend;
 PicLength = PicEnd - PicStart;
 PicTop = 1.2;
@@ -62,6 +64,9 @@ plot(time(windowEoff), Poff_normalized, 'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/Ictop,'b');
+plot(time(windowEoff(1)), Poff_full_normalized(windowEoff(1)),'o','color','red');
+plot(time(windowEoff(end)), Poff_full_normalized(windowEoff(end)),'o','color','red');
+plot(time(PicStart:PicEnd),Poff_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
 xlim([time(PicStart),time(PicEnd)]);
 ylim([PicBottom,PicTop]);
 

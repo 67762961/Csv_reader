@@ -1,8 +1,11 @@
 function main(Para_file,Para_mode,Para_data,Para_out,Prra_draw)
-
+% 编码修改为UTF-8
+feature('DefaultCharacterSet','UTF8');
+% 代码版本号
 Ver = "V2.2.2";
-
-fprintf('开始读取\n\n')
+% 运行开始提示
+fprintf('开始读取\n\n');
+fprintf('代码版本: %s\n\n', Ver);
 
 %% 初始化参数配置
 % 文件路径配置参数

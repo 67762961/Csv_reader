@@ -185,7 +185,7 @@ Vge_dg_min = strings(1,length(DuiguanCH));
 
 for gd_num = 1:length(DuiguanCH)
     if (DuiguanCH(gd_num)~=0)
-        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cnton2,DuiguanMARK(gd_num));
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cnton2,toff1,ton2,DuiguanMARK(gd_num));
     else
         Vge_dg_mean(gd_num) = " ";
         Vge_dg_max(gd_num) = " ";

@@ -13,13 +13,14 @@ Vge_dg_min = min(Vge_dg);
 PicLength = fix(cnton2/2);
 PicStart = ton2 - fix(PicLength/3);
 PicEnd =  ton2 + fix(2*PicLength/3);
-PicHeight = abs(Vge_dg_max - Vge_dg_min);
-PicTop = Vge_dg_max + PicHeight*2/3;
-PicBottom = Vge_dg_min - PicHeight*2/3;
-PicHeight = PicTop - PicBottom;
 
 [Vge_dg_on_max , cemax_idx_on_max]= max(Vge_dg(PicStart:PicEnd));
 [Vge_dg_on_min , cemax_idx_on_min]= min(Vge_dg(PicStart:PicEnd));
+
+PicHeight = abs(Vge_dg_max - Vge_dg_min);
+PicTop = Vge_dg_on_max + PicHeight/3;
+PicBottom = Vge_dg_on_min - PicHeight/6;
+PicHeight = PicTop - PicBottom;
 
 cemax_idx_on_max = cemax_idx_on_max + PicStart -1;
 cemax_idx_on_min = cemax_idx_on_min + PicStart -1;
@@ -28,9 +29,9 @@ plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_on_max), Vge_dg_on_max, 'ro', 'MarkerFaceColor','r');
 plot(time(cemax_idx_on_min), Vge_dg_on_min, 'ro', 'MarkerFaceColor','r');
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.9, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.8, ['V_g_e对管onmax=',num2str(Vge_dg_on_max),'V'], 'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.7, ['V_g_e对管onmin=',num2str(Vge_dg_on_min),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.94, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.87, ['V_g_e对管onmax=',num2str(Vge_dg_on_max),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.80, ['V_g_e对管onmin=',num2str(Vge_dg_on_min),'V'], 'FontSize',13);
 
 nspd = (time(2)-time(1))*1e9;
 barlength = fix(cnton2/50);
@@ -53,13 +54,15 @@ saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_on_T'
 close(gcf);
 hold off
 
-
 % 关断段绘图
 PicStart = toff1 - fix(PicLength/3);
 PicEnd =  toff1 + fix(2*PicLength/3);
 
 [Vge_dg_off_max , cemax_idx_off_max]= max(Vge_dg(PicStart:PicEnd));
 [Vge_dg_off_min , cemax_idx_off_min]= min(Vge_dg(PicStart:PicEnd));
+PicTop = Vge_dg_off_max + PicHeight/3;
+PicBottom = Vge_dg_off_min - PicHeight/6;
+PicHeight = PicTop - PicBottom;
 
 cemax_idx_off_max = cemax_idx_off_max + PicStart -1;
 cemax_idx_off_min = cemax_idx_off_min + PicStart -1;
@@ -68,9 +71,9 @@ plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_off_max), Vge_dg_off_max, 'ro', 'MarkerFaceColor','r');
 plot(time(cemax_idx_off_min), Vge_dg_off_min, 'ro', 'MarkerFaceColor','r');
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.9, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.8, ['V_g_e对管offmax =',num2str(Vge_dg_off_max),'V'], 'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)), PicBottom+PicHeight*0.7, ['V_g_e对管offmin =',num2str(Vge_dg_off_min),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.94, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.87, ['V_g_e对管offmax =',num2str(Vge_dg_off_max),'V'], 'FontSize',13);
+text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.80, ['V_g_e对管offmin =',num2str(Vge_dg_off_min),'V'], 'FontSize',13);
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-off']);

@@ -44,6 +44,7 @@ Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 
 %% 文件夹建立
 path=location;
+[~,Floder,~] = fileparts(location);
 dataname = [num2str(datstart, '%03d'), '-', Dataname];
 clipboard('copy', dataname);
 
@@ -61,8 +62,8 @@ outputtable=strcat([path,'\result\',ouput_table]);
 datetime = datestr(now, 'yyyymmdd');
 time = datestr(now, 'HH:MM:SS');
 
-Paratable1 = {'代码版本', '日期', '时间', '路径', '器件', '起始数', '总数', '终点数'};
-Paradata1 = {Ver,datetime,time,location,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
+Paratable1 = {'代码版本', '日期', '时间', '文件夹', '器件', '起始数', '总数', '终点数'};
+Paradata1 = {Ver,datetime,time,Floder,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
 Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管标记', '对管通道', '负载电流'};
 Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH), num2str(Fuzaimode)};

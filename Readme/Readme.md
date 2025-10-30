@@ -1,4 +1,4 @@
-# 使用说明 v2.1.8
+# 使用说明 v2.2.4
 ## 参数表说明
 &emsp; &emsp; 文件 **Csv_reader_ParaTemplate.m** 为基础示例输入参数表，**禁止修改**，运行该文件将读取 TestLib 中数据，以验证程序是否能良好运转。在实验数据读取时，应当另创一个新的m文件，将参数表内容复制过去，再修改参数使用。
 &emsp; &emsp; 具体参数说明如下：
@@ -34,6 +34,10 @@
     - ##### Para_mode.didtmode
         &emsp; &emsp;开通电流didt计算区间，正整数数组型。与dvdt计算区间设置原理相同，但不同的是，理论上didt的计算应当就是10%到90%Ictop，原则上不应当设置别的数值。但未防止状态机识别起始算法失效以及其他原因产生的报错影响读取，所以保留此接口。同时，与dvdt计算区间参数不同的是，手动设置计算区间后，输出将会变为只有手动设置段。PS：极端条件下，结束位置可以取到高于100%，但极度不推荐此参数。
             &emsp; &emsp;示例: [30, 90]、[15, 85]
+        - ##### Para_mode.DuiguanMARK
+        &emsp; &emsp;监测对管序号标记，正整数数组类型。用于标记监测的哪个或者哪几个对管门极，与 DuiguanCH 数组中的通道顺序必须一一对应。目前最多支持同时计算两个，当 DuiguanMARK 参数填入 [1,5] 、 DuiguanCH 参数填入 [6,4] 时，软件将会把通道 6 (4)的数据当作对管 T1(T5) 的 Vge 开始计算开通关断期间的最大最小值并输出图像。最后的数据表格中将会有 VgemaxT1(V)、VgeminT1(V)、VgemeanT1(V) 和 VgemaxT5(V)、VgeminT5(V)、VgemeanT5(V) 项，表头字符串的数字部分由 DuiguanMARK 参数决定。
+    - ##### Para_mode.DuiguanCH
+        &emsp; &emsp;监测对管通道标记，正整数数组类型。用于设置监测的对管门极数据在哪个通道，与 DuiguanMARK 数组中的通道顺序必须一一对应，若某一个通道标记为0，则关闭该通道的对管监测功能，即填入[6,0]，则表示仅有第六通道为对管检测通道。
     - ##### Para_mode.Fuzaimode
         &emsp; &emsp;负载电流模式开关兼通道配置，非负整型。若填值不为0，则打开负载电流模式。填的数值+1则为负载电流数据在CSV文件中的列数。开启负载电流模式后，将无法计算损耗以及其他跟电流相关的数据，仅分析尖峰。
     - ##### ~~Para_mode.Dflag~~(已与V2.0.3版本后删除，反向恢复分析改为通道分配控制)
@@ -41,6 +45,11 @@
     - ##### Para_mode.Drawflag
         &emsp; &emsp;组间数据分析绘图使能开关，布尔类型。置1时将开启组间数据分析绘图，包括尖峰损耗等数据在组间变化的趋势等，置0时将跳过该过程。
 - #### 数据配置参数
+    - ##### Para_out.titlemode
+        &emsp; &emsp;数据输出表预设，字符串型哈希表类型。只有四种选项，全部参数('Full')、基础模式('Standard')、双对管模式('2Duiguan')、自定义模式('Manual')，其余输入均无效。此表仅用于快捷复制，所有数据都会在表后列出。全部参数模式将直接列出全部数据、基础模式将仅列出基础测试需要的数据(包括一个对管门极)、双对管模式将舍弃反向恢复的相关计算转而提供两个对管监测、最后自定义模式将以title_Manual参数中提到的数据输出。
+        &emsp; &emsp;示例: 'Full'、'Standard'、'2Duiguan'、'Manual'
+    - ##### Para_out.title_Manual
+        &emsp; &emsp;自定义数据输出表，字符串型哈希表类型。仅在 titlemode 配置为 'Manual' 时生效，用以提供特殊的输出数据要求，仅能识别下述字符串，其余输入无效。{'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'}
     - ##### Para_data.gate_didt
         &emsp; &emsp;开通电流didt上升容错，非负整数类型，可填0。didt上升沿检测算法的检测窗口长度，若在i到i+gate_didt的区间内呈上升趋势则判断为上升；反之则判断为下降重置初始点。填0时即为设置成要求必须严格上升，即i+1的数值必须比i高。实际使用时，若Ic数据线非常光滑，则可以填0关闭容错；若略有毛刺则可以填值3~5；不建议填10以上的值。
     - ##### Para_data.gate_Erec

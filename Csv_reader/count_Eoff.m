@@ -24,7 +24,7 @@ for i = 1:18
     SWoff_stop_indices = find(Ic(valid_range) <= Ictop*(0.02+i/100), 1, 'first');
     SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
     if i == 1
-        fprintf('Eon计算:\n')
+        fprintf('Eoff计算:\n')
     end
 end
 if isempty(SWoff_stop_indices)

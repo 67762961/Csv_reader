@@ -2,8 +2,8 @@ function [tdoff,tf] = count_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,
 
 %% ================ 关断时间（Toff）计算与绘图 ================
 % 关断时电流=90%时刻
-toffIcm90_indices = find(Ic(tIcm-fix(ton2/10):min(toff1+50, length(Ic))) < Ictop*0.9, 1, 'first');
-toffIcm90 = tIcm + toffIcm90_indices - 1;
+toffIcm90_indices = find(Ic(tIcm+100:min(toff1+fix(ton2/10), length(Ic))) < Ictop*0.9, 1, 'first');
+toffIcm90 = tIcm+100 + toffIcm90_indices - 1;
 if isempty(toffIcm90_indices)
     print('关断时电流=90%时刻识别失败')
     error('关断时电流=90%时刻识别失败')

@@ -2,7 +2,7 @@ function [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Vd_
 
 %% Vcetop Ictop 计算
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-[Vgemax,T_Vgemax] = max(Vge(ton1:ton2));
+[Vgemax,T_Vgemax] = max(Vge(ton1+fix(cnton1/4):ton2-fix(cnton1/4)));
 T_Vgemax = ton1 + T_Vgemax - 1; % 转换为全局索引
 vge_high_interval = fix(T_Vgemax - cnton1/10) : fix(T_Vgemax + cnton1/10);
 meanVgetop = median(Vge(vge_high_interval)); % 中值滤波

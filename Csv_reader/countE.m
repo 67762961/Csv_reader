@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -109,16 +109,18 @@ cntoff1 = ton2-toff1;
 cnton2 = toff2-ton2;
 
 %% 探头偏置校正（静态区间均值）
-if (Ch_labels(3)~=0)
+if (I_Fix(1) == 1) || (I_Fix(2) == 1)
+    fprintf('探头自动较零:\n');
+end
+if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
     static_ic_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
     meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
     Ic = Ic - meanIc; % 电流探头较零
     ch3 = ch3 - meanIc;
-    fprintf('探头自动较零:\n');
     fprintf('       Ic偏移量:%03fA\n',meanIc);
 end
 
-if (Ch_labels(5)~=0)
+if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
     static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
     meanId = mean(Id(static_id_interval));
     Id = Id - meanId;% 电流探头较零
@@ -129,9 +131,9 @@ end
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 if (Fuzaimode == 0)
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2);
 else
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2);
 end
 
 [Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);

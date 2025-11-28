@@ -20,6 +20,8 @@ Para_mode.DuiguanMARK   = [2, 3];                                       %% 对�
 Para_mode.DuiguanCH     = [6, 4];                                       %% 对管门极监测对应通道
 Para_mode.Fuzaimode     = 0;
 Para_mode.Drawflag      = 0;                                            %% 是否需要绘图分析
+Para_mode.I_Fix         = [1, 1];                                       %% 是否对电流进行校正     1-校正 0-不校正
+Para_mode.I_meature     = "Id";                                         %% 以Ic或Id计算的实际测试电流值
 
 % 数据配置参数
 Para_data.gate_didt  = 3;                                               %% didt回落容错     didt计算中上升沿过滤毛刺阈值

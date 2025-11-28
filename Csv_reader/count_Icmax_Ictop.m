@@ -1,4 +1,4 @@
-function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,ton1,toff1,cnton1,ton2,toff2)
+function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2)
 
 %% 计算Ictop
 nspd = (time(2)-time(1))*1e9;
@@ -27,7 +27,6 @@ PicHeight = PicTop - PicBottom;
 if Id_flag~=0
     static_id_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
     Idbase =  mean(ch5(static_id_interval)); % 关断时平均Id作为Ictop
-    Ictop_out = -1*Idbase;
     
     barheight = 0.02*PicHeight;
     barStart =fix(toff1 + cntoff1/4);
@@ -47,8 +46,6 @@ if Id_flag~=0
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     
     plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
-else
-    Ictop_out = Ictop;
 end
 % Ic校准线及标注
 barStart = fix(toff1 + cntoff1/4);
@@ -62,20 +59,19 @@ hold on;
 plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
 text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
 
-% ylim([PicBottom, PicTop]);
-% xlim([time(PicStart), time(PicEnd)]);
-% title(['Ic=',num2str(fix(Ictop_out)),' A']);
-% grid on;
-
-% save_dir = fullfile(path, 'result', dataname, '01 Icmax & Ictop');
-% if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-% saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop_out)),'A.png']), 'png');
-% close(gcf);
-% hold off
-
 %% Icmax 计算
 [Icmax, Icmax_idx] = max(ch3(ton2:toff2));
 Icmax_idx = ton2 + Icmax_idx - 1;
+
+%% 电流采信选择
+switch I_meature
+    case "Ic"
+        Ictop_out = Ictop;
+    case "Id"
+        Ictop_out = -1*Idbase;
+    otherwise
+        error('I_meature参数错误 请检查');
+end
 
 % 绘图
 plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');

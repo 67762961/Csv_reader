@@ -29,6 +29,8 @@ DuiguanMARK = Para_mode.DuiguanMARK;
 DuiguanCH   = Para_mode.DuiguanCH;
 % Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
+I_Fix       = Para_mode.I_Fix;           %% 是否对电流进行校正     1-校正 0-不校正
+I_meature   = Para_mode.I_meature;       %% 以Ic或Id计算的实际测试电流值
 
 % 数据配置
 gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
@@ -68,8 +70,8 @@ Paradata1 = {Ver,datetime,time,Floder,tablename,num2str(datstart),num2str(datnum
 Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管标记', '对管通道', '负载电流'};
 Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH), num2str(Fuzaimode)};
 
-Paratable3 = {'didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
-Paradata3 = {num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
+Paratable3 = {'电流校准','电流采信','didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
+Paradata3 = {num2str(I_Fix),I_meature,num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
 
 titleMap = containers.Map;
 titleMap('Full') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
@@ -93,7 +95,7 @@ cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
     cnt=cnt+1;
 end
 % 表头修正

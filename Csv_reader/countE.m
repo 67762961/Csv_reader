@@ -161,10 +161,7 @@ if (Ch_labels(3)~=0)
     [didt,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,SWon_start,SWon_stop);
     
     % ====================== 开通时间（Ton）计算 ======================
-    [tdon,tr] = count_Ton(num,time,ch1,Ictop,path,dataname,ton10,tonIcm10,tonIcm90);
-    
-    % ====================== 关断时间（Toff）计算与绘图 ======================
-    [tdoff,tf] = count_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,toff90);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,ton10,toff90,tonIcm10,tonIcm90);
 else
     dvdtoutput = " ";
     didt = " ";

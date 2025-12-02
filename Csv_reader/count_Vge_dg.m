@@ -80,7 +80,7 @@ title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-off']);
 grid on;
 
 % 路径构建优化
-save_dir = fullfile(path, 'result', dataname, '08 Vge_dg');
+save_dir = fullfile(path, 'result', dataname, '07 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_off_T',num2str(gd_num),'.png']), 'png');
 close(gcf);

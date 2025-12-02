@@ -74,8 +74,8 @@ Paratable3 = {'电流校准','电流采信','didt阈值', 'Erec阈值', '门极�
 Paradata3 = {num2str(I_Fix),I_meature,num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
 
 titleMap = containers.Map;
-titleMap('Full') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
-titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Tdon(ns)', 'Tdoff(ns)','    ','    ','    ','    ','    ','    ','    '};
+titleMap('Full') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)','    ','    ','    ','    ','    ','    ','    '};
 titleMap('2Duiguan') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    ','    ','    '};
 titleMap('Manual') = title_Manual;
 

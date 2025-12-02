@@ -136,13 +136,7 @@ else
     [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2);
 end
 
-[Vcemax,Vcetop,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
-
-if (Ch_labels(4)~=0)
-    [Vdmax] = count_Vdmax(num,time,ch4,Ictop,path,dataname,ton2,toff2);
-else
-    Vdmax = "   ";
-end
+[Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
 
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================
@@ -256,7 +250,7 @@ for i = 1:length(title)
     output(i) = currentValue;
 end
 
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)'};
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dt(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 output_backup = zeros(length(Full_title),1);
 for i = 1:length(Full_title)
     currentKey = Full_title{i};

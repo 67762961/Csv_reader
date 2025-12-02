@@ -87,7 +87,7 @@ title(['Ic=',num2str(fix(Ictop)),'A dv/dt计算']);
 grid on;
 
 % 保存路径处理
-save_dir = fullfile(path, 'result', dataname, '05 dvdt');
+save_dir = fullfile(path, 'result', dataname, '04 dvdt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A dvdt-Vcetop=',num2str(fix(Vcetop)),'.png']), 'png');
 close(gcf);

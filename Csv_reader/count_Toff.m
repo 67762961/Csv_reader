@@ -57,7 +57,7 @@ ylabel('Voltage (V)');
 xlim([time(toff_bg_start),time(toff_bg_end)]);
 
 % 路径处理标准化
-save_dir = fullfile(path, 'result', dataname, '07 Ton & Toff');
+save_dir = fullfile(path, 'result', dataname, '06 Ton & Toff');
 if ~exist(save_dir, 'dir')
     mkdir(save_dir);draw
 end

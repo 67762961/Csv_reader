@@ -63,17 +63,17 @@ line([time(barStart),time(barEnd)],[Vcetop,Vcetop],'Color', [0.5 0.5 0.5],'LineS
 hold on;
 line([time(barStart),time(barStart)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
 line([time(barEnd),time(barEnd)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
-text(time(fix(cemax_idx+0.05*PicLength)),Vcetop - fix(PicHeight*0.1),['Vcetop =',num2str(Vcetop),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx-0.05*PicLength)),Vcetop - fix(PicHeight*0.1),['Vcetop =',num2str(Vcetop),'V'], 'FontSize',13,'Color','b');
 
 % Vcemax绘图
 plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
 if 0 ~= Vd_flag
     plot(time(PicStart:PicEnd), ch4(PicStart:PicEnd), 'g');
     plot(time(dmax_idx), Vdmax, 'ro', 'MarkerFaceColor','r');
-    text(time(fix(dmax_idx+0.05*PicLength)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
+    text(time(fix(dmax_idx-0.1*PicLength)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
 end
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(fix(cemax_idx+0.05*PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx-0.3*PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);

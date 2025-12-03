@@ -41,13 +41,20 @@ end
 
 if (Ch_labels(3)~=0)
     ch3 = Ch_labels(3)/abs(Ch_labels(3))*data(:,4);       % Ic（集电极电流）
+else
+    ch3 = time*0;
 end
 
-ch4 = data(:,5);        % Vd（二极管电压）
-
+if (Ch_labels(4)~=0)
+    ch4 = data(:,5);        % Vd（二极管电压）
+else
+    ch4 = time*0;
+end
 
 if (Ch_labels(5)~=0)
     ch5 = Ch_labels(5)/abs(Ch_labels(5))*data(:,6);        % Id（二极管电流）
+else
+    ch5 = time*0;
 end
 
 Vge_dg = zeros(length(data(:,1)),length(DuiguanCH));

@@ -23,14 +23,15 @@ PicTop = fix(1.1*max(ch3(PicStart:PicEnd)));
 PicBottom = fix(1.5*min(ch5(PicStart:PicEnd)));
 PicHeight = PicTop - PicBottom;
 
+barheight = 0.02*PicHeight;
+barStart =fix(toff1 + cntoff1/4);
+barEnd = fix(ton2 - cntoff1/4);
+
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0
     static_id_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
     Idbase =  mean(ch5(static_id_interval)); % 关断时平均Id作为Ictop
     
-    barheight = 0.02*PicHeight;
-    barStart =fix(toff1 + cntoff1/4);
-    barEnd = fix(ton2 - cntoff1/4);
     % Idbase水平线及标注
     line([time(barStart),time(barEnd)],[Idbase,Idbase],'Color', [0.5 0.5 0.5],'LineStyle','--');
     hold on;
@@ -64,6 +65,9 @@ text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'Fon
 Icmax_idx = ton2 + Icmax_idx - 1;
 
 %% 电流采信选择
+if Id_flag==0
+    I_meature = "Ic";
+end
 switch I_meature
     case "Ic"
         Ictop_out = Ictop;

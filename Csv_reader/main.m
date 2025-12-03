@@ -9,7 +9,6 @@ fprintf('代码版本: %s\n\n', Ver);
 
 %% 初始化参数配置
 % 文件路径配置参数
-ouput_table = '数据读取结果.xlsx' ;      %% 输出文件名
 location    = Para_file.location ;      %% 路径
 tablename   = Para_file.tablename;      %% csv文件名
 Dataname    = Para_file.dataname ;      %% 数据标签
@@ -48,6 +47,7 @@ Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 path=location;
 [~,Floder,~] = fileparts(location);
 dataname = [num2str(datstart, '%03d'), '-', Dataname];
+ouput_table = dataname ;      %% 输出文件名
 clipboard('copy', dataname);
 
 if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法

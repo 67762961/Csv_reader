@@ -88,15 +88,15 @@ end
 cntVge = indzer(Vge,Vgeth);
 % Vge过零点次数记录
 cntsw = length(cntVge);
-if cntsw ~= 6
+if (cntsw ~= 6) && (cntsw ~= 4)
     fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
     error('过零点判断异常')
 end
 % fprintf('%d\n',cntsw);
 % 第0次开通时间点
-ton0=cntVge(cntsw-5);
+ton0=cntVge(1);
 % 第0次关断时间点
-toff0=cntVge(cntsw-4);
+toff0=cntVge(2);
 % 第一次开通时间点
 ton1=cntVge(cntsw-3);
 % 第一次关断时间点

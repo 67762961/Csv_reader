@@ -16,9 +16,10 @@ Ictop = mean(ch3(window_start:tIcm));               % 计算均值
 % plot(time(tIcm), ch3(tIcm), 'ro', 'MarkerFaceColor','r');
 % error('1')
 
-PicLength = toff2 - ton1;
-PicStart = ton1-fix(1*PicLength/5);
-PicEnd = toff2+fix(1*PicLength/5);
+PicLength = abs(toff2 - ton1);
+PicStart = max(ton1-fix(1*PicLength/5),1);
+PicEnd = min(toff2+fix(1*PicLength/5),length(time));
+PicLength = abs(PicEnd - PicStart);
 PicTop = fix(1.1*max(ch3(PicStart:PicEnd)));
 PicBottom = fix(1.5*min(ch5(PicStart:PicEnd)));
 PicHeight = PicTop - PicBottom;

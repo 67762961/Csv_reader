@@ -49,8 +49,9 @@ end
 
 % 绘图
 PicLength = toff2 - ton1;
-PicStart = ton1-fix(1*PicLength/5);
-PicEnd = toff2+fix(1*PicLength/5);
+PicStart = max(ton1-fix(1*PicLength/5),1);
+PicEnd = min(toff2+fix(1*PicLength/5),length(time));
+PicLength = abs(toff2 - ton1);
 PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
 PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;

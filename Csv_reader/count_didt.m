@@ -59,10 +59,12 @@ end
 
 % 绘图
 % figure;
-SWonlength = fix((valid_rise_end - valid_rise_start));
+[~, max_idx] = max(ch3(window_di));          % 快速定位峰值索引 max_idx为相对索引
+tIcm = Window_Start + max_idx - 1;          % 转换为全局索引
 
+SWonlength = fix((valid_rise_end - valid_rise_start));
 PicStart = valid_rise_start - SWonlength;
-PicEnd = valid_rise_end + 2*SWonlength;
+PicEnd = tIcm + 2*SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.05*PicTop);

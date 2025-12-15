@@ -21,7 +21,7 @@ PicStart = max(ton1-fix(1*PicLength/5),1);
 PicEnd = min(toff2+fix(1*PicLength/5),length(time));
 PicLength = abs(PicEnd - PicStart);
 PicTop = fix(1.1*max(ch3(PicStart:PicEnd)));
-PicBottom = fix(1.5*min(ch5(PicStart:PicEnd)));
+PicBottom = min(fix(1.5*min(ch5(PicStart:PicEnd))),-0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
 barheight = 0.02*PicHeight;

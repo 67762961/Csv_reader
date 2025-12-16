@@ -1,61 +1,85 @@
-function [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,cntVge,ton10,toff90,tonIcm10,tonIcm90)
+function [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ictop,path,dataname,cntVge,Tdidt)
 
 cntsw = length(cntVge);
+ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
+
+valid_rise_start = Tdidt(1);
+valid_rise_end = Tdidt(2);
+valid_fall_start = Tdidt(3);
+valid_fall_end = Tdidt(4);
+
+%% ================ Vgetop计算 ================
+% 计算Vge高电平电压（使用中值避免噪声干扰）
+Vgemax = max(ch1);
+ch1_po = ch1(ch1>=0);
+ch1_top = ch1_po((ch1_po >= 0.90*Vgemax)&(ch1_po <= 0.95*Vgemax));
+Vgetop = median(ch1_top);
+
+% if (Vgetop < 0.9*Vgemax)
+%     fprintf('Vgetop检测:\n')
+%     fprintf('       Vgetop(%03f) 小于 0.9*Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',Vgetop,0.9*Vgemax)
+%     Vgetop = 0.9*Vgemax;
+% end
+
+% 寻找关断时Vge=90%的时间点
+% disp(ch1(toff1:-1:ton1))
+toff90_indices = find(ch1(toff1:-1:ton1) > 0.9 * Vgetop, 1, 'first');
+toff90 = toff1 - toff90_indices + 1; % 转换为原始索引
+if isempty(toff90_indices)
+    print('关断时Vge=90%的时间点识别失败')
+    error('关断时Vge=90%的时间点识别失败')
+end
+
+Vgemin = min(ch1(toff1:ton2));
+ch1_ne = ch1(toff1:ton2);
+ch1_ne = ch1_ne(ch1_ne<=0);
+ch1_base = ch1_ne((ch1_ne <= 0.90*Vgemin)&(ch1_ne >= 0.95*Vgemin));
+Vgebase = median(ch1_base);
+
+% 寻找开通时Vge=10%的时间点
+% disp(ch1(ton2:-1:toff1))
+ton10_indices = find(ch1(ton2:-1:toff1) < 0.8 * Vgebase, 1, 'first');
+ton10 = ton2 - ton10_indices + 1;
+if isempty(ton10_indices)
+    print('开通时Vge=10%的时间点识别失败')
+    error('开通时Vge=10%的时间点识别失败')
+end
 
 %% ================ 开通时间（Ton）计算与绘图 ================
 % 索引边界保护
-% ton_bg_start = max(1, fix(ton10 * 0.997));
-ton_bg_end = min(length(time), fix(tonIcm90 * 1.003));
-ton_delay_range = ton10 : tonIcm10;
-ton_slope_range = tonIcm10 : tonIcm90;
+ton_delay_range = ton10 : valid_rise_start;
+ton_slope_range = valid_rise_start : valid_rise_end;
 
 % 时间参数计算
-if tonIcm10 - ton10 > 0
-    tdon = (time(tonIcm10) - time(ton10))* 1e9;
+if  valid_rise_start - ton10 > 0
+    tdon = (time(valid_rise_start) - time(ton10))* 1e9;
 else
     tdon = 0;
 end
 
-if tonIcm90 - tonIcm10 > 0
-    tr = (time(tonIcm90) - time(tonIcm10)) * 1e9;
+if valid_rise_end - valid_rise_start > 0
+    tr = (time(valid_rise_end) - time( valid_rise_start)) * 1e9;
 else
     tr = 0;
 end
 
 %% ================ 关断时间（Toff）计算与绘图 ================
 % 关断时电流=90%时刻
-toffIcm90_indices = find(Ic(tIcm+100:min(toff1+fix(ton2/10), length(Ic))) < Ictop*0.9, 1, 'first');
-toffIcm90 = tIcm+100 + toffIcm90_indices - 1;
-if isempty(toffIcm90_indices)
-    print('关断时电流=90%时刻识别失败')
-    error('关断时电流=90%时刻识别失败')
-end
-
-% 关断时电流=10%时刻
-toffIcm10_indices = find(Ic(toffIcm90:min(ton2, length(Ic))) < Ictop*0.1, 1, 'first');
-toffIcm10 = toffIcm90 + toffIcm10_indices - 1;
-if isempty(toffIcm90_indices)
-    print('关断时电流=10%时刻识别失败')
-    error('关断时电流=10%时刻识别失败')
-end
-
-% 动态索引边界保护
-toff_bg_start = max(1, fix(toff90 * 0.997));
-% toff_bg_end = min(length(time), fix(toffIcm10 * 1.003));
-toff_delay_range = toff90 : toffIcm90;  % 延迟阶段索引
-toff_slope_range = toffIcm90 : toffIcm10;  % 斜率阶段索引
+toff_delay_range = toff90 : valid_fall_start;  % 延迟阶段索引
+toff_slope_range = valid_fall_start : valid_fall_end;  % 斜率阶段索引
 
 % 时间参数计算（单位：纳秒）
-if (toffIcm90 - toff90 > 0)
-    tdoff = (time(toffIcm90) - time(toff90)) * 1e9;
+if (valid_fall_start - toff90 > 0)
+    tdoff = (time(valid_fall_start) - time(toff90)) * 1e9;
 else
     tdoff = 0;
 end
 
-if toffIcm10 - toffIcm90 > 0
-    tf = (time(toffIcm10) - time(toffIcm90)) * 1e9;
+if valid_fall_end - valid_fall_start > 0
+    tf = (time(valid_fall_end) - time(valid_fall_start)) * 1e9;
 else
     tf = 0;
 end
@@ -63,9 +87,12 @@ end
 %% ================ 绘图 ================
 
 PicLength = fix((ton2 - toff1)*2/11);
-PicStart = toff_bg_start - PicLength;
-PicEnd = ton_bg_end + PicLength;
-% PicLength = PicEnd - PicStart;
+PicStart = ton1 - PicLength;
+PicEnd = toff2 + 2*PicLength;
+PicLength = PicEnd - PicStart;
+% PicTop = 15;
+% PicBottom = -10;
+% PicHeight = PicTop - PicBottom;
 
 hold on;
 % 背景区间（绿色）
@@ -75,16 +102,22 @@ plot(time(ton_delay_range), ch1(ton_delay_range), 'r', 'LineWidth', 1.8);
 % 斜率阶段（蓝色）
 plot(time(ton_slope_range), ch1(ton_slope_range), 'b', 'LineWidth', 1.8);
 
-text(time(ton10)*0.999,ch1(ton10)-1,['t(d)on=',num2str(tdon),'ns'],'FontSize',13,'color','red');
-text(time(tonIcm90)*1.0005,ch1(tonIcm90)+1,['tr=',num2str(tr),'ns'],'FontSize',13,'color','blue');
+line([time(PicStart),time(PicEnd)],[Vgetop, Vgetop], 'Color', [0.7 0.7 0.7]);
+text(time(fix((PicStart+PicEnd)/2)),Vgetop+1,['Vgetop=',num2str(Vgetop),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
+
+line([time(PicStart),time(PicEnd)],[Vgebase, Vgebase], 'Color', [0.7 0.7 0.7]);
+text(time(fix((PicStart+PicEnd)/2)),Vgebase-1,['Vgebase=',num2str(Vgebase),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
+
+text(time(ton10+fix(0.03*PicLength)),ch1(ton10),['t(d)on=',num2str(tdon),'ns'],'FontSize',13,'color','red');
+text(time(valid_rise_end+fix(0.03*PicLength)),ch1(valid_rise_end)+1,['tr=',num2str(tr),'ns'],'FontSize',13,'color','blue');
 
 % 延迟阶段（红色）
 plot(time(toff_delay_range), ch1(toff_delay_range), 'r', 'LineWidth', 1.8);
 % 斜率阶段（蓝色）
 plot(time(toff_slope_range), ch1(toff_slope_range), 'b', 'LineWidth', 1.8);
 
-text(time(toff90)*1.0005,ch1(toff90)+1,['t(d)off=',num2str(tdoff),'ns'],'FontSize',13,'color','red');
-text(time(toffIcm10)*0.999,ch1(toffIcm10)-1,['tf=',num2str(tf),'ns'],'FontSize',13,'color','blue');
+text(time(toff90+fix(0.03*PicLength)),ch1(toff90),['t(d)off=',num2str(tdoff),'ns'],'FontSize',13,'color','red');
+text(time(valid_fall_end+fix(0.03*PicLength)),ch1(valid_fall_end),['tf=',num2str(tf),'ns'],'FontSize',13,'color','blue');
 
 % 图形属性
 grid on;

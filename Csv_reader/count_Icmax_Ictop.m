@@ -1,4 +1,4 @@
-function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,I_meature,cntVge)
+function [Ictop_out,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,I_meature,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);

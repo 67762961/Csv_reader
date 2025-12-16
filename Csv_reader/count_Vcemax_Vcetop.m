@@ -1,40 +1,14 @@
-function [Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
+function [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
-cnton1 = toff1-ton1;
 cntoff1 = ton2-toff1;
+cnton2 = toff2 - ton2;
 
 %% Vcetop Ictop 计算
-% 计算Vge高电平电压（使用中值避免噪声干扰）
-[Vgemax,T_Vgemax] = max(Vge(ton1+fix(cnton1/4):ton2-fix(cnton1/4)));
-T_Vgemax = ton1 + T_Vgemax - 1; % 转换为全局索引
-vge_high_interval = fix(T_Vgemax - cnton1/10) : fix(T_Vgemax + cnton1/10);
-meanVgetop = median(Vge(vge_high_interval)); % 中值滤波
-if (meanVgetop < 0.9*Vgemax)
-    fprintf('Vgetop检测:\n')
-    fprintf('       Vgetop(%03f) 小于 0.9*Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',meanVgetop,0.9*Vgemax)
-    meanVgetop = 0.9*Vgemax;
-end
-% 寻找关断时Vge=90%的时间点
-toff90_indices = find(Vge(toff1:-1:ton1) > 0.9 * meanVgetop, 1, 'first');
-toff90 = toff1 - toff90_indices + 1; % 转换为原始索引
-if isempty(toff90_indices)
-    print('关断时Vge=90%的时间点识别失败')
-    error('关断时Vge=90%的时间点识别失败')
-end
-
-% 寻找开通时Vge=10%的时间点
-ton10_indices = find(Vge(ton2:toff2) > 0.1 * meanVgetop, 1, 'first');
-ton10 = ton2 + ton10_indices - 1;
-if isempty(ton10_indices)
-    print('开通时Vge=10%的时间点识别失败')
-    error('开通时Vge=10%的时间点识别失败')
-end
-
 % 计算Vcetop
 start_idx = fix(toff1 + cntoff1/4);         % 起始索引：关断后1/20周期
 end_idx = fix(ton2 - cntoff1/4);          % 结束索引：下一次导通前1/20周期
@@ -42,9 +16,8 @@ Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
 
 %% Vcemax计算
 % 找出最大值
-cnton2 = toff2 - ton2;
-[Vcemax, cemax_idx] = max(ch2(toff90-cnton2:fix(toff90+cnton2)));
-cemax_idx = toff90 - cnton2 + cemax_idx - 1;  % 转换为全局索引
+[Vcemax, cemax_idx] = max(ch2(toff1 - cnton2:fix(ton2)));
+cemax_idx = toff1 - cnton2 + cemax_idx - 1;  % 转换为全局索引
 
 
 %% ================ Vdmax计算 ================

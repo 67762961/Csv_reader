@@ -1,4 +1,4 @@
-function [didt_on,didt_off,Tdidt_on_Start,Tdidt_on_Stop] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
+function [didt_on,didt_off,Tdidt] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 
@@ -100,10 +100,6 @@ saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt(on).png'
 close(gcf);
 hold off
 
-Tdidt_on_Start = valid_rise_start;
-Tdidt_on_Stop = valid_rise_end;
-
-
 % ====================== 关断时刻 di/dt计算模块 ======================
 % 动态窗口生成
 max_search_length = fix((SWoff_stop - SWoff_start)/3);
@@ -186,3 +182,5 @@ if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt(off).png']), 'png');
 close(gcf);
 hold off
+
+Tdidt = [valid_rise_start,valid_rise_end,valid_fall_start,valid_fall_end];

@@ -1,4 +1,8 @@
-function [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2)
+function [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge)
+
+cntsw = length(cntVge);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算

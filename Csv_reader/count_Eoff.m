@@ -1,4 +1,10 @@
-function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,ton1,cnton1)
+function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge)
+
+cntsw = length(cntVge);
+ton1=cntVge(cntsw-3);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+cnton1 = toff1-ton1;
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找

@@ -1,4 +1,10 @@
-function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1)
+function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge)
+
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
+cntoff1 = ton2-toff1;
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量

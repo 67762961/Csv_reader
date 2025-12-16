@@ -1,4 +1,4 @@
-function [didt_on,didt_off,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
+function [didt_on,didt_off,Tdidt_on_Start,Tdidt_on_Stop] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 
@@ -100,8 +100,8 @@ saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt(on).png'
 close(gcf);
 hold off
 
-tonIcm10 = valid_rise_start;
-tonIcm90 = valid_rise_end;
+Tdidt_on_Start = valid_rise_start;
+Tdidt_on_Stop = valid_rise_end;
 
 
 % ====================== 关断时刻 di/dt计算模块 ======================

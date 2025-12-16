@@ -1,4 +1,10 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,Vge_dg,Ictop,path,dataname,cnton2,toff1,ton2,gd_num)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num)
+
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
+cnton2 = toff2-ton2;
 
 %% 对管门极监测
 Vge_dg_mean = mean(Vge_dg);

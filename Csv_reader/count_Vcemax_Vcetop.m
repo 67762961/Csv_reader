@@ -1,4 +1,12 @@
-function [Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Vd_flag,ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2)
+function [Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
+
+cntsw = length(cntVge);
+ton1=cntVge(cntsw-3);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
+cnton1 = toff1-ton1;
+cntoff1 = ton2-toff1;
 
 %% Vcetop Ictop 计算
 % 计算Vge高电平电压（使用中值避免噪声干扰）

@@ -1,4 +1,8 @@
-function [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,ton10,toff90,tonIcm10,tonIcm90)
+function [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,cntVge,ton10,toff90,tonIcm10,tonIcm90)
+
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
 
 %% ================ 开通时间（Ton）计算与绘图 ================
 % 索引边界保护

@@ -1,4 +1,11 @@
-function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2)
+function [Ictop_out,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Id_flag,ch5,path,dataname,I_meature,cntVge)
+
+cntsw = length(cntVge);
+ton1=cntVge(cntsw-3);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
+cnton1 = toff1-ton1;
 
 %% 计算Ictop
 nspd = (time(2)-time(1))*1e9;

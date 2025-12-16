@@ -103,8 +103,6 @@ ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 % 第二次开通时间点
 ton2=cntVge(cntsw-1);
-% 第二次关断时间点
-toff2=cntVge(cntsw);
 
 % 计算第0开通时长
 cnton0 = toff0-ton0;
@@ -112,8 +110,6 @@ cnton0 = toff0-ton0;
 cnton1 = toff1-ton1;
 % 计算两次脉冲间关断时长
 cntoff1 = ton2-toff1;
-% 计算第二个脉冲开通时长
-cnton2 = toff2-ton2;
 
 %% 探头偏置校正（静态区间均值）
 if (I_Fix(1) == 1) || (I_Fix(2) == 1)
@@ -138,20 +134,20 @@ end
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 if (Fuzaimode == 0)
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
 else
-    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,ton1,toff1,cnton1,ton2,toff2);
+    [Ictop,tIcm,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
 end
 
-[Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,ton1,toff1,cnton1,cntoff1,ton2,toff2);
+[Vcemax,Vcetop,Vdmax,ton10,toff90] = count_Vcemax_Vcetop(num,time,Vge,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
 
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================
-    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,toff2,cntoff1);
+    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge);
     
     
     % ====================== 关断损耗计算（Eoff） ======================
-    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,ton2,ton1,cnton1);
+    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge);
     cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
 else
     Eon = " ";
@@ -163,10 +159,10 @@ if (Ch_labels(3)~=0)
     [dvdt_on,dvdt_off] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
+    [didt_on,didt_off,Tdidt_on_Start,Tdidt_on_Stop] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
     
-    % ====================== 开通时间（Ton）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,ton10,toff90,tonIcm10,tonIcm90);
+    % ====================== 开通关断时间（Ton&Toff）计算 ======================
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,cntVge,ton10,toff90,Tdidt_on_Start,Tdidt_on_Stop);
 else
     dvdt_on = " ";
     dvdt_off = " ";
@@ -185,7 +181,7 @@ Vge_dg_min = strings(1,length(DuiguanCH));
 
 for gd_num = 1:length(DuiguanCH)
     if (DuiguanCH(gd_num)~=0)
-        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cnton2,toff1,ton2,DuiguanMARK(gd_num));
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num));
     else
         Vge_dg_mean(gd_num) = " ";
         Vge_dg_max(gd_num) = " ";
@@ -195,7 +191,7 @@ end
 
 % ====================== Prr/Erec计算 ======================
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
-    [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,ton2,toff2);
+    [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
 else
     Prrmax = " ";
     Erec = " ";

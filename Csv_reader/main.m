@@ -2,7 +2,7 @@ function main(Para_file,Para_mode,Para_data,Para_out,Prra_draw)
 % 编码修改为UTF-8
 feature('DefaultCharacterSet','UTF8');
 % 代码版本号
-Ver = "V2.2.7";
+Ver = "V2.3.0";
 % 运行开始提示
 fprintf('开始读取\n\n');
 fprintf('代码版本: %s\n\n', Ver);
@@ -16,8 +16,7 @@ datstart    = Para_file.datstart ;      %% csv文件序号起始点
 datnum      = Para_file.datnum   ;      %% csv文件序号组数
 datend      = datstart + datnum-1;      %% csv文件序号终止点
 
-% 模式配置参
-% nspd       = Para_mode.nspd     ;       %% csv采样率 ns per dot
+% 模式配置参数
 Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels   = Para_mode.Ch_labels;       %% 通道分配
 Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
@@ -28,7 +27,6 @@ didtmode    = Para_mode.didtmode ;       %% didt模式
 Fuzaimode   = Para_mode.Fuzaimode;
 DuiguanMARK = Para_mode.DuiguanMARK;
 DuiguanCH   = Para_mode.DuiguanCH;
-% Dflag      = Para_mode.Dflag    ;       %% 是否有二极管反向恢复测试
 Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
 I_Fix       = Para_mode.I_Fix;           %% 是否对电流进行校正     1-校正 0-不校正
 I_meature   = Para_mode.I_meature;       %% 以Ic或Id计算的实际测试电流值

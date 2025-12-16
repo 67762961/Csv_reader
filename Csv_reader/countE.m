@@ -160,9 +160,7 @@ end
 
 if (Ch_labels(3)~=0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt,dvdt_a_b] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,SWoff_start,SWoff_stop);
-    % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-    dvdtoutput = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
+    [dvdt_on,dvdt_off] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== di/dt计算模块 ======================
     [didt_on,didt_off,tonIcm10,tonIcm90] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
@@ -170,7 +168,8 @@ if (Ch_labels(3)~=0)
     % ====================== 开通时间（Ton）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ic,Ictop,path,dataname,tIcm,toff1,ton2,ton10,toff90,tonIcm10,tonIcm90);
 else
-    dvdtoutput = " ";
+    dvdt_on = " ";
+    dvdt_off = " ";
     didt_on = " ";
     didt_off = " ";
     tdon = " ";
@@ -229,7 +228,8 @@ dataMap('Eoff(mJ)') = Eoff;
 dataMap('VceMAX(V)') = Vcemax;
 dataMap('VdMAX(V)') = Vdmax;
 dataMap('Vcetop(V)') = Vcetop;
-dataMap('dv/dt(V/us)') = dvdtoutput;
+dataMap('dv/dton(V/us)') = dvdt_on;
+dataMap('dv/dtoff(V/us)') = dvdt_off;
 dataMap('di/dton(A/us)') = didt_on;
 dataMap('di/dtoff(A/us)') = didt_off;
 dataMap('Erec(mJ)') = Erec;
@@ -256,7 +256,7 @@ for i = 1:length(title)
     output(i) = currentValue;
 end
 
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 output_backup = zeros(length(Full_title),1);
 for i = 1:length(Full_title)
     currentKey = Full_title{i};

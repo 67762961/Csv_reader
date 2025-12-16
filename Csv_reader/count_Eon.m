@@ -1,4 +1,4 @@
-function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge)
+function [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode)
 
 cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
@@ -12,7 +12,7 @@ cntoff1 = ton2-toff1;
 cnton2 = toff2 - ton2;
 search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
 valid_range = search_start:min(toff2+cnton2, length(Ic));
-SWon_start_indices = find(Ic(valid_range) >= max(0.1*Ictop, 3), 1, 'first');
+SWon_start_indices = find(Ic(valid_range) >= max(Eonmode(1)*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
 if isempty(SWon_start_indices)
     print('Eon计算起点识别失败')
@@ -20,16 +20,16 @@ if isempty(SWon_start_indices)
 end
 
 %开通结束时刻寻找
-SWon_stop_indices = find(Vce(valid_range) <= Vcetop*0.02, 1, 'first');
+SWon_stop_indices = find(Vce(valid_range) <= Vcetop*Eonmode(2), 1, 'first');
 SWon_stop = valid_range(1) + SWon_stop_indices - 1;
 for i = 1:18
     if ~isempty(SWon_stop_indices)
         if(i~=1)
-            fprintf('       未找到 0.02 Vcetop 作为 Eon 计算结束点 放宽至 %0.2f Vcetop \n', (0.02+(i-1)/100));
+            fprintf('       未找到 %0.2f Vcetop 作为 Eon 计算结束点 放宽至 %0.2f Vcetop \n', Eonmode(2), (0.02+(i-1)/100));
         end
         break;
     end
-    SWon_stop_indices = find(Vce(valid_range) <= Vcetop*(0.02+i/100), 1, 'first');
+    SWon_stop_indices = find(Vce(valid_range) <= Vcetop*(Eonmode(2)+i/100), 1, 'first');
     SWon_stop = valid_range(1) + SWon_stop_indices - 1;
     if i == 1
         fprintf('Eon计算:\n')
@@ -41,9 +41,9 @@ if isempty(SWon_stop_indices)
 end
 
 Window_width = SWon_stop - SWon_start;
-Window_extend = fix(Window_width/10);
+Window_extend = Window_width;
 Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start-3*Window_extend):(SWon_stop); % 定义计算窗口
+windowEon = (SWon_start-fix(Eonmode(3)*Window_extend)):(SWon_stop+fix(Eonmode(4)*Window_extend)); % 定义计算窗口
 
 % 向量化计算功率和能量
 Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）
@@ -70,8 +70,10 @@ plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/max(Ic),'b');
-plot(time(windowEon(1)), Pon_full_normalized(windowEon(1)),'o','color','red');
-plot(time(windowEon(end)), Pon_full_normalized(windowEon(end)),'o','color','red');
+plot(time(SWon_start), Pon_full_normalized(SWon_start),'o','color','red');
+plot(time(SWon_stop), Pon_full_normalized(SWon_stop),'o','color','red');
+plot(time(windowEon(1)), Pon_full_normalized(windowEon(1)),'ro', 'MarkerFaceColor','r');
+plot(time(windowEon(end)), Pon_full_normalized(windowEon(end)),'ro', 'MarkerFaceColor','r');
 plot(time(PicStart:PicEnd),Pon_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
 xlim([time(PicStart),time(PicEnd)]);
 ylim([PicBottom,PicTop]);

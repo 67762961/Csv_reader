@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -143,11 +143,11 @@ end
 
 if (Ch_labels(3)~=0)
     % ====================== 开通损耗计算（Eon） ======================
-    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge);
-    
+    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode);
     
     % ====================== 关断损耗计算（Eoff） ======================
-    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge);
+    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eoffmode);
+    
     cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
 else
     Eon = " ";

@@ -21,6 +21,8 @@ datend      = datstart + datnum-1;      %% csv文件序号终止点
 Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
 Ch_labels   = Para_mode.Ch_labels;       %% 通道分配
 Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
+Eonmode     = Para_mode.Eonmode;         %% 开通损耗配置
+Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
 dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode    = Para_mode.didtmode ;       %% didt模式
 Fuzaimode   = Para_mode.Fuzaimode;
@@ -95,7 +97,7 @@ cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Chmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
     cnt=cnt+1;
 end
 % 表头修正

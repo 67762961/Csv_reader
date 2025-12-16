@@ -1,4 +1,4 @@
-function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge)
+function [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eoffmode)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -9,7 +9,7 @@ cnton1 = toff1-ton1;
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
 valid_range = (ton1+fix(0.7*cnton1)):min(ton2, length(Vce));
-SWoff_start_indices = find(Vce(valid_range) >= Vcetop*0.1, 1, 'first');
+SWoff_start_indices = find(Vce(valid_range) >= Vcetop*Eoffmode(1), 1, 'first');
 SWoff_start = valid_range(1) + SWoff_start_indices - 1;
 if isempty(SWoff_start_indices)
     print('Eoff计算起点识别失败')
@@ -18,16 +18,16 @@ end
 
 %关断结束时刻寻找
 valid_range = SWoff_start:min(ton2, length(Ic));
-SWoff_stop_indices = find(Ic(valid_range) <= Ictop*0.02, 1, 'first');
+SWoff_stop_indices = find(Ic(valid_range) <= Ictop*Eoffmode(2), 1, 'first');
 SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
 for i = 1:18
     if ~isempty(SWoff_stop_indices)
         if(i~=1)
-            fprintf('       未找到 0.02 Ictop 作为 Eoff 计算结束点 放宽至 %0.2f Ictop \n', (0.02+(i-1)/100));
+            fprintf('       未找到 %0.2f Ictop 作为 Eoff 计算结束点 放宽至 %0.2f Ictop \n',Eoffmode(2),(0.02+(i-1)/100));
         end
         break;
     end
-    SWoff_stop_indices = find(Ic(valid_range) <= Ictop*(0.02+i/100), 1, 'first');
+    SWoff_stop_indices = find(Ic(valid_range) <= Ictop*(Eoffmode(2)+i/100), 1, 'first');
     SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
     if i == 1
         fprintf('Eoff计算:\n')
@@ -41,8 +41,8 @@ end
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));
 Window_width = SWoff_stop - SWoff_start;
-Window_extend = fix(Window_width/10);
-windowEoff = (SWoff_start-3*Window_extend: SWoff_stop);
+Window_extend = fix(Window_width);
+windowEoff = (SWoff_start-fix(Eoffmode(3)*Window_extend)):(SWoff_stop+fix(Eoffmode(4)*Window_extend)); % 定义计算窗口
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;
@@ -70,8 +70,10 @@ plot(time(windowEoff), Poff_normalized, 'r', 'LineWidth',1.2);
 hold on
 plot(time,Vce/Vcetop,'g');
 plot(time,Ic/Ictop,'b');
-plot(time(windowEoff(1)), Poff_full_normalized(windowEoff(1)),'o','color','red');
-plot(time(windowEoff(end)), Poff_full_normalized(windowEoff(end)),'o','color','red');
+plot(time(SWoff_start), Poff_full_normalized(SWoff_start),'o','color','red');
+plot(time(SWoff_stop), Poff_full_normalized(SWoff_stop),'o','color','red');
+plot(time(windowEoff(1)), Poff_full_normalized(windowEoff(1)),'ro', 'MarkerFaceColor','r');
+plot(time(windowEoff(end)), Poff_full_normalized(windowEoff(end)),'ro', 'MarkerFaceColor','r');
 plot(time(PicStart:PicEnd),Poff_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
 xlim([time(PicStart),time(PicEnd)]);
 ylim([PicBottom,PicTop]);

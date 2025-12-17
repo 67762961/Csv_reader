@@ -9,10 +9,10 @@ SWoff_stop = cntSW(4);
 % 阈值定义
 V_10 = Vcetop * 0.1;
 V_90 = Vcetop * 0.9;
-V_a  = Vcetop * dvdtmode(1)/100;
-V_b  = Vcetop * dvdtmode(2)/100;
-V_c  = Vcetop * dvdtmode(2)/100;
-V_d  = Vcetop * dvdtmode(1)/100;
+V_a  = Vcetop * dvdtmode(3)/100;
+V_b  = Vcetop * dvdtmode(4)/100;
+V_c  = Vcetop * dvdtmode(1)/100;
+V_d  = Vcetop * dvdtmode(2)/100;
 
 % 电压上升沿阈值检测
 max_search_length = fix((SWoff_stop - SWoff_start)/5);
@@ -40,7 +40,7 @@ else
     warning('dvdt段落识别出现异常')
 end
 
-if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
+if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
     rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
     if isempty(rise_start_idx_a)
         print('dvdt起始点识别失败')
@@ -84,13 +84,13 @@ text(time(fix(rise_start_idx+0.03*PicLength)),Vce(rise_start_idx),['Vce{10}=',nu
 text(time(fix(rise_end_idx+0.03*PicLength)),Vce(rise_end_idx),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop=',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt=',num2str(fix(dvdt+0.5)),'V/us'],'FontSize',13);
-if dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90
+if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
     plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
     plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
+    text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(3)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
     plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
-    text(time(rise_start_idx-fix(Riselength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(1)),'-',num2str(dvdtmode(2)),')=',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
+    text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(4)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
+    text(time(rise_start_idx-fix(Riselength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(3)),'-',num2str(dvdtmode(4)),')=',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
 end
 % 坐标轴设置
 ylim([PicBottom, PicTop]);
@@ -106,7 +106,7 @@ close(gcf);
 hold off
 
 % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-dvdt_off = (dvdtmode(1) ~= 10 || dvdtmode(2) ~= 90) * dvdt_a_b + (dvdtmode(1) == 10 && dvdtmode(2) == 90) * dvdt;
+dvdt_off = (dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90) * dvdt_a_b + (dvdtmode(3) == 10 && dvdtmode(4) == 90) * dvdt;
 
 %% 开通dv/dt计算模块
 max_search_length = fix((SWon_stop - SWon_start)/5);
@@ -145,9 +145,9 @@ plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(fall_start_idx_c:fall_end_idx_d ), Vce(fall_start_idx_c:fall_end_idx_d ), 'r', 'LineWidth',1.5);
 plot(time(fall_start_idx_c), Vce(fall_start_idx_c), 'ro', 'MarkerFaceColor','r');
-text(time(fix(fall_start_idx_c+0.03*PicLength)),Vce(fall_start_idx_c),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(fall_start_idx_c)),'V',],'FontSize',13);
+text(time(fix(fall_start_idx_c+0.03*PicLength)),Vce(fall_start_idx_c),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(fall_start_idx_c)),'V',],'FontSize',13);
 plot(time(fall_end_idx_d), Vce(fall_end_idx_d), 'ro', 'MarkerFaceColor','r');
-text(time(fix(fall_end_idx_d+0.03*PicLength)),Vce(fall_end_idx_d),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(fall_end_idx_d)),'V',],'FontSize',13);
+text(time(fix(fall_end_idx_d+0.03*PicLength)),Vce(fall_end_idx_d),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(fall_end_idx_d)),'V',],'FontSize',13);
 plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
 plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['Vcetop=',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);

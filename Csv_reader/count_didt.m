@@ -10,6 +10,8 @@ SWoff_stop = cntSW(4);
 % 阈值定义
 Ic_a  = Ictop * didtmode(1)/100;
 Ic_b  = Ictop * didtmode(2)/100;
+Ic_c  = Ictop * didtmode(3)/100;
+Ic_d  = Ictop * didtmode(4)/100;
 
 % 状态机参数初始化
 state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
@@ -115,7 +117,7 @@ state = 0;
 for i = window_di
     switch state
         case 0 % 等待触发
-            if ch3(i) <= Ic_b
+            if ch3(i) <= Ic_c
                 valid_fall_start = i;
                 % fprintf('触发值 %f\n',ch3(valid_fall_start))
                 state = 1;
@@ -127,7 +129,7 @@ for i = window_di
                 state = 0; % 发现回落重置
                 valid_fall_start = [];
             else
-                if ch3(i) <= Ic_a
+                if ch3(i) <= Ic_d
                     valid_fall_end = i;
                     % 完成检测
                     break;
@@ -166,8 +168,8 @@ plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 
 % 动态标注
-text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
-text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
+text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(3)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
+text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop=',num2str(fix(Ictop+0.5)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt=',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
 

@@ -213,6 +213,14 @@ else
     PrrPROMAX = " ";
 end
 
+% ====================== 纯C方案的Irms辅助计算 ======================
+I_cap = data0(:,8);        % 电容电流
+static_ic_interval = fix(ton2 - cntoff1*3/10) : fix(ton2 - cntoff1/10);
+meanI_cap = mean(I_cap(static_ic_interval)); % 关断时平均电流视为参考0电流
+I_cap = I_cap - meanI_cap; % 电流探头较零
+fprintf('       I_cap:%03fA\n',meanI_cap);
+[I2dt_on,I2dt_off] = count_i2dt(num,time,I_cap,Ictop,path,dataname,cntVge,Tdidt);
+
 % 创建datamap数据字典
 dataMap = containers.Map;
 dataMap('脉宽长(us)') = Length_ton0;
@@ -243,6 +251,8 @@ dataMap('Tdoff(ns)') = tdoff;
 dataMap('Tfall(ns)') = tf;
 dataMap('    ') = " ";
 
+dataMap('I2dt_on') = I2dt_on;
+dataMap('I2dt_off') = I2dt_off;
 
 %% 输出表
 output=zeros(length(title),1);
@@ -252,7 +262,7 @@ for i = 1:length(title)
     output(i) = currentValue;
 end
 
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','I2dt_on','I2dt_off'};
 output_backup = zeros(length(Full_title),1);
 for i = 1:length(Full_title)
     currentKey = Full_title{i};

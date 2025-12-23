@@ -60,8 +60,8 @@ assert(~isempty(Erec_stop), '反向恢复时间Erec结束点检测失败');
 valid_indices = Erec_start:Erec_stop;
 Erec = sum(Prr(valid_indices(2:end)) .* diff(time(valid_indices))) * 1000; % 单位mJ
 
-valid_time = time(Erec_start:end);       % 时间向量 [s]
-valid_Prr = Prr(Erec_start:end);         % 瞬时功率向量 [W]
+valid_time = time(Erec_start:Prr_end);       % 时间向量 [s]
+valid_Prr = Prr(Erec_start:Prr_end);         % 瞬时功率向量 [W]
 Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
 
 % 可视化
@@ -73,10 +73,10 @@ PicTop = 2;
 PicBottom = -1;
 PicHeight = PicTop - PicBottom;
 
-plot(time,Id./max(Id)*1.5,'b');
+plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
-plot(time,Vd./Vcetop,'g');
-plot(time,1.5*Erec_t/max(Erec_t),'c:');
+plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');
+plot(time(PicStart:PicEnd),1.5*Erec_t(PicStart:PicEnd)/max(Erec_t(PicStart:PicEnd)),'c:');
 plot(time(Erec_start:Erec_stop),Prr(Erec_start:Erec_stop)/Prrmax/1000,'r',LineWidth=1.5);
 plot(time(Prr_start:Erec_start),Prr(Prr_start:Erec_start)/Prrmax/1000,'r--');
 plot(time(Erec_stop:Prr_end),Prr(Erec_stop:Prr_end)/Prrmax/1000,'r--');

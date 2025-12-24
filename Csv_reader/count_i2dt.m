@@ -15,18 +15,18 @@ I2_cap = I_cap .* I_cap;
 % 开通I2dt计算
 I2_on_window = valid_rise_start-fix(cnton1/5):toff2;
 dt = diff(time(I2_on_window)); % 时间差分
-I2dt_on = sum(I2_cap(I2_on_window(2:end)) .* dt)*10e6;
+I2dt_on = sum(I2_cap(I2_on_window(2:end)) .* dt)*1e6;
 time_window_on = time(I2_on_window); % 获取开通窗口的时间向量
 I2_data_on = I2_cap(I2_on_window); % 获取开通窗口的电流平方数据
-I2dt_integral_on = cumtrapz(time_window_on, I2_data_on)*10e6; % 计算累积积分
+I2dt_integral_on = cumtrapz(time_window_on, I2_data_on)*1e6; % 计算累积积分
 max_I_cap_on = max(abs(max(I_cap(I2_on_window))), abs(min(I_cap(I2_on_window))));
 
 I2_off_window = valid_fall_start:valid_rise_start;
 dt = diff(time(I2_off_window)); % 时间差分
-I2dt_off = sum(I2_cap(I2_off_window(2:end)) .* dt)*10e6;
+I2dt_off = sum(I2_cap(I2_off_window(2:end)) .* dt)*1e6;
 time_window_off = time(I2_off_window); % 获取开通窗口的时间向量
 I2_data_off = I2_cap(I2_off_window); % 获取开通窗口的电流平方数据
-I2dt_integral_off = cumtrapz(time_window_off, I2_data_off)*10e6; % 计算累积积分
+I2dt_integral_off = cumtrapz(time_window_off, I2_data_off)*1e6; % 计算累积积分
 max_I_cap_off = max(abs(max(I_cap(I2_off_window))), abs(min(I_cap(I2_off_window))));
 
 

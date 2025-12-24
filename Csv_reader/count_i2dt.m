@@ -36,7 +36,7 @@ PicEnd = I2_on_window(end);
 PicLength = PicEnd - PicStart;
 
 
-set(gcf, 'Position', [300, 500, 1600, 500]); % [左下角x, 左下角y, 宽度, 高度]
+set(gcf, 'Position', [100, 100, 1600, 600]); % [左下角x, 左下角y, 宽度, 高度]
 subplot(1,2,1);
 hold on
 yyaxis left

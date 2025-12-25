@@ -1,4 +1,4 @@
-function [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ictop,path,dataname,cntVge,Tdidt)
+function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch_,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -6,23 +6,17 @@ toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
 
-valid_rise_start = Tdidt(1);
-valid_rise_end = Tdidt(2);
-valid_fall_start = Tdidt(3);
-valid_fall_end = Tdidt(4);
+valid_rise_start = Td_dt(1);
+valid_rise_end = Td_dt(2);
+valid_fall_start = Td_dt(3);
+valid_fall_end = Td_dt(4);
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
 Vgemax = max(ch1);
 ch1_po = ch1(ch1>=0);
-ch1_top = ch1_po((ch1_po >= 0.90*Vgemax)&(ch1_po <= 0.95*Vgemax));
+ch1_top = ch1_po((ch1_po >= 0.90*Vgemax)&(ch1_po <= 0.97*Vgemax));
 Vgetop = median(ch1_top);
-
-% if (Vgetop < 0.9*Vgemax)
-%     fprintf('Vgetop检测:\n')
-%     fprintf('       Vgetop(%03f) 小于 0.9*Vgemax(%03f), 将用 0.9Vgemax 代替 Vgetop \n',Vgetop,0.9*Vgemax)
-%     Vgetop = 0.9*Vgemax;
-% end
 
 % 寻找关断时Vge=90%的时间点
 % disp(ch1(toff1:-1:ton1))
@@ -36,7 +30,7 @@ end
 Vgemin = min(ch1(toff1:ton2));
 ch1_ne = ch1(toff1:ton2);
 ch1_ne = ch1_ne(ch1_ne<=0);
-ch1_base = ch1_ne((ch1_ne <= 0.90*Vgemin)&(ch1_ne >= 0.95*Vgemin));
+ch1_base = ch1_ne(ch1_ne <= 0.50*Vgemin);
 Vgebase = median(ch1_base);
 
 % 寻找开通时Vge=10%的时间点
@@ -90,9 +84,8 @@ PicLength = fix((ton2 - toff1)*2/11);
 PicStart = ton1 - PicLength;
 PicEnd = toff2 + 2*PicLength;
 PicLength = PicEnd - PicStart;
-% PicTop = 15;
-% PicBottom = -10;
-% PicHeight = PicTop - PicBottom;
+PicTop = 20;
+PicBottom = -10;
 
 hold on;
 % 背景区间（绿色）
@@ -101,6 +94,9 @@ plot(time(PicStart:PicEnd), ch1(PicStart:PicEnd), 'Color', [0.2 0.8 0.2]);
 plot(time(ton_delay_range), ch1(ton_delay_range), 'r', 'LineWidth', 1.8);
 % 斜率阶段（蓝色）
 plot(time(ton_slope_range), ch1(ton_slope_range), 'b', 'LineWidth', 1.8);
+
+plot(time(ton10), ch1(ton10),'o','color','red');
+plot(time(toff90), ch1(toff90),'o','color','red');
 
 line([time(PicStart),time(PicEnd)],[Vgetop, Vgetop], 'Color', [0.7 0.7 0.7]);
 text(time(fix((PicStart+PicEnd)/2)),Vgetop+1,['Vgetop=',num2str(Vgetop),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
@@ -119,12 +115,31 @@ plot(time(toff_slope_range), ch1(toff_slope_range), 'b', 'LineWidth', 1.8);
 text(time(toff90+fix(0.03*PicLength)),ch1(toff90),['t(d)off=',num2str(tdoff),'ns'],'FontSize',13,'color','red');
 text(time(valid_fall_end+fix(0.03*PicLength)),ch1(valid_fall_end),['tf=',num2str(tf),'ns'],'FontSize',13,'color','blue');
 
+ch_Max = max(ch_(PicStart:PicEnd));
+ch_Min = min(ch_(PicStart:PicEnd));
+range = (ch_Max - ch_Min)/3;
+ch_ = ch_/range - 9;
+
+plot(time(PicStart:PicEnd), ch_(PicStart:PicEnd), 'g', 'LineWidth', 1);
+plot(time(ton_slope_range), ch_(ton_slope_range), 'b', 'LineWidth', 1);
+plot(time(ton_delay_range), ch_(ton_delay_range), 'r', 'LineWidth', 1);
+plot(time(toff_slope_range), ch_(toff_slope_range), 'b', 'LineWidth', 1);
+plot(time(toff_delay_range), ch_(toff_delay_range), 'r', 'LineWidth', 1);
+
 % 图形属性
 grid on;
-title(sprintf('Ic=%dA  Ton=%.1fns Toff=%.1fns', fix(Ictop), tr + tdon, tdoff + tf));
+switch Type_Td_dt
+    case 'Tdidt'
+        title(sprintf('Ic=%dA Ton=%.1fns Toff=%.1fns (didt)', fix(Ictop), tr + tdon, tdoff + tf));
+    case 'Tdvdt'
+        title(sprintf('Ic=%dA Ton=%.1fns Toff=%.1fns (dvdt)', fix(Ictop), tr + tdon, tdoff + tf));
+    otherwise
+        title(sprintf('Ic=%dA Ton=%.1fns Toff=%.1fns', fix(Ictop), tr + tdon, tdoff + tf));
+end
 xlabel('Time (s)');
 ylabel('Voltage (V)');
 xlim([time(PicStart),time(PicEnd)]);
+ylim([PicBottom, PicTop]);
 
 % 标准化保存路径
 save_dir = fullfile(path, 'result', dataname, '06 Ton & Toff');

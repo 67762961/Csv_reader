@@ -1,4 +1,4 @@
-function [dvdt_on,dvdt_off] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW)
+function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW)
 
 SWon_start = cntSW(1);
 SWon_stop = cntSW(2);
@@ -167,3 +167,8 @@ close(gcf);
 hold off
 
 dvdt_on = dvdt_c_d;
+if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
+    Tdvdt = [fall_start_idx_c,fall_end_idx_d,rise_start_idx_a,rise_end_idx_b];
+else
+    Tdvdt = [fall_start_idx_c,fall_end_idx_d,rise_start_idx,rise_end_idx];
+end

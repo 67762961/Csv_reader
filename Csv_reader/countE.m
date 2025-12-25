@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -8,8 +8,9 @@ data0 = readmatrix(filename, 'NumHeaderLines', 20);                 % 跳过CSV�
 fprintf('%s\n',filename);
 
 if Fuzaimode ~= 0
-    Ch_labels(4) = 0;
-    Ch_labels(5) = 0;
+    Ch_labels(3) = 0;
+    I_Fix(1) = 0;
+    I_Fix(2) = 0;
 end
 
 % 通道修正
@@ -152,17 +153,28 @@ if (Ch_labels(3)~=0)
 else
     Eon = " ";
     Eoff = " ";
+    cntSW = [ton2-fix(cnton1/5),ton2+fix(cnton1/5),toff1-fix(cnton1/5),toff1+fix(cnton1/5)];
 end
 
 if (Ch_labels(3)~=0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    [dvdt_on,dvdt_off,~] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== di/dt计算模块 ======================
     [didt_on,didt_off,Tdidt] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,time,ch1,Ictop,path,dataname,cntVge,Tdidt);
+    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch3,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
+    
+elseif (Fuzaimode ~= 0)
+    % ====================== dv/dt计算模块 ======================
+    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    
+    % ====================== 开通关断时间（Ton&Toff）计算 ======================
+    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch2,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
+    
+    didt_on = " ";
+    didt_off = " ";
 else
     dvdt_on = " ";
     dvdt_off = " ";
@@ -172,6 +184,8 @@ else
     tr = " ";
     tdoff = " ";
     tf = " ";
+    Vgetop = " ";
+    Vgebase = " ";
 end
 
 % ====================== 对管门极监测 Vge_dg ======================
@@ -189,28 +203,25 @@ for gd_num = 1:length(DuiguanCH)
     end
 end
 
-% ====================== Prr/Erec计算 ======================
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
+    % ====================== Prr/Erec计算 ======================
     [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
+    
+    % ====================== 反向恢复极限功率 ======================
+    Delta_Ic = Icmax - Ictop;
+    PrrPROMAX = Delta_Ic * Vdmax / 1000; % 单位kW
 else
     Prrmax = " ";
     Erec = " ";
+    PrrPROMAX = " ";
 end
 
 % ====================== 脉宽长度计算 ======================
 nspd = (time(2)-time(1))*1e9;
-if(Ch_labels(3)~=0)
+if(Ch_labels(3)~=0) || (Fuzaimode ~= 0)
     Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
 else
     Length_ton0 = 2*fix((cnton0/nspd) /(2000/nspd) + 0.5);
-end
-
-% ====================== 反向恢复极限功率 ======================
-if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
-    Delta_Ic = Icmax - Ictop;
-    PrrPROMAX = Delta_Ic * Vdmax / 1000; % 单位kW
-else
-    PrrPROMAX = " ";
 end
 
 % 创建datamap数据字典
@@ -241,6 +252,8 @@ dataMap('Tdon(ns)') = tdon;
 dataMap('Trise(ns)') = tr;
 dataMap('Tdoff(ns)') = tdoff;
 dataMap('Tfall(ns)') = tf;
+dataMap('Vgetop(V)') = Vgetop;
+dataMap('Vgebase(V)') = Vgebase;
 dataMap('    ') = " ";
 
 
@@ -252,7 +265,6 @@ for i = 1:length(title)
     output(i) = currentValue;
 end
 
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 output_backup = zeros(length(Full_title),1);
 for i = 1:length(Full_title)
     currentKey = Full_title{i};

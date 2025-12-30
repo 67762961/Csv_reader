@@ -13,9 +13,12 @@ valid_fall_end = Td_dt(4);
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-Vgemax = max(ch1);
-ch1_po = ch1(ch1>=0);
-ch1_top = ch1_po((ch1_po >= 0.90*Vgemax)&(ch1_po <= 0.97*Vgemax));
+% Vgemax = max(ch1);
+ch1_po = ch1(ton1-fix((ton2 - toff1)*3/11):toff2+2*fix((ton2 - toff1)*3/11));
+ch1_po = ch1_po(ch1_po>=0);
+High_Thresh = quantile(ch1_po, 0.95);
+Low_Thresh = quantile(ch1_po, 0.90);
+ch1_top = ch1_po((Low_Thresh <= ch1_po)&(ch1_po <= High_Thresh));
 Vgetop = median(ch1_top);
 
 % 寻找关断时Vge=90%的时间点
@@ -27,12 +30,13 @@ if isempty(toff90_indices)
     error('关断时Vge=90%的时间点识别失败')
 end
 
-Vgemin = min(ch1(toff1:ton2));
-ch1_ne = ch1(toff1:ton2);
+% Vgemin = min(ch1(toff1:ton2));
+ch1_ne = ch1(ton1-fix((ton2 - toff1)*3/11):toff2+2*fix((ton2 - toff1)*3/11));
 ch1_ne = ch1_ne(ch1_ne<=0);
-ch1_base = ch1_ne(ch1_ne <= 0.50*Vgemin);
+High_Thresh = quantile(ch1_ne, 0.50);
+Low_Thresh = quantile(ch1_ne, 0.10);
+ch1_base = ch1_ne((Low_Thresh <= ch1_ne)&(ch1_ne <= High_Thresh));
 Vgebase = median(ch1_base);
-
 % 寻找开通时Vge=10%的时间点
 % disp(ch1(ton2:-1:toff1))
 ton10_indices = find(ch1(ton2:-1:toff1) < 0.8 * Vgebase, 1, 'first');

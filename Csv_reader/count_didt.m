@@ -86,8 +86,8 @@ plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 % 动态标注
 text(time(fix(valid_rise_start+0.03*PicLength)),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
 text(time(fix(valid_rise_end+0.03*PicLength)),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop=',num2str(fix(Ictop)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt=',num2str(fix(didt_on+0.5)),'A/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(Ictop)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_on+0.5)),'A/us'],'FontSize',13);
 plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 ylim([PicBottom, PicTop]);
@@ -170,8 +170,8 @@ plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 % 动态标注
 text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(3)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
 text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop=',num2str(fix(Ictop+0.5)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt=',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(Ictop+0.5)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
 
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);

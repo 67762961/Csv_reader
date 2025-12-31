@@ -82,15 +82,15 @@ plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
 plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
 text(time(fix(rise_start_idx+0.03*PicLength)),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
 text(time(fix(rise_end_idx+0.03*PicLength)),Vce(rise_end_idx),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop=',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt=',num2str(fix(dvdt+0.5)),'V/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt = ',num2str(fix(dvdt+0.5)),'V/us'],'FontSize',13);
 if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
     plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
     plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
     text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(3)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
     plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
     text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(4)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
-    text(time(rise_start_idx-fix(Riselength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(3)),'-',num2str(dvdtmode(4)),')=',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
+    text(time(rise_start_idx-fix(Riselength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(3)),'-',num2str(dvdtmode(4)),') = ',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
 end
 % 坐标轴设置
 ylim([PicBottom, PicTop]);
@@ -150,8 +150,8 @@ plot(time(fall_end_idx_d), Vce(fall_end_idx_d), 'ro', 'MarkerFaceColor','r');
 text(time(fix(fall_end_idx_d+0.03*PicLength)),Vce(fall_end_idx_d),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(fall_end_idx_d)),'V',],'FontSize',13);
 plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
 plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['Vcetop=',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.7,['dv/dt=',num2str(fix(dvdt_c_d+0.5)),'V/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.7,['dv/dt = ',num2str(fix(dvdt_c_d+0.5)),'V/us'],'FontSize',13);
 
 % 坐标轴设置
 ylim([PicBottom, PicTop]);

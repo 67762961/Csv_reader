@@ -209,5 +209,5 @@ if ~isempty(allFigs)
     close(allFigs);
 end
 fprintf('数据读取完成');
-% winopen(strcat([path,'\result\',dataname]));
-system(['explorer.exe ',strrep(strcat([path,'\result\',dataname]), '/', '\')]);
+winopen(strcat([path,'\result\',dataname]));
+% system(['explorer.exe ',strrep(strcat([path,'\result\',dataname]), '/', '\')]);

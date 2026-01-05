@@ -103,10 +103,10 @@ plot(time(ton10), ch1(ton10),'o','color','red');
 plot(time(toff90), ch1(toff90),'o','color','red');
 
 line([time(PicStart),time(PicEnd)],[Vgetop, Vgetop], 'Color', [0.7 0.7 0.7]);
-text(time(fix((PicStart+PicEnd)/2)),Vgetop+1,['Vgetop=',num2str(Vgetop),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
+text(time(PicStart+fix(PicLength*0.35)),Vgetop+1,['Vgetop=',num2str(Vgetop),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
 
 line([time(PicStart),time(PicEnd)],[Vgebase, Vgebase], 'Color', [0.7 0.7 0.7]);
-text(time(fix((PicStart+PicEnd)/2)),Vgebase-1,['Vgebase=',num2str(Vgebase),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
+text(time(PicStart+fix(PicLength*0.3)),Vgebase-1.2,['Vgebase=',num2str(Vgebase),'V'],'FontSize',13,'color',[0.7 0.7 0.7]);
 
 text(time(ton10+fix(0.03*PicLength)),ch1(ton10),['t(d)on=',num2str(tdon),'ns'],'FontSize',13,'color','red');
 text(time(valid_rise_end+fix(0.03*PicLength)),ch1(valid_rise_end)+1,['tr=',num2str(tr),'ns'],'FontSize',13,'color','blue');

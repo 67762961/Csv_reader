@@ -45,7 +45,7 @@ line([time(barStart),time(barEnd)],[Vcetop,Vcetop],'Color', [0.5 0.5 0.5],'LineS
 hold on;
 line([time(barStart),time(barStart)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
 line([time(barEnd),time(barEnd)],[Vcetop-barheight, Vcetop+barheight], 'Color', [0.5 0.5 0.5]);
-text(time(fix(cemax_idx-0.05*PicLength)),Vcetop - fix(PicHeight*0.1),['Vcetop =',num2str(Vcetop),'V'], 'FontSize',13,'Color','b');
+text(time(PicStart+fix(PicLength*2/5)),Vcetop - fix(PicHeight*0.1),['Vcetop =',num2str(Vcetop),'V'], 'FontSize',13,'Color','b');
 
 % Vcemax绘图
 plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');

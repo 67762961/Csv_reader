@@ -68,9 +68,9 @@ end
 % [~, max_idx] = max(ch3(window_di));          % 快速定位峰值索引 max_idx为相对索引
 % tIcm = Window_Start + max_idx - 1;          % 转换为全局索引
 
-SWonlength = fix((Window_Stop - Window_Start)/5);
-PicStart = Window_Start - SWonlength;
-PicEnd = Window_Stop + SWonlength;
+SWonlength = 5*fix(valid_rise_end - valid_rise_start);
+PicStart = valid_rise_start - SWonlength;
+PicEnd = valid_rise_end + 2*SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.05*PicTop);
@@ -150,9 +150,9 @@ if isempty(didt_off)
     didt_off = 0;
 end
 
-PicLength = Window_Stop - Window_Start;
-PicStart = Window_Start-PicLength;
-PicEnd = Window_Stop+PicLength;
+SWonlength = 5*fix(valid_fall_end - valid_fall_start);
+PicStart = valid_fall_start - SWonlength;
+PicEnd = valid_fall_end + SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.5*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.1*PicTop);

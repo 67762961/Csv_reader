@@ -6,17 +6,16 @@ toff2=cntVge(cntsw);
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
-Prr_start_indices = find(ch5(ton2:toff2) > min(ch5(ton2:toff2))*0.1, 1, 'first');
+Prr_start_indices = find(ch5(ton2:toff2) > 0, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) > max(ch4(ton2:toff2))*0.9, 1, 'first');
-Prr_end = Prr_start + Prr_end_indices - 1 + 100;
+Prr_end_indices = find(ch4(Prr_start:toff2) > Vcetop*0.9, 1, 'first');
+Prr_end = Prr_start + Prr_end_indices - 1;
 
-Prr_length = abs(Prr_end -Prr_start);
 % fprintf('%f\n%f\n%f\n',ton2,Prr_start_indices,Prr_end_indices);
 
 % 恢复起始点：首次从负到正跨越零点的位置
-Erec_start = find(diff(ch5(Prr_start-fix(Prr_length*0.01):Prr_end) >= 0) == 1, 1) + Prr_start;
+Erec_start = Prr_start;
 Erec_stop = [];
 
 [~, peak_idx] = max(Id(Erec_start:end));
@@ -29,7 +28,7 @@ t_Prrmax = Prr_start + max_idx - 1;
 Prrmax = Prrmax_value / 1000;  % 单位kW
 
 % 动态窗口生成
-window_di = t_Prrmax: fix(toff2);
+window_di = t_Prrmax: fix(toff2)+gate_Erec;
 
 for i = window_di
     % fprintf('采样点 %f\n',Prr(i))
@@ -44,10 +43,6 @@ for i = window_di
             break;
         end
     end
-end
-
-if isempty(Erec_stop)
-    Erec_stop = Prr_end;
 end
 
 % 有效性验证
@@ -76,7 +71,7 @@ PicHeight = PicTop - PicBottom;
 plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
 plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');
-plot(time(PicStart:PicEnd),1.5*Erec_t(PicStart:PicEnd)/max(Erec_t(PicStart:PicEnd)),'c:');
+plot(time(Erec_start:Prr_end),1.5*Erec_t(Erec_start:Prr_end)/max(Erec_t(Erec_start:Prr_end)),'c:');
 plot(time(Erec_start:Erec_stop),Prr(Erec_start:Erec_stop)/Prrmax/1000,'r',LineWidth=1.5);
 plot(time(Prr_start:Erec_start),Prr(Prr_start:Erec_start)/Prrmax/1000,'r--');
 plot(time(Erec_stop:Prr_end),Prr(Erec_stop:Prr_end)/Prrmax/1000,'r--');
@@ -84,6 +79,7 @@ plot(time(t_Prrmax),1,'o','color','red');
 
 plot(time(Prr_start),Id(Prr_start)./max(Id)*1.5,'o','color','blue');
 plot(time(Prr_end),Vd(Prr_end)./Vcetop,'o','color','green');
+plot(time(Erec_stop),Prr(Erec_stop)/Prrmax/1000,'o','color','red');
 
 line([time(Erec_stop-gate_Erec),time(Erec_stop+gate_Erec)],[Prr(Erec_stop)/Prrmax/1000,Prr(Erec_stop)/Prrmax/1000],'Color', [0.5 0.5 0.5]);
 line([time(Erec_stop-gate_Erec),time(Erec_stop-gate_Erec)],[Prr(Erec_stop)/Prrmax/1000-0.05, Prr(Erec_stop)/Prrmax/1000+0.05], 'Color', [0.5 0.5 0.5]);

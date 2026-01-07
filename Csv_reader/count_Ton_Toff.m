@@ -89,7 +89,7 @@ PicStart = ton1 - PicLength;
 PicEnd = toff2 + 2*PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = 20;
-PicBottom = -10;
+PicBottom = -15;
 
 hold on;
 % 背景区间（绿色）
@@ -121,14 +121,14 @@ text(time(valid_fall_end+fix(0.03*PicLength)),ch1(valid_fall_end),['tf=',num2str
 
 ch_Max = max(ch_(PicStart:PicEnd));
 ch_Min = min(ch_(PicStart:PicEnd));
-range = (ch_Max - ch_Min)/3;
-ch_ = ch_/range - 9;
+range = (ch_Max - ch_Min)/5;
+ch_ = ch_/range - 12;
 
-plot(time(PicStart:PicEnd), ch_(PicStart:PicEnd), 'g', 'LineWidth', 1);
-plot(time(ton_slope_range), ch_(ton_slope_range), 'b', 'LineWidth', 1);
-plot(time(ton_delay_range), ch_(ton_delay_range), 'r', 'LineWidth', 1);
-plot(time(toff_slope_range), ch_(toff_slope_range), 'b', 'LineWidth', 1);
-plot(time(toff_delay_range), ch_(toff_delay_range), 'r', 'LineWidth', 1);
+plot(time(PicStart:PicEnd), ch_(PicStart:PicEnd), 'g', 'LineWidth', 0.5);
+plot(time(ton_slope_range), ch_(ton_slope_range), 'b', 'LineWidth', 0.5);
+plot(time(ton_delay_range), ch_(ton_delay_range), 'r', 'LineWidth', 0.5);
+plot(time(toff_slope_range), ch_(toff_slope_range), 'b', 'LineWidth', 0.5);
+plot(time(toff_delay_range), ch_(toff_delay_range), 'r', 'LineWidth', 0.5);
 
 % 图形属性
 grid on;

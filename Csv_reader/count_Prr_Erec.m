@@ -3,6 +3,7 @@ function [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,V
 cntsw = length(cntVge);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
+cnt2 = toff2 - ton2;
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
@@ -10,7 +11,7 @@ Prr_start_indices = find(ch5(ton2:toff2) > 0, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
 Prr_end_indices = find(ch4(Prr_start:toff2) > Vcetop*0.9, 1, 'first');
-Prr_end = Prr_start + Prr_end_indices - 1;
+Prr_end = Prr_start + Prr_end_indices - 1 + fix(cnt2/5);
 
 % fprintf('%f\n%f\n%f\n',ton2,Prr_start_indices,Prr_end_indices);
 
@@ -71,7 +72,7 @@ PicHeight = PicTop - PicBottom;
 plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
 plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');
-plot(time(Erec_start:Prr_end),1.5*Erec_t(Erec_start:Prr_end)/max(Erec_t(Erec_start:Prr_end)),'c:');
+plot(time(Erec_start:Prr_end),1.5*Erec_t(Erec_start:Prr_end)/max(Erec_t(Erec_start:Prr_end)),'c--');
 plot(time(Erec_start:Erec_stop),Prr(Erec_start:Erec_stop)/Prrmax/1000,'r',LineWidth=1.5);
 plot(time(Prr_start:Erec_start),Prr(Prr_start:Erec_start)/Prrmax/1000,'r--');
 plot(time(Erec_stop:Prr_end),Prr(Erec_stop:Prr_end)/Prrmax/1000,'r--');

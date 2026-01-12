@@ -1,4 +1,4 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
+function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 
@@ -76,6 +76,9 @@ PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.05*PicTop);
 PicHeight = PicTop - PicBottom;
 
+close all;
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'b');
 hold on;
 plot(time(valid_rise_start:valid_rise_end), ch3(valid_rise_start:valid_rise_end), 'r', 'LineWidth',1.5);
@@ -94,13 +97,6 @@ ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A di/dt(on) 计算']);
 grid on;
-
-% 保存处理
-save_dir = fullfile(path, 'result', dataname, '05 didt');
-if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt(on).png']), 'png');
-close(gcf);
-hold off
 
 % ====================== 关断时刻 di/dt计算模块 ======================
 % 动态窗口生成
@@ -158,7 +154,7 @@ PicTop = fix(1.5*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
-
+subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'b');
 hold on;
 plot(time(valid_fall_start:valid_fall_end), ch3(valid_fall_start:valid_fall_end), 'r', 'LineWidth',1.5);
@@ -181,7 +177,7 @@ grid on;
 % 保存处理
 save_dir = fullfile(path, 'result', dataname, '05 didt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt(off).png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt.png']), 'png');
 close(gcf);
 hold off
 

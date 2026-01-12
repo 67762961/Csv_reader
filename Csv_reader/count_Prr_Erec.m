@@ -1,4 +1,4 @@
-function [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge)
+function [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge)
 
 cntsw = length(cntVge);
 ton2=cntVge(cntsw-1);
@@ -69,6 +69,8 @@ PicTop = 2;
 PicBottom = -1;
 PicHeight = PicTop - PicBottom;
 
+close all;
+figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
 plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
 plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');

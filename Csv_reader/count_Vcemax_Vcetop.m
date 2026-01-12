@@ -1,4 +1,4 @@
-function [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
+function [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -37,6 +37,8 @@ PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
 PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
+close all;
+figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
 % Vcetop校准线及标注
 barStart = start_idx;
 barEnd = end_idx;

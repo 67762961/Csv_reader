@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,DPI,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
@@ -135,19 +135,16 @@ end
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 if (Fuzaimode == 0)
-    [Ictop,Icmax] = count_Icmax_Ictop(num,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
+    [Ictop,Icmax] = count_Icmax_Ictop(num,DPI,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
 else
-    [Ictop,Icmax] = count_Icmax_Ictop(num,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
+    [Ictop,Icmax] = count_Icmax_Ictop(num,DPI,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
 end
 
-[Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
+[Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
 
 if (Ch_labels(3)~=0)
-    % ====================== 开通损耗计算（Eon） ======================
-    [Eon,SWon_start,SWon_stop] = count_Eon(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode);
-    
-    % ====================== 关断损耗计算（Eoff） ======================
-    [Eoff,SWoff_start,SWoff_stop] = count_Eoff(num,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eoffmode);
+    % ====================== 开关损耗计算（Eon&Eoff） ======================
+    [Eon,SWon_start,SWon_stop,Eoff,SWoff_start,SWoff_stop] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode);
     
     cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
 else
@@ -158,20 +155,20 @@ end
 
 if (Ch_labels(3)~=0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,~] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    [dvdt_on,dvdt_off,~] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,Tdidt] = count_didt(num,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
+    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch3,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
+    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch3,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
     
 elseif (Fuzaimode ~= 0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch2,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
+    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch2,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
     
     didt_on = " ";
     didt_off = " ";
@@ -195,7 +192,7 @@ Vge_dg_min = strings(1,length(DuiguanCH));
 
 for gd_num = 1:length(DuiguanCH)
     if (DuiguanCH(gd_num)~=0)
-        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num));
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,DPI,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num));
     else
         Vge_dg_mean(gd_num) = " ";
         Vge_dg_max(gd_num) = " ";
@@ -205,7 +202,7 @@ end
 
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0) && (Ch_labels(3)~=0)
     % ====================== Prr/Erec计算 ======================
-    [Prrmax,Erec] = count_Prr_Erec(num,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
+    [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
     
     % ====================== 反向恢复极限功率 ======================
     Delta_Ic = Icmax - Ictop;

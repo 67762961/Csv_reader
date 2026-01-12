@@ -89,13 +89,17 @@ else
     title = titleMap(defaultMode);
 end
 
-Data_num    = length(title);
+dpiValue = winqueryreg('HKEY_CURRENT_USER', 'Control Panel\Desktop\WindowMetrics', 'AppliedDPI');
+dpiValue = double(dpiValue);
+DPI = dpiValue/96;
+
+Data_num = length(title);
 %% 数据读取与计算
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,DPI,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
     cnt=cnt+1;
 end
 % 表头修正

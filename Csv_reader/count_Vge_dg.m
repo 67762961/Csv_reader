@@ -1,4 +1,4 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,DPI,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num)
 
 cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
@@ -31,6 +31,9 @@ PicHeight = PicTop - PicBottom;
 cemax_idx_on_max = cemax_idx_on_max + PicStart -1;
 cemax_idx_on_min = cemax_idx_on_min + PicStart -1;
 
+close all;
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_on_max), Vge_dg_on_max, 'ro', 'MarkerFaceColor','r');
@@ -53,13 +56,6 @@ xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-on']);
 grid on;
 
-% 路径构建优化
-save_dir = fullfile(path, 'result', dataname, '07 Vge_dg');
-if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_on_T',num2str(gd_num),'.png']), 'png');
-close(gcf);
-hold off
-
 % 关断段绘图
 PicStart = toff1 - fix(PicLength/3);
 PicEnd =  toff1 + fix(2*PicLength/3);
@@ -73,6 +69,7 @@ PicHeight = PicTop - PicBottom;
 cemax_idx_off_max = cemax_idx_off_max + PicStart -1;
 cemax_idx_off_min = cemax_idx_off_min + PicStart -1;
 
+subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;
 plot(time(cemax_idx_off_max), Vge_dg_off_max, 'ro', 'MarkerFaceColor','r');
@@ -88,6 +85,6 @@ grid on;
 % 路径构建优化
 save_dir = fullfile(path, 'result', dataname, '07 Vge_dg');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_off_T',num2str(gd_num),'.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Vge_dg_T',num2str(gd_num),'.png']), 'png');
 close(gcf);
 hold off

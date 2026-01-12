@@ -1,4 +1,4 @@
-function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,time,ch1,ch_,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
+function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -91,6 +91,8 @@ PicLength = PicEnd - PicStart;
 PicTop = 20;
 PicBottom = -15;
 
+close all;
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
 hold on;
 % 背景区间（绿色）
 plot(time(PicStart:PicEnd), ch1(PicStart:PicEnd), 'Color', [0.2 0.8 0.2]);

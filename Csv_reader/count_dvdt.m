@@ -1,4 +1,4 @@
-function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW)
+function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW)
 
 SWon_start = cntSW(1);
 SWon_stop = cntSW(2);
@@ -73,6 +73,9 @@ PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
 PicHeight = PicTop - PicBottom;
 
+close all;
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
@@ -97,13 +100,6 @@ ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A dv/dt(off)计算']);
 grid on;
-
-% 保存路径处理
-save_dir = fullfile(path, 'result', dataname, '04 dvdt');
-if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A dvdt(off).png']), 'png');
-close(gcf);
-hold off
 
 % 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
 dvdt_off = (dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90) * dvdt_a_b + (dvdtmode(3) == 10 && dvdtmode(4) == 90) * dvdt;
@@ -141,6 +137,7 @@ PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
 PicHeight = PicTop - PicBottom;
 
+subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(fall_start_idx_c:fall_end_idx_d ), Vce(fall_start_idx_c:fall_end_idx_d ), 'r', 'LineWidth',1.5);
@@ -162,7 +159,7 @@ grid on;
 % 保存路径处理
 save_dir = fullfile(path, 'result', dataname, '04 dvdt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A dvdt(on).png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A dvdt.png']), 'png');
 close(gcf);
 hold off
 

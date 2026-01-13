@@ -38,7 +38,7 @@ PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
 close all;
-figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
 % Vcetop校准线及标注
 barStart = start_idx;
 barEnd = end_idx;

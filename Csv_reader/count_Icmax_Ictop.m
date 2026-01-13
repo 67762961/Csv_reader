@@ -36,7 +36,7 @@ barStart =fix(toff1 + cntoff1/4);
 barEnd = fix(ton2 - cntoff1/4);
 
 close all;
-figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0
     static_id_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);

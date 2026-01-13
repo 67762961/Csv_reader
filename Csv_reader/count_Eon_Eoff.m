@@ -123,7 +123,7 @@ Poff_max_t = Poff_max_t+SWoff_start-1;
 PicStart = windowEon(1) - 2*Window_extend;
 PicEnd = SWon_stop + 2*Window_extend;
 PicLength = PicEnd - PicStart;
-PicTop = Vcetop*1.2;
+PicTop = Vcetop*1.5;
 PicBottom = Vcetop*-0.2;
 PicHeight = PicTop - PicBottom;
 
@@ -136,7 +136,7 @@ set(gca,'Ycolor','b')
 Ic_img=plot(time,Ic,'b');
 hold on
 xlim([time(PicStart),time(PicEnd)]);
-ylim([-0.2*Icmax,1.2*Icmax]);
+ylim([-0.2*Icmax,1.5*Icmax]);
 
 yyaxis left
 set(gca,'Ycolor','g')
@@ -179,7 +179,7 @@ set(gca,'Ycolor','b')
 Ic_img=plot(time,Ic,'b');
 hold on
 xlim([time(PicStart),time(PicEnd)]);
-ylim([-0.2*Icmax,1.2*Icmax]);
+ylim([-0.2*Icmax,1.5*Icmax]);
 
 yyaxis left
 set(gca,'Ycolor','g')

@@ -5,6 +5,12 @@ toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
 cntoff1 = ton2-toff1;
+cntsw = length(cntVge);
+ton1=cntVge(cntsw-3);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+cnton1 = toff1-ton1;
+
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量
@@ -51,52 +57,6 @@ Pon_full = Vce .* Ic * 1000; % 功率计算（mW）
 dt = diff(time(windowEon)); % 时间差分
 Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
 
-% 归一化处理
-Ponmax = max(Pon(windowEon));
-Pon_normalized = Pon(windowEon) / Ponmax / 2; % 归一化到[-0.5, 0.5]范围
-Pon_full_normalized=Pon_full / Ponmax / 2;
-[Pon_max,Pon_max_t]=max(Pon_normalized);
-Pon_max_t = Pon_max_t+SWon_start-1;
-
-% 可视化设置
-PicStart = windowEon(1) - 2*Window_extend;
-PicEnd = SWon_stop + 2*Window_extend;
-PicLength = PicEnd - PicStart;
-PicTop = 1.2;
-PicBottom = -0.2;
-PicHeight = PicTop - PicBottom;
-
-close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
-subplot('Position', [0.05, 0.15, 0.4, 0.75]);
-plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2);
-hold on
-plot(time,Vce/Vcetop,'g');
-plot(time,Ic/max(Ic),'b');
-plot(time(SWon_start), Pon_full_normalized(SWon_start),'o','color','red');
-plot(time(SWon_stop), Pon_full_normalized(SWon_stop),'o','color','red');
-plot(time(windowEon(1)), Pon_full_normalized(windowEon(1)),'ro', 'MarkerFaceColor','r');
-plot(time(windowEon(end)), Pon_full_normalized(windowEon(end)),'ro', 'MarkerFaceColor','r');
-plot(time(PicStart:PicEnd),Pon_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
-xlim([time(PicStart),time(PicEnd)]);
-ylim([PicBottom,PicTop]);
-
-% 标注和格式设置
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
-text(time(Pon_max_t-fix(PicLength/30)),Pon_max+fix(PicHeight)/20,'Pon','color','red','FontSize',13);
-text(time(SWon_start),0.9,'Vce','color','green','FontSize',13);
-text(time(SWon_stop),0.9,'Ic','color','blue','FontSize',13);
-legend('P_{on}','V_{ce}','I_c', 'Location','northeast');
-legend('boxoff');
-title(sprintf('Ic=%dA 开通损耗分析（归一化）', fix(Ictop)));
-grid on;
-
-cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-cnton1 = toff1-ton1;
-
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
 valid_range = (ton1+fix(0.7*cnton1)):min(ton2, length(Vce));
@@ -141,45 +101,113 @@ Poff_full = Vce .* Ic * 1000; % 功率计算（mW）
 dt_off = diff(time(windowEoff));
 Eoff = sum(Poff(windowEoff(2:end)) .* dt_off);
 
-% 归一化处理
+%% ====================== 开通损耗绘图 ======================
+% 可视化设置
+% 功率归一化处理
+Icmax = max(max(Ic(windowEon)),max(Ic(windowEoff)));
+Ponmax = max(Pon(windowEon));
 Poffmax = max(Poff(windowEoff));
-Poff_normalized = Poff(windowEoff) / Poffmax / 2;
-Poff_full_normalized = Poff_full / Poffmax / 2;
+Pmax = max(Ponmax,Poffmax);
+
+Pon_normalized = Pon(windowEon) / Pmax *Vcetop*0.6;
+Pon_full_normalized=Pon_full / Pmax *Vcetop*0.6;
+[Pon_max,Pon_max_t]=max(Pon_normalized);
+Pon_max_t = Pon_max_t+SWon_start-1;
+
+
+Poff_normalized = Poff(windowEoff) / Pmax *Vcetop*0.6;
+Poff_full_normalized = Poff_full / Pmax *Vcetop*0.6;
 [Poff_max,Poff_max_t]=max(Poff_normalized);
 Poff_max_t = Poff_max_t+SWoff_start-1;
 
-% 可视化
+PicStart = windowEon(1) - 2*Window_extend;
+PicEnd = SWon_stop + 2*Window_extend;
+PicLength = PicEnd - PicStart;
+PicTop = Vcetop*1.2;
+PicBottom = Vcetop*-0.2;
+PicHeight = PicTop - PicBottom;
 
+close all;
+figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+subplot('Position', [0.05, 0.15, 0.4, 0.75]);
+
+yyaxis right
+set(gca,'Ycolor','b')
+Ic_img=plot(time,Ic,'b');
+hold on
+xlim([time(PicStart),time(PicEnd)]);
+ylim([-0.2*Icmax,1.2*Icmax]);
+
+yyaxis left
+set(gca,'Ycolor','g')
+Vce_img=plot(time,Vce,'g');
+hold on
+Pon_img = plot(time(windowEon),Pon_normalized,'r', 'LineWidth',1.2,'LineStyle', '-');
+plot(time(SWon_start), Pon_full_normalized(SWon_start),'o','color','red');
+plot(time(SWon_stop), Pon_full_normalized(SWon_stop),'o','color','red');
+plot(time(windowEon(1)), Pon_full_normalized(windowEon(1)),'ro', 'MarkerFaceColor','r');
+plot(time(windowEon(end)), Pon_full_normalized(windowEon(end)),'ro', 'MarkerFaceColor','r');
+plot(time(PicStart:PicEnd),Pon_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
+ylim([PicBottom,PicTop]);
+
+% 标注和格式设置
+yyaxis left
+text(time(Pon_max_t-fix(PicLength/30)),Pon_max+fix(PicHeight*0.05),'Pon','color','red','FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eon=',num2str(Eon),'mJ'],'FontSize',13);
+text(time(SWon_start-fix(PicLength/30)),Vcetop+0.05*Vcetop,'Vce','color','green','FontSize',13);
+text(time(windowEon(1)-fix(PicLength*0.1)),PicBottom+PicHeight*0.05,[num2str(time(windowEon(1))*1e6),'us'],'FontSize',8,'color','r');
+text(time(windowEon(end)-fix(PicLength*0.05)),PicBottom+PicHeight*0.05,[num2str(time(windowEon(end))*1e6),'us'],'FontSize',8,'color','r');
+
+yyaxis right
+text(time(SWon_stop+fix(PicLength/30)),Ictop-0.15*Icmax,'Ic','color','blue','FontSize',13);
+
+legend([Ic_img, Vce_img, Pon_img],'I_c','V_{ce}','P_{on}', 'Location','northeast');
+legend('boxoff');
+title(sprintf('Ic=%dA 开通损耗分析', fix(Ictop)));
+grid on;
+
+%% ====================== 关断损耗绘图 ======================
+% 可视化
 PicStart = windowEoff(1) - 2*Window_extend;
 PicEnd = SWoff_stop + 2*Window_extend;
 PicLength = PicEnd - PicStart;
-PicTop = 1.2;
-PicBottom = -0.2;
-PicHeight = PicTop - PicBottom;
 
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);
-plot(time(windowEoff), Poff_normalized, 'r', 'LineWidth',1.2);
+
+yyaxis right
+set(gca,'Ycolor','b')
+Ic_img=plot(time,Ic,'b');
 hold on
-plot(time,Vce/Vcetop,'g');
-plot(time,Ic/Ictop,'b');
+xlim([time(PicStart),time(PicEnd)]);
+ylim([-0.2*Icmax,1.2*Icmax]);
+
+yyaxis left
+set(gca,'Ycolor','g')
+Vce_img=plot(time,Vce,'g');
+hold on
+Poff_img=plot(time(windowEoff), Poff_normalized, 'r', 'LineWidth',1.2,'LineStyle', '-');
 plot(time(SWoff_start), Poff_full_normalized(SWoff_start),'o','color','red');
 plot(time(SWoff_stop), Poff_full_normalized(SWoff_stop),'o','color','red');
 plot(time(windowEoff(1)), Poff_full_normalized(windowEoff(1)),'ro', 'MarkerFaceColor','r');
 plot(time(windowEoff(end)), Poff_full_normalized(windowEoff(end)),'ro', 'MarkerFaceColor','r');
 plot(time(PicStart:PicEnd),Poff_full_normalized(PicStart:PicEnd),'r--','LineWidth',0.5);
-xlim([time(PicStart),time(PicEnd)]);
 ylim([PicBottom,PicTop]);
 
 % 标注
+yyaxis left
+text(time(Poff_max_t-fix(PicLength/50)),Poff_max+fix(PicHeight*0.05),'Poff','color','red','FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.93,['Eoff=',num2str(Eoff),'mJ'],'FontSize',13);
-text(time(Poff_max_t-fix(PicLength/50)),Poff_max+fix(PicHeight)/20,'Poff','color','red','FontSize',13);
-text(time(SWoff_stop),0.95,'Vce','color','green','FontSize',13);
-text(time(SWoff_start),0.95,'Ic','color','blue','FontSize',13);
-legend('P_{off}','V_{ce}','I_c', 'Location','northeast');
-legend('boxoff');
-title(sprintf('Ic=%dA 关断损耗分析（归一化）', fix(Ictop)));
-grid on;
+text(time(SWoff_stop-fix(PicLength/30)),Vcetop-0.15*Vcetop,'Vce','color','green','FontSize',13);
+text(time(windowEoff(1)-fix(PicLength*0.1)),PicBottom+PicHeight*0.05,[num2str(time(windowEoff(1))*1e6),'us'],'FontSize',8,'color','r');
+text(time(windowEoff(end)-fix(PicLength*0.05)),PicBottom+PicHeight*0.05,[num2str(time(windowEoff(end))*1e6),'us'],'FontSize',8,'color','r');
 
+yyaxis right
+text(time(SWoff_start+fix(PicLength/30)),Ictop+0.05*Icmax,'Ic','color','blue','FontSize',13);
+
+legend([Ic_img, Vce_img, Poff_img],'I_c','V_{ce}','P_{off}','Location','northeast');
+legend('boxoff');
+title(sprintf('Ic=%dA 关断损耗分析', fix(Ictop)));
+grid on;
 save_dir = fullfile(path, 'result', dataname, '03 Eon & Eoff');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
 saveas(gcf, fullfile(save_dir, [ num, ' Ic=',num2str(fix(Ictop)),'A Eon & Eoff.png']), 'png');

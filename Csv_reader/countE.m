@@ -91,6 +91,11 @@ cntVge = indzer(Vge,Vgeth);
 cntsw = length(cntVge);
 if (cntsw ~= 6) && (cntsw ~= 4)
     fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
+    cntVge_time=zeros(1,cntsw);
+    for i=1:cntsw
+        cntVge_time(i) = time(cntVge(i))*1e6;
+    end
+    disp(cntVge_time)
     error('过零点判断异常')
 end
 % fprintf('%d\n',cntsw);

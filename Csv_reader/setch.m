@@ -34,7 +34,7 @@ end
 
 for j = 1:length(Ch_labels)
     if(Ch_labels(j))
-        if isempty(data_in(:,Ch_labels(j)+1))
+        if isempty(data_in(:,abs(Ch_labels(j))+1))
             fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Ch_labels(j))+1);
             error('参数填写错误');
         else

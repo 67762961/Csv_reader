@@ -75,7 +75,7 @@ PicHeight = PicTop - PicBottom;
 
 close all;
 figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
-subplot('Position', [0.05, 0.15, 0.4, 0.75]);
+subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
@@ -137,7 +137,7 @@ PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
 PicHeight = PicTop - PicBottom;
 
-subplot('Position', [0.55, 0.15, 0.4, 0.75]);
+subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
 plot(time(fall_start_idx_c:fall_end_idx_d ), Vce(fall_start_idx_c:fall_end_idx_d ), 'r', 'LineWidth',1.5);

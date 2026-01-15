@@ -1,4 +1,22 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,DPI,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature)
+function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,DPI,title,Full_title,Para_mode)
+
+% 模式配置参数
+Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
+Ch_labels   = Para_mode.Ch_labels;       %% 通道分配
+Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
+Eonmode     = Para_mode.Eonmode;         %% 开通损耗配置
+Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
+dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
+didtmode    = Para_mode.didtmode ;       %% didt模式
+Fuzaimode   = Para_mode.Fuzaimode;
+INTG_I2t    = Para_mode.INTG_I2t;
+DuiguanMARK = Para_mode.DuiguanMARK;
+DuiguanCH   = Para_mode.DuiguanCH;
+I_Fix       = Para_mode.I_Fix;           %% 是否对电流进行校正     1-校正 0-不校正
+I_meature   = Para_mode.I_meature;       %% 以Ic或Id计算的实际测试电流值
+gate_didt   = Para_mode.gate_didt;       %% didt上升沿检测允许回落阈值
+gate_Erec   = Para_mode.gate_Erec;       %% Erec下降沿检测允许抬升阈值
+Vgeth       = Para_mode.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);

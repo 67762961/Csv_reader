@@ -1,4 +1,4 @@
-function main(Para_file,Para_mode,Para_data,Para_out,Prra_draw)
+function main(Para_file,Para_mode,Para_out,Prra_draw)
 % 编码修改为UTF-8
 feature('DefaultCharacterSet','UTF8');
 % 代码版本号
@@ -25,23 +25,22 @@ Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
 dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode    = Para_mode.didtmode ;       %% didt模式
 Fuzaimode   = Para_mode.Fuzaimode;
+INTG_I2t    = Para_mode.INTG_I2t;
 DuiguanMARK = Para_mode.DuiguanMARK;
 DuiguanCH   = Para_mode.DuiguanCH;
-Drawflag    = Para_mode.Drawflag ;       %% 是否需要绘图分析
 I_Fix       = Para_mode.I_Fix;           %% 是否对电流进行校正     1-校正 0-不校正
 I_meature   = Para_mode.I_meature;       %% 以Ic或Id计算的实际测试电流值
-
-% 数据配置
-gate_didt  = Para_data.gate_didt;       %% didt上升沿检测允许回落阈值
-gate_Erec  = Para_data.gate_Erec;       %% Erec下降沿检测允许抬升阈值
+gate_didt   = Para_mode.gate_didt;       %% didt上升沿检测允许回落阈值
+gate_Erec   = Para_mode.gate_Erec;       %% Erec下降沿检测允许抬升阈值
+Vgeth       = Para_mode.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
 
 % 输出数据配置
 titlemode   = Para_out.titlemode;
 title_Manual= Para_out.title_Manual;
 
 % 绘图配置参
-Vgeth     =  Prra_draw.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
 Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
+Drawflag  =  Prra_draw.Drawflag ;       %% 是否需要绘图分析
 
 %% 文件夹建立
 path=location;
@@ -67,14 +66,14 @@ time = datestr(now, 'HH:MM:SS');
 Paratable1 = {'代码版本', '日期', '时间', '文件夹', '器件', '起始数', '总数', '终点数'};
 Paradata1 = {Ver,datetime,time,Floder,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
-Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'dvdt模式', 'didt模式', '对管标记', '对管通道', '负载电流'};
-Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH), num2str(Fuzaimode)};
+Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'Eon模式', 'Eoff模式', 'dvdt模式', 'didt模式', '对管标记', '对管通道'};
+Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(Eonmode), num2str(Eoffmode),num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH)};
 
-Paratable3 = {'电流校准','电流采信','didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
-Paradata3 = {num2str(I_Fix),I_meature,num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
+Paratable3 = {'负载电流','Irms模式','电流校准','电流采信','didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
+Paradata3 = {num2str(Fuzaimode),num2str(INTG_I2t),num2str(I_Fix),I_meature,num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};
 
 titleMap = containers.Map;
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'I2dt_on','I2dt_off','Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
 titleMap('Standard') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)', 'di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)','    ','    ','    ','    ','    ','    ','    '};
 titleMap('2Duiguan') = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'Vcetop(V)', 'dv/dtoff(V/us)', 'di/dton(A/us)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','    ','    ','    ','    ','    '};
 titleMap('Manual') = title_Manual;
@@ -99,7 +98,7 @@ cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,DPI,title,Full_title,Chmode,Eonmode,Eoffmode,dvdtmode,didtmode,DuiguanMARK,DuiguanCH,Fuzaimode,Ch_labels,Vgeth,gate_didt,gate_Erec,Smooth_Win,I_Fix,I_meature);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,DPI,title,Full_title,Para_mode);
     cnt=cnt+1;
 end
 % 表头修正

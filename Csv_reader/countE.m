@@ -226,6 +226,20 @@ else
     Length_ton0 = 2*fix((cnton0/nspd) /(2000/nspd) + 0.5);
 end
 
+% ====================== 纯C方案的Irms辅助计算 ======================
+if (INTG_I2t~=0)
+    I_cap = data0(:,INTG_I2t+1);        % 电容电流
+    static_ic_interval = fix(ton2 - cntoff1*3/10) : fix(ton2 - cntoff1/10);
+    meanI_cap = mean(I_cap(static_ic_interval)); % 关断时平均电流视为参考0电流
+    I_cap = I_cap - meanI_cap; % 电流探头较零
+    fprintf('       I_cap:%03fA\n',meanI_cap);
+    [I2dt_on,I2dt_off] = count_i2dt(num,DPI,time,I_cap,Ictop,path,dataname,cntVge,Tdidt);
+else
+    I2dt_on = " ";
+    I2dt_off = " ";
+end
+
+
 % 创建datamap数据字典
 dataMap = containers.Map;
 dataMap('脉宽长(us)') = Length_ton0;
@@ -256,6 +270,8 @@ dataMap('Tdoff(ns)') = tdoff;
 dataMap('Tfall(ns)') = tf;
 dataMap('Vgetop(V)') = Vgetop;
 dataMap('Vgebase(V)') = Vgebase;
+dataMap('I2dt_on') = I2dt_on;
+dataMap('I2dt_off') = I2dt_off;
 dataMap('    ') = " ";
 
 

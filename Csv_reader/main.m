@@ -17,22 +17,23 @@ datnum      = Para_file.datnum   ;      %% csv文件序号组数
 datend      = datstart + datnum-1;      %% csv文件序号终止点
 
 % 模式配置参数
-Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
-Ch_labels   = Para_mode.Ch_labels;       %% 通道分配
-Smooth_Win  = Para_mode.Smooth_Win;      %% 通道滤波窗口长度
-Eonmode     = Para_mode.Eonmode;         %% 开通损耗配置
-Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
-dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
-didtmode    = Para_mode.didtmode ;       %% didt模式
-Fuzaimode   = Para_mode.Fuzaimode;
-INTG_I2t    = Para_mode.INTG_I2t;
-DuiguanMARK = Para_mode.DuiguanMARK;
-DuiguanCH   = Para_mode.DuiguanCH;
-I_Fix       = Para_mode.I_Fix;           %% 是否对电流进行校正     1-校正 0-不校正
-I_meature   = Para_mode.I_meature;       %% 以Ic或Id计算的实际测试电流值
-gate_didt   = Para_mode.gate_didt;       %% didt上升沿检测允许回落阈值
-gate_Erec   = Para_mode.gate_Erec;       %% Erec下降沿检测允许抬升阈值
-Vgeth       = Para_mode.Vgeth    ;       %% 门极开关门槛值 依据器件手册提供 一般为0
+Chmode      = Para_mode.Chmode   ;      %% 通道分配模式
+Ch_labels   = Para_mode.Ch_labels;      %% 通道分配
+Smooth_Win  = Para_mode.Smooth_Win;     %% 通道滤波窗口长度
+Eonmode     = Para_mode.Eonmode;        %% 开通损耗配置
+Eoffmode    = Para_mode.Eoffmode;       %% 关断损耗配置
+dvdtmode    = Para_mode.dvdtmode ;      %% dvdt模式
+didtmode    = Para_mode.didtmode ;      %% didt模式
+Fuzaimode   = Para_mode.Fuzaimode;      %% 负载电流模式
+INTG_I2t    = Para_mode.INTG_I2t;       %% 对电动电流的I2t积分计算
+DuiguanMARK = Para_mode.DuiguanMARK;    %% 对管门极监测标记
+DuiguanCH   = Para_mode.DuiguanCH;      %% 对管门极监测对应通道
+I_Fix       = Para_mode.I_Fix;          %% 是否对电流进行校正     1-校正 0-不校正
+I_meature   = Para_mode.I_meature;      %% 以Ic或Id计算的实际测试电流值
+gate_didt   = Para_mode.gate_didt;      %% didt上升沿检测允许回落阈值
+gate_Erec   = Para_mode.gate_Erec;      %% Erec下降沿检测允许抬升阈值
+Vgeth       = Para_mode.Vgeth    ;      %% 门极开关门槛值 依据器件手册提供 一般为0
+NameStyle   = Para_mode.NameStyle;      %% 文件命名风格     横河 或 泰克
 
 % 输出数据配置
 titlemode   = Para_out.titlemode;
@@ -98,7 +99,7 @@ cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,DPI,title,Full_title,Para_mode);
+    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,NameStyle,DPI,title,Full_title,Para_mode);
     cnt=cnt+1;
 end
 % 表头修正

@@ -1,4 +1,5 @@
 %% 初始化
+close all;
 clear;
 clc;
 

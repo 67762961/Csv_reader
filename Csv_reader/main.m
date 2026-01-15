@@ -2,7 +2,7 @@ function main(Para_file,Para_mode,Para_out,Prra_draw)
 % 编码修改为UTF-8
 feature('DefaultCharacterSet','UTF8');
 % 代码版本号
-Ver = "V2.3.5";
+Ver = "V2.4.0";
 % 运行开始提示
 fprintf('开始读取\n\n');
 fprintf('代码版本: %s\n\n', Ver);
@@ -59,6 +59,8 @@ if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法
     end
 end
 
+Eonmode_Str = [num2str(Eonmode(1)),num2str(Eonmode(2)),num2str(Eonmode(3)),num2str(Eonmode(4))];
+Eoffmode_Str = [num2str(Eoffmode(1)),num2str(Eoffmode(2)),num2str(Eoffmode(3)),num2str(Eoffmode(4))];
 %% 表头设定
 outputtable=strcat([path,'\result\',ouput_table,'.xlsx']);
 datetime = datestr(now, 'yyyymmdd');
@@ -68,7 +70,7 @@ Paratable1 = {'代码版本', '日期', '时间', '文件夹', '器件', '起始
 Paradata1 = {Ver,datetime,time,Floder,tablename,num2str(datstart),num2str(datnum),num2str(datend)};
 
 Paratable2 = {'通道设置', '通道分配', '滤波窗口', 'Eon模式', 'Eoff模式', 'dvdt模式', 'didt模式', '对管标记', '对管通道'};
-Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), num2str(Eonmode), num2str(Eoffmode),num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH)};
+Paradata2 = {num2str(Chmode), num2str(Ch_labels), num2str(Smooth_Win), Eonmode_Str, Eoffmode_Str,num2str(dvdtmode), num2str(didtmode), num2str(DuiguanMARK),num2str(DuiguanCH)};
 
 Paratable3 = {'负载电流','Irms模式','电流校准','电流采信','didt阈值', 'Erec阈值', '门极阈值', '芯片耐压', '整体绘图'};
 Paradata3 = {num2str(Fuzaimode),num2str(INTG_I2t),num2str(I_Fix),I_meature,num2str(gate_didt), num2str(gate_Erec), num2str(Vgeth), num2str(Vmax), num2str(Drawflag)};

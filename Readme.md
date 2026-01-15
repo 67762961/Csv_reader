@@ -1,4 +1,4 @@
-# 使用说明 v2.3.4
+# 使用说明 v2.4.0
 ## 参数表说明
 &emsp; &emsp; 文件 **Csv_reader_ParaTemplate.m** 为基础示例输入参数表，**禁止修改**，运行该文件将读取 TestLib 中数据，以验证程序是否能良好运转。在实验数据读取时，应当另创一个新的m文件，将参数表内容复制过去，再修改参数使用。
 &emsp; &emsp; 具体参数说明如下：
@@ -46,30 +46,35 @@
         &emsp; &emsp;监测对管通道标记，正整数数组类型。用于设置监测的对管门极数据在哪个通道，与 DuiguanMARK 数组中的通道顺序必须一一对应，若某一个通道标记为0，则关闭该通道的对管监测功能，即填入[6,0]，则表示仅有第六通道为对管检测通道;若实际上没有监测对管的通道则填入[0, 0]。
     - ##### Para_mode.Fuzaimode
         &emsp; &emsp;负载电流模式开关兼通道配置，非负整型。若填值不为0，则打开负载电流模式。填的数值+1则为负载电流数据在CSV文件中的列数。开启负载电流模式后，将无法计算损耗以及其他跟电流相关的数据，仅分析尖峰。
+    - ##### Para_mode.INTG_I2t 
+        &emsp; &emsp;Irms计算电流模式开关兼通道配置，非负整型。若填值不为0，则打开I2dt计算模式。填的数值则为电容电流数据在CSV文件中的列数。
     - ##### ~~Para_mode.Dflag~~(已与V2.0.3版本后删除，反向恢复分析改为通道分配控制)
         ~~&emsp; &emsp;二极管反向恢复计算使能开关，布尔类型。置1时将计算二极管反向恢复Prr和Erec，置0时将跳过该部分。若数据文件中未包括Id情况，则强烈建议关闭改选项。~~
-    - ##### Para_mode.Drawflag
-        &emsp; &emsp;组间数据分析绘图使能开关，布尔类型。置1时将开启组间数据分析绘图，包括尖峰损耗等数据在组间变化的趋势等，置0时将跳过该过程。
     - ##### Para_mode.I_Fix
         &emsp; &emsp;电流自动校正开关，布尔类型数组。分为两个，第一个为电流"Ic"是否校正的开关；第二个是"Id"的校正开关，置为1时开启校正，为0时关闭校正。
             &emsp; &emsp;示例: [0, 0]、[1, 1]
     - ##### Para_mode.I_meature
         &emsp; &emsp;电流top计算来源，字符串哈希表。仅"Ic"、和"Id"有效，若填入"Ic"则是使用寻找关断时刻最大电流计算Ictop；若填入"Id"则是通过续流电流的静态范围均值计算Ictop。实际使用时，若实验时采用Ic确定实际电流则填入"Ic"；若实验时采用Id确定实际电流则填入"Id"。
             &emsp; &emsp;示例: "Id"、"Ic"
-- #### 数据配置参数
-    - ##### Para_data.gate_didt
+    - ##### Para_mode.gate_didt
         &emsp; &emsp;开通(关断)电流didt上升(下降)容错，非负整数类型，可填0。第一个参数为didt上升沿检测算法的检测窗口长度，若在i到i+gate_didt的区间内呈上升趋势则判断为上升；反之则判断为下降重置初始点。填0时即为设置成要求必须严格上升，即i+1的数值必须比i高。第二个参数为下降didt的对应参数，原理一致。实际使用时，若Ic数据线非常光滑，则可以填0关闭容错；若略有毛刺则可以填值3到5；不建议填30以上的值，下降容错则一般需要填大一点，大致10 ~ 30为宜。
             &emsp; &emsp;示例: [3,15]、[7,30]
-    - ##### Para_data.gate_Erec
+    - ##### Para_mode.gate_Erec
         &emsp; &emsp;Erec计算反向恢复功率下降沿容错，非负整数类型，可填0。原理与didt上升容错大致相同，但由于Prr为Id和Vd的乘积，因此一般干扰都较大，所以填制都可以放大一些。常见填值10~50都有，需要视情况而定。
+    - ##### Prra_draw.Vgeth
+        &emsp; &emsp;门极开通电压，整数类型。用于判断开关时间以及绘图，原则上应填写器件手册中开通所需的Vge电压，但通常填0也能运行。
+    - ##### Para_mode.NameStyle
+        &emsp; &emsp;CSV命名风格参数，字符串类型。用于匹配CSV的命名风格，目前仅有 '泰克' 和 '横河' 填如其他参数无效，分别对应 NAME_NUM_ALL.csv 和 NAMENUM_00000.csv 的命名风格。
+    
+- #### 输出配置参数
     - ##### Para_out.titlemode
         &emsp; &emsp;数据输出表预设，字符串型哈希表类型。只有四种选项，全部参数('Full')、基础模式('Standard')、双对管模式('2Duiguan')、自定义模式('Manual')，其余输入均无效。此表仅用于快捷复制，所有数据都会在表后列出。全部参数模式将直接列出全部数据、基础模式将仅列出基础测试需要的数据(包括一个对管门极)、双对管模式将舍弃反向恢复的相关计算转而提供两个对管监测、最后自定义模式将以title_Manual参数中提到的数据输出。
         &emsp; &emsp;示例: 'Full'、'Standard'、'2Duiguan'、'Manual'
     - ##### Para_out.title_Manual
         &emsp; &emsp;自定义数据输出表，字符串型哈希表类型。仅在 titlemode 配置为 'Manual' 时生效，用以提供特殊的输出数据要求，仅能识别下述字符串，其余输入无效。{'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)'};
-
-    - ##### Prra_draw.Vgeth
-        &emsp; &emsp;门极开通电压，整数类型。用于判断开关时间以及绘图，原则上应填写器件手册中开通所需的Vge电压，但通常填0也能运行。
+- #### 绘图配置参数
+    - ##### Para_mode.Drawflag
+        &emsp; &emsp;组间数据分析绘图使能开关，布尔类型。置1时将开启组间数据分析绘图，包括尖峰损耗等数据在组间变化的趋势等，置0时将跳过该过程。
     - ##### Prra_draw.Vmax
         &emsp; &emsp;器件最大耐压值，正整数类型。器件最大耐压，Vcemax绘图时将添加一条耐压值线，以供评估电压尖峰风险。
 

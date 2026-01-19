@@ -1,0 +1,21 @@
+# 忽略Csv_reader文件夹内的所有文件
+*
+
+# 只跟踪当前已存在的特定文件（不忽略这些文件）
+!.gitignore
+!count_didt.m
+!count_dvdt.m
+!count_Eon_Eoff.m
+!count_i2dt.m
+!count_lcmax_lctop.m
+!count_Prr_Erec.m
+!count_Ton_Toff.m
+!count_Vcemax_Vcetop.m
+!count_Vge_dg.m
+!countE.m
+!Csv_reader_ParaTemplate.m
+!draw.m
+!findch.m
+!indzer.m
+!main.m
+!setch.m

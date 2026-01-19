@@ -1,22 +1,15 @@
-TestLib
-/Csv_reader/Csv_reader.m
-/count_didt.p
-/count_dvdt.p
-/count_Eoff.p
-/count_Eon.p
-/count_Prr_Erec.p
-/count_Toff.p
-/count_Ton.p
-/count_Vcemax_Vdmax.p
-/count_Vcetop_Ictop.p
-/countE.p
-/Csv_reader_ParaTemplate.p
-/draw.p
-/findch.p
-/indzer.p
-/main.p
-/setch.p
-Csv_reader/Csv_Reader_ChiXiao.m
-Csv_reader/Csv_Reader_150Sida.m
-Csv_reader/Csv_Reader_150vinco.m
-Csv_reader/Csv_reader_weike320.m
+# 首先忽略所有文件和文件夹
+*
+
+# 不忽略.gitignore本身
+!.gitignore
+
+# 不忽略Readme文件夹及其所有内容
+!Readme/
+Readme/*
+
+# 不忽略Csv_reader文件夹（但不自动跟踪其内容）
+!Csv_reader/
+
+# 不忽略Readme.md文件
+!Readme.md

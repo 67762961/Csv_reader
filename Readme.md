@@ -143,7 +143,6 @@
     ##### 范围选取
     - Vcemax范围取(门极关断90%处 - 开通时长 ， 门极关断90%处 + 开通时长)
     - Vdmax范围取(ton2 - 开通时长 ， toff2)
-    ![Vcemax & Vdmax 计算](Readme/计算过程绘图/Vcemax&Vdmax计算.png)
     &emsp;
     ##### 输出图像
     &emsp;&emsp;输出图像将绘制第二三次开通关断完整过程的Vce和Vd。

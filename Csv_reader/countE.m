@@ -32,11 +32,11 @@ end
 data0 = readmatrix(filename, 'NumHeaderLines', 20);                 % 跳过CSV头部元数据
 fprintf('%s\n',filename);
 
-if Fuzaimode ~= 0
-    Ch_labels(3) = 0;
-    I_Fix(1) = 0;
-    I_Fix(2) = 0;
-end
+% if Fuzaimode ~= 0
+%     Ch_labels(3) = 0;
+%     I_Fix(1) = 0;
+%     I_Fix(2) = 0;
+% end
 
 % 通道修正
 if strcmp(Chmode,'findch')
@@ -63,6 +63,8 @@ ch2 = data(:,3);        % Vce（集射极电压）
 
 if Fuzaimode ~= 0
     I_fuzai = data(:,10);
+else
+    I_fuzai = time*0;
 end
 
 if (Ch_labels(3)~=0)
@@ -164,11 +166,7 @@ end
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-if (Fuzaimode == 0)
-    [Ictop,Icmax] = count_Icmax_Ictop(num,DPI,time,ch3,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
-else
-    [Ictop,Icmax] = count_Icmax_Ictop(num,DPI,time,I_fuzai,Ch_labels(5),ch5,path,dataname,I_meature,cntVge);
-end
+[Ictop,Icmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge);
 
 [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
 

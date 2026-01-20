@@ -47,7 +47,6 @@ Drawflag  =  Prra_draw.Drawflag ;       %% 是否需要绘图分析
 path=location;
 [~,Floder,~] = fileparts(location);
 dataname = [num2str(datstart, '%03d'), '-', Dataname];
-ouput_table = dataname ;      %% 输出文件名
 clipboard('copy', dataname);
 
 if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法
@@ -62,7 +61,6 @@ end
 Eonmode_Str = [num2str(Eonmode(1)),num2str(Eonmode(2)),num2str(Eonmode(3)),num2str(Eonmode(4))];
 Eoffmode_Str = [num2str(Eoffmode(1)),num2str(Eoffmode(2)),num2str(Eoffmode(3)),num2str(Eoffmode(4))];
 %% 表头设定
-outputtable=strcat([path,'\result\',ouput_table,'.xlsx']);
 datetime = datestr(now, 'yyyymmdd');
 time = datestr(now, 'HH:MM:SS');
 
@@ -140,8 +138,10 @@ combinedCell(21+datnum, 1:length(titleMap('Full'))) = titleMap('Full');
 combinedCell(22+datnum:size(data_backup,1)+21+datnum, 1:size(data_backup,2)) = num2cell(data_backup);
 
 % 使用 writecell 一次性写入整个单元格数组到
+% ouput_table = dataname ;      %% 输出文件名
+% outputtable=strcat([path,'\result\',ouput_table,'.xlsx']);
+% writecell(combinedCell, outputtable, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
 outputtable_backup = strcat([path,'\result\',dataname,'\',dataname,'.xlsx']);
-writecell(combinedCell, outputtable, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
 writecell(combinedCell, outputtable_backup, 'Sheet', dataname, 'Range', 'A1', 'UseExcel', false);
 
 %% 复制参数表到文件路径

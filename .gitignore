@@ -10,6 +10,8 @@ Readme/*
 
 # 不忽略Csv_reader文件夹（但不自动跟踪其内容）
 !Csv_reader/
+!WDF_2_CSV/
+!WDF_2_CSV/**
 
 # 不忽略Readme.md文件
 !Readme.md

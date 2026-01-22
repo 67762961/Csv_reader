@@ -6,7 +6,7 @@
 
 # 不忽略Readme文件夹及其所有内容
 !Readme/
-Readme/*
+!Readme/*
 
 # 不忽略Csv_reader文件夹（但不自动跟踪其内容）
 !Csv_reader/

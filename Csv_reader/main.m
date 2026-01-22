@@ -47,6 +47,10 @@ Drawflag  =  Prra_draw.Drawflag ;       %% 是否需要绘图分析
 path=location;
 [~,Floder,~] = fileparts(location);
 dataname = [num2str(datstart, '%03d'), '-', Dataname];
+if length(dataname) >= 31
+    fprintf('表名过长 当前长度%d\n',length(dataname))
+    error('表名过长')
+end
 clipboard('copy', dataname);
 
 if ~exist(strcat(path,'\result\'), 'dir')  % 存在性检测方法

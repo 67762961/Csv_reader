@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(locate,tablename,tablenum,path,dataname,NameStyle,DPI,title,Full_title,Para_mode)
+function [output,output_backup] = countE(filename,num,path,dataname,DPI,title,Full_title,Para_mode)
 
 % 模式配置参数
 Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
@@ -20,15 +20,6 @@ Vgeth       = Para_mode.Vgeth    ;       %% 门极开关门槛值 依据器件�
 
 %% 数据读取与预处理
 % fprintf('%s',Chmode);
-num = num2str(tablenum, '%03d');
-switch NameStyle
-    case '横河'
-        filename = fullfile(locate, [tablename, num, '_00000.csv']);        % 修正路径拼接
-    case '泰克'
-        filename = fullfile(locate, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
-    otherwise
-        error('未识别的文件命名风格 请检查NameStyle参数 仅支持 横河 、 泰克 两种');
-end
 data0 = readmatrix(filename, 'NumHeaderLines', 20);                 % 跳过CSV头部元数据
 fprintf('%s\n',filename);
 
@@ -266,7 +257,7 @@ end
 % 创建datamap数据字典
 dataMap = containers.Map;
 dataMap('脉宽长(us)') = Length_ton0;
-dataMap('  CSV  ') = tablenum;
+dataMap('  CSV  ') = str2double(num);
 dataMap('Ic(A)') = Ictop;
 dataMap('Icmax(A)') = Icmax;
 dataMap('Eon(mJ)') = Eon;

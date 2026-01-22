@@ -39,7 +39,7 @@ NameStyle   = Para_mode.NameStyle;      %% 文件命名风格     横河 或 泰
 titlemode   = Para_out.titlemode;
 title_Manual= Para_out.title_Manual;
 
-% 绘图配置参
+% 绘图配置参数
 Vmax      =  Prra_draw.Vmax     ;       %% 器件最大耐压值
 Drawflag  =  Prra_draw.Drawflag ;       %% 是否需要绘图分析
 
@@ -98,8 +98,26 @@ Data_num = length(title);
 cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
+
+EndFile = (fullfile(location, [tablename, '_', num2str(datend, '%03d'), '_ALL.csv']));
+if ~exist(EndFile,'file') % 存在性检测方法
+    fprintf('未找到%s文件 请检查文件数量和输入参数\n', EndFile);
+    error('文件数量错误')
+end
+
 for tablenum=datstart:datend
-    [data1(cnt,:),data_backup(cnt,:)]=countE(location,tablename,tablenum,location,dataname,NameStyle,DPI,title,Full_title,Para_mode);
+    % 拼接名称
+    num = num2str(tablenum, '%03d');
+    switch NameStyle
+        case '横河'
+            filename = fullfile(location, [tablename, num, '_00000.csv']);        % 修正路径拼接
+        case '泰克'
+            filename = fullfile(location, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
+        otherwise
+            error('未识别的文件命名风格 请检查NameStyle参数 仅支持 横河 、 泰克 两种');
+    end
+    
+    [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode);
     cnt=cnt+1;
 end
 % 表头修正

@@ -1,22 +1,17 @@
 function [Eon,SWon_start,SWon_stop,Eoff,SWoff_start,SWoff_stop] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode)
 
 cntsw = length(cntVge);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
-cntoff1 = ton2-toff1;
-cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
 cnton1 = toff1-ton1;
-
+cnton2 = toff2 - ton2;
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量
 %开通起始时刻寻找
-cnton2 = toff2 - ton2;
-search_start = max(fix(ton2 - cntoff1/4), 1);  % 防止负索引
+search_start = max(fix(ton2 - cnton1/4), 1);  % 防止负索引
 valid_range = search_start:min(toff2+cnton2, length(Ic));
 SWon_start_indices = find(Ic(valid_range) >= max(Eonmode(1)*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;

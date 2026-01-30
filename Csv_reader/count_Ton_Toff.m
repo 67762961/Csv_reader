@@ -11,10 +11,17 @@ valid_rise_end = Td_dt(2);
 valid_fall_start = Td_dt(3);
 valid_fall_end = Td_dt(4);
 
+PicLength = fix((ton2 - toff1)*2/11);
+PicStart = max(ton1 - PicLength,1);
+PicEnd = min(toff2 + 2*PicLength,length(ch1));
+PicLength = PicEnd - PicStart;
+PicTop = 20;
+PicBottom = -15;
+
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
 % Vgemax = max(ch1);
-ch1_po = ch1(ton1-fix((ton2 - toff1)*3/11):toff2+2*fix((ton2 - toff1)*3/11));
+ch1_po = ch1(PicStart:PicEnd);
 ch1_po = ch1_po(ch1_po>=0);
 High_Thresh = quantile(ch1_po, 0.95);
 Low_Thresh = quantile(ch1_po, 0.90);
@@ -31,7 +38,7 @@ if isempty(toff90_indices)
 end
 
 % Vgemin = min(ch1(toff1:ton2));
-ch1_ne = ch1(ton1-fix((ton2 - toff1)*3/11):toff2+2*fix((ton2 - toff1)*3/11));
+ch1_ne = ch1(PicStart:PicEnd);
 ch1_ne = ch1_ne(ch1_ne<=0);
 High_Thresh = quantile(ch1_ne, 0.50);
 Low_Thresh = quantile(ch1_ne, 0.10);
@@ -83,13 +90,6 @@ else
 end
 
 %% ================ 绘图 ================
-
-PicLength = fix((ton2 - toff1)*2/11);
-PicStart = ton1 - PicLength;
-PicEnd = toff2 + 2*PicLength;
-PicLength = PicEnd - PicStart;
-PicTop = 20;
-PicBottom = -15;
 
 close all;
 figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);

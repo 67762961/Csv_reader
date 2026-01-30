@@ -103,20 +103,36 @@ cnt=1;
 data1=zeros(datend-datstart+1,Data_num);
 data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 
-EndFile = (fullfile(location, [tablename, '_', num2str(datend, '%03d'), '_ALL.csv']));
+parts = split(NameStyle,'-');
+if isstrprop(parts(end),'digit')
+    step = str2double(parts(end));
+    Frist = str2double(parts(end-1));
+    NameStyle = parts(1);
+end
+
+switch NameStyle
+    case "横河"
+        EndFile = fullfile(location, [tablename, datend, '_00000.csv']);        % 修正路径拼接
+    case "泰克"
+        EndFile = (fullfile(location, [tablename, '_', num2str(datend, '%03d'), '_ALL.csv']));
+    case "飞仕得"
+        EndFile = fullfile(location, [tablename, '-I(',num2str(Frist + step*(datend-1)),')', '-',num2str(datend),'.csv']);     % 修正路径拼接
+end
 if ~exist(EndFile,'file') % 存在性检测方法
     fprintf('未找到%s文件 请检查文件数量和输入参数\n', EndFile);
     error('文件数量错误')
 end
 
 for tablenum=datstart:datend
-    % 拼接名称
+    % 拼接 名称
     num = num2str(tablenum, '%03d');
     switch NameStyle
         case '横河'
             filename = fullfile(location, [tablename, num, '_00000.csv']);        % 修正路径拼接
         case '泰克'
             filename = fullfile(location, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
+        case '飞仕得'
+            filename = fullfile(location, [tablename, '-I(',num2str(Frist + step*(str2double(num)-1)),')', '-',num2str(tablenum),'.csv']);     % 修正路径拼接
         otherwise
             error('未识别的文件命名风格 请检查NameStyle参数 仅支持 横河 、 泰克 两种');
     end

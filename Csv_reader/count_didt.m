@@ -70,7 +70,7 @@ end
 
 SWonlength = 5*fix(valid_rise_end - valid_rise_start);
 PicStart = valid_rise_start - SWonlength;
-PicEnd = valid_rise_end + 2*SWonlength;
+PicEnd = valid_rise_end + SWonlength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.05*PicTop);

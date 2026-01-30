@@ -147,8 +147,8 @@ plot(time(fall_end_idx_d), Vce(fall_end_idx_d), 'ro', 'MarkerFaceColor','r');
 text(time(fix(fall_end_idx_d+0.03*PicLength)),Vce(fall_end_idx_d),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(fall_end_idx_d)),'V',],'FontSize',13);
 plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
 plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.7,['dv/dt = ',num2str(fix(dvdt_c_d+0.5)),'V/us'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt = ',num2str(fix(dvdt_c_d+0.5)),'V/us'],'FontSize',13);
 
 % 坐标轴设置
 ylim([PicBottom, PicTop]);

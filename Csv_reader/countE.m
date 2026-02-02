@@ -53,7 +53,7 @@ ch1 = data(:,2);        % Vge（门极电压）
 ch2 = data(:,3);        % Vce（集射极电压）
 
 if Fuzaimode ~= 0
-    I_fuzai = data(:,10);
+    I_fuzai = Fuzaimode/abs(Fuzaimode)*data(:,10);
 else
     I_fuzai = time*0;
 end

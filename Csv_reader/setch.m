@@ -24,11 +24,11 @@ data_out = zeros(size(data_in));
 data_out(:,1) = data_in(:,1);           % 保留时间轴
 
 if(Fuzaimode ~=  0)
-    if isempty(data_in(:,Fuzaimode+1))
-        fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  Fuzaimode+1);
+    if isempty(data_in(:,abs(Fuzaimode)+1))
+        fprintf('参数填写错误\n请仔细检查csv文件第 %d 列是否有数据\n',  abs(Fuzaimode)+1);
         error('参数填写错误');
     end
-    data_out(:,10) = data_in(:,Fuzaimode+1);
+    data_out(:,10) = data_in(:,abs(Fuzaimode)+1);
 end
 
 
@@ -63,7 +63,7 @@ for i = 1:length(Ch_labels)
     end
     if i >= length(Ch_labels)
         if (Fuzaimode ~= 0)
-            fprintf('    %s(通道%d)', "I_fuzai", Fuzaimode);
+            fprintf('    %s(通道%d)', "I_fuzai", abs(Fuzaimode));
         end
         if (DuiguanCH(1) ~= 0)
             fprintf('    %s(通道%d)', "Vge_dg", DuiguanCH(1));

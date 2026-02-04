@@ -42,9 +42,9 @@ if isempty(SWon_stop_indices)
 end
 
 Window_width = SWon_stop - SWon_start;
-Window_extend = Window_width;
+Window_on_extend = Window_width;
 Pon = zeros(size(time)); % 预分配内存
-windowEon = (SWon_start-fix(Eonmode(3)*Window_extend)):(SWon_stop+fix(Eonmode(4)*Window_extend)); % 定义计算窗口
+windowEon = (SWon_start-fix(Eonmode(3)*Window_on_extend)):(SWon_stop+fix(Eonmode(4)*Window_on_extend)); % 定义计算窗口
 
 % 向量化计算功率和能量
 Pon(windowEon) = Vce(windowEon) .* Ic(windowEon) * 1000; % 功率计算（mW）
@@ -87,8 +87,8 @@ end
 % 初始化并计算关断损耗能量
 Poff = zeros(size(time));
 Window_width = SWoff_stop - SWoff_start;
-Window_extend = fix(Window_width);
-windowEoff = (SWoff_start-fix(Eoffmode(3)*Window_extend)):(SWoff_stop+fix(Eoffmode(4)*Window_extend)); % 定义计算窗口
+Window_off_extend = fix(Window_width);
+windowEoff = (SWoff_start-fix(Eoffmode(3)*Window_off_extend)):(SWoff_stop+fix(Eoffmode(4)*Window_off_extend)); % 定义计算窗口
 
 % 向量化计算
 Poff(windowEoff) = Vce(windowEoff) .* Ic(windowEoff) * 1000;
@@ -115,8 +115,8 @@ Poff_full_normalized = Poff_full / Pmax *Vcetop*0.6;
 [Poff_max,Poff_max_t]=max(Poff_normalized);
 Poff_max_t = Poff_max_t+SWoff_start-1;
 
-PicStart = windowEon(1) - 2*Window_extend;
-PicEnd = SWon_stop + 2*Window_extend;
+PicStart = windowEon(1) - 3*Window_on_extend;
+PicEnd = windowEon(end) + 3*Window_on_extend;
 PicLength = PicEnd - PicStart;
 PicTop = Vcetop*1.5;
 PicBottom = Vcetop*-0.2;
@@ -163,8 +163,8 @@ grid on;
 
 %% ====================== 关断损耗绘图 ======================
 % 可视化
-PicStart = windowEoff(1) - 2*Window_extend;
-PicEnd = SWoff_stop + 2*Window_extend;
+PicStart = windowEoff(1) - 3*Window_off_extend;
+PicEnd = windowEoff(end) + 3*Window_off_extend;
 PicLength = PicEnd - PicStart;
 
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);

@@ -15,20 +15,20 @@ V_c  = Vcetop * dvdtmode(1)/100;
 V_d  = Vcetop * dvdtmode(2)/100;
 
 % 电压上升沿阈值检测
-max_search_length = fix((SWoff_stop - SWoff_start)/5);
+max_search_length = fix((SWoff_stop - SWoff_start));
 window_dv_start = max(1, SWoff_start-max_search_length);  % 起始索引不低于1
 window_dv_end = min(length(Vce), SWoff_stop+max_search_length);  % 终止索引不超过数组长度
 window_dv = window_dv_start : window_dv_end;
 
 rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
 if isempty(rise_start_idx)
-    print('dvdt起始点识别失败')
-    error('dvdt起始点识别失败')
+    print('dvdt_off起始点识别失败')
+    error('dvdt_off起始点识别失败')
 end
 rise_end_idx  = find(Vce(rise_start_idx:window_dv(end)) >= V_90, 1, 'first') + rise_start_idx - 1;
 if isempty(rise_end_idx)
-    print('dvdt结束点识别失败')
-    error('dvdt结束点识别失败')
+    print('dvdt_off结束点识别失败')
+    error('dvdt_off结束点识别失败')
 end
 delta_time = time(rise_end_idx) - time(rise_start_idx); % 时间差(ns转秒)
 
@@ -37,19 +37,19 @@ if (rise_end_idx - rise_start_idx)>0
     dvdt = (Vce(rise_end_idx ) - Vce(rise_start_idx)) / delta_time * 1e-6;
 else
     dvdt = 0;
-    warning('dvdt段落识别出现异常')
+    warning('dvdt_off段落识别出现异常')
 end
 
 if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
     rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
     if isempty(rise_start_idx_a)
-        print('dvdt起始点识别失败')
-        error('dvdt起始点识别失败')
+        print('dvdt_off起始点识别失败')
+        error('dvdt_off起始点识别失败')
     end
     rise_end_idx_b  = find(Vce(rise_start_idx:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx - 1;
     if isempty(rise_end_idx_b)
-        print('dvdt结束点识别失败')
-        error('dvdt结束点识别失败')
+        print('dvdt_off结束点识别失败')
+        error('dvdt_off结束点识别失败')
     end
     delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
     
@@ -57,7 +57,7 @@ if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
         dvdt_a_b = (Vce(rise_end_idx_b) - Vce(rise_start_idx_a)) / delta_time_a_b * 1e-6;
     else
         dvdt_a_b = 0;
-        warning('dvdt_a_b段落识别出现异常')
+        warning('dvdt_off段落识别出现异常')
     end
 else
     dvdt_a_b = 0;
@@ -105,20 +105,20 @@ grid on;
 dvdt_off = (dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90) * dvdt_a_b + (dvdtmode(3) == 10 && dvdtmode(4) == 90) * dvdt;
 
 %% 开通dv/dt计算模块
-max_search_length = fix((SWon_stop - SWon_start)/5);
+max_search_length = fix((SWon_stop - SWon_start));
 window_dv_start = max(1, SWon_start-max_search_length);  % 起始索引不低于1
 window_dv_end = min(length(Vce), SWon_stop+max_search_length);  % 终止索引不超过数组长度
 window_dv = window_dv_start : window_dv_end;
 
 fall_start_idx_c = find(Vce(window_dv) <= V_c, 1, 'first') + window_dv(1) - 1;
 if isempty(fall_start_idx_c)
-    print('dvdt起始点识别失败')
-    error('dvdt起始点识别失败')
+    print('dvdt_on起始点识别失败')
+    error('dvdt_on起始点识别失败')
 end
 fall_end_idx_d  = find(Vce(fall_start_idx_c:window_dv(end)) <= V_d, 1, 'first') + fall_start_idx_c - 1;
 if isempty(fall_end_idx_d)
-    print('dvdt结束点识别失败')
-    error('dvdt结束点识别失败')
+    print('dvdt_on结束点识别失败')
+    error('dvdt_on结束点识别失败')
 end
 delta_time_c_d = time(fall_end_idx_d) - time(fall_start_idx_c); % 时间差(ns转秒)
 
@@ -126,7 +126,7 @@ if (fall_end_idx_d - fall_start_idx_c)>0
     dvdt_c_d = (Vce(fall_end_idx_d) - Vce(fall_start_idx_c)) / delta_time_c_d * 1e-6;
 else
     dvdt_c_d = 0;
-    warning('dvdt_c_d段落识别出现异常')
+    warning('dvdt_on段落识别出现异常')
 end
 
 Falllength = abs(fix((fall_end_idx_d - fall_start_idx_c)));

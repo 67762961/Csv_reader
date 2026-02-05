@@ -6,12 +6,12 @@ toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
 cnton1 = toff1-ton1;
+cntoff1 = ton2-toff1;
 
 Id_flag = Ch_labels(5);
 
 %% 计算Ictop
 nspd = (time(2)-time(1))*1e9;
-cntoff1 = ton2-toff1;
 
 % 传统计算法Ictop
 current_interval = ton1 + fix(cnton1/2) : toff1;    % 定义电流峰值搜索区间
@@ -29,8 +29,10 @@ PicLength = abs(toff2 - ton1);
 PicStart = max(ton1-fix(1*PicLength/5),1);
 PicEnd = min(toff2+fix(1*PicLength/5),length(time));
 PicLength = abs(PicEnd - PicStart);
-PicTop = fix(1.1*max(ch3(PicStart:PicEnd)));
-PicBottom = min(fix(1.5*min(ch5(PicStart:PicEnd))),-0.1*PicTop);
+Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
+PicTop = fix(1.1*Max);
+Min = min(min(ch3(PicStart:PicEnd)),min(ch5(PicStart:PicEnd)));
+PicBottom = fix(min(1.3*Min,-0.1*PicTop));
 PicHeight = PicTop - PicBottom;
 
 barheight = 0.02*PicHeight;

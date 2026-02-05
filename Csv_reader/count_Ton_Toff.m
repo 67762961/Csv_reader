@@ -1,4 +1,4 @@
-function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
+function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Vgetop,Vgebase,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -20,16 +20,6 @@ PicBottom = -15;
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-% Vgemax = max(ch1);
-ch1_po = ch1(PicStart:PicEnd);
-ch1_po = ch1_po(ch1_po>=0);
-High_Thresh = quantile(ch1_po, 0.95);
-Low_Thresh = quantile(ch1_po, 0.90);
-ch1_top = ch1_po((Low_Thresh <= ch1_po)&(ch1_po <= High_Thresh));
-Vgetop = median(ch1_top);
-
-% 寻找关断时Vge=90%的时间点
-% disp(ch1(toff1:-1:ton1))
 toff90_indices = find(ch1(toff1:-1:ton1) > 0.9 * Vgetop, 1, 'first');
 toff90 = toff1 - toff90_indices + 1; % 转换为原始索引
 if isempty(toff90_indices)
@@ -37,15 +27,6 @@ if isempty(toff90_indices)
     error('关断时Vge=90%的时间点识别失败')
 end
 
-% Vgemin = min(ch1(toff1:ton2));
-ch1_ne = ch1(PicStart:PicEnd);
-ch1_ne = ch1_ne(ch1_ne<=0);
-High_Thresh = quantile(ch1_ne, 0.50);
-Low_Thresh = quantile(ch1_ne, 0.10);
-ch1_base = ch1_ne((Low_Thresh <= ch1_ne)&(ch1_ne <= High_Thresh));
-Vgebase = median(ch1_base);
-% 寻找开通时Vge=10%的时间点
-% disp(ch1(ton2:-1:toff1))
 ton10_indices = find(ch1(ton2:-1:toff1) < 0.8 * Vgebase, 1, 'first');
 ton10 = ton2 - ton10_indices + 1;
 if isempty(ton10_indices)

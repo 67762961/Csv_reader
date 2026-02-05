@@ -116,8 +116,9 @@ if (cntsw ~= 6) && (cntsw ~= 4)
     disp(cntVge_time)
     error('过零点判断异常')
 end
-% fprintf('%d\n',cntsw);
-% 第0次开通时间点
+
+[Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
+
 ton0=cntVge(1);
 % 第0次关断时间点
 toff0=cntVge(2);
@@ -180,14 +181,14 @@ if (Ch_labels(3)~=0)
     [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch3,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
     
 elseif (Fuzaimode ~= 0)
     % ====================== dv/dt计算模块 ======================
     [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch2,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
     
     didt_on = " ";
     didt_off = " ";
@@ -200,8 +201,6 @@ else
     tr = " ";
     tdoff = " ";
     tf = " ";
-    Vgetop = " ";
-    Vgebase = " ";
 end
 
 % ====================== 对管门极监测 Vge_dg ======================

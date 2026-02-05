@@ -12,6 +12,7 @@
 !count_Ton_Toff.m
 !count_Vcemax_Vcetop.m
 !count_Vge_dg.m
+!count_Vge.m
 !countE.m
 !Csv_reader_ParaTemplate.m
 !draw.m

@@ -119,9 +119,6 @@ end
 
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
 
-ton0=cntVge(1);
-% 第0次关断时间点
-toff0=cntVge(2);
 % 第一次开通时间点
 ton1=cntVge(cntsw-3);
 % 第一次关断时间点
@@ -129,8 +126,6 @@ toff1=cntVge(cntsw-2);
 % 第二次开通时间点
 ton2=cntVge(cntsw-1);
 
-% 计算第0开通时长
-cnton0 = toff0-ton0;
 % 计算第一开通时长
 cnton1 = toff1-ton1;
 % 计算两次脉冲间关断时长
@@ -233,11 +228,7 @@ end
 
 % ====================== 脉宽长度计算 ======================
 nspd = (time(2)-time(1))*1e9;
-if(Ch_labels(3)~=0) || (Fuzaimode ~= 0)
-    Length_ton0 = 2*fix((cnton0+(tdon-tdoff)/nspd) /(2000/nspd) + 0.5);
-else
-    Length_ton0 = 2*fix((cnton0/nspd) /(2000/nspd) + 0.5);
-end
+Length_ton0 = 2*fix(((cntVge(2)-cntVge(1))/nspd) /(2000/nspd) + 0.5);
 
 % ====================== 纯C方案的Irms辅助计算 ======================
 if (INTG_I2t~=0)

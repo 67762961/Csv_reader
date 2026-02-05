@@ -46,6 +46,27 @@ if isempty(ton10_1_indices)
     error('第一开通时间点识别失败')
 end
 
+if length(cntVge) > 4
+    ton0=cntVge(1);
+    toff0=cntVge(2);
+    
+    ton10_0_indices = find(ch1(ton0:-1:1) < 0.8 * Vgebase, 1, 'first');
+    ton10_0 = ton0 - ton10_0_indices + 1;
+    if isempty(ton10_0_indices)
+        error('第零开通时间点识别失败')
+    end
+    
+    toff90_0_indices = find(ch1(toff0:-1:ton0) > 0.9 * Vgetop, 1, 'first');
+    toff90_0 = toff0 - toff90_0_indices + 1; % 转换为原始索引
+    if isempty(toff90_0_indices)
+        error('第零关断时间点识别失败')
+    end
+    
+    cntVge(cntsw-5) = ton10_0;
+    cntVge(cntsw-4) = toff90_0;
+end
+
+%% ================ 更新cntVge ================
 cntVge(cntsw-3) = ton10_1;
 cntVge(cntsw-2) = toff90_1;
 cntVge(cntsw-1) = ton10_2;

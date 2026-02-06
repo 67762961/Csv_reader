@@ -1,18 +1,14 @@
 function [Eon,SWon_start,SWon_stop,Eoff,SWoff_start,SWoff_stop] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode)
 
 cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
-cnton1 = toff1-ton1;
-cnton2 = toff2 - ton2;
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量
 %开通起始时刻寻找
-search_start = max(fix(ton2 - cnton1/4), 1);  % 防止负索引
-valid_range = search_start:min(toff2+cnton2, length(Ic));
+valid_range = ton2:toff2;
 SWon_start_indices = find(Ic(valid_range) >= max(Eonmode(1)*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
 if isempty(SWon_start_indices)
@@ -54,7 +50,7 @@ Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
-valid_range = (ton1+fix(0.7*cnton1)):min(ton2, length(Vce));
+valid_range = toff1:ton2;
 SWoff_start_indices = find(Vce(valid_range) >= Vcetop*Eoffmode(1), 1, 'first');
 SWoff_start = valid_range(1) + SWoff_start_indices - 1;
 if isempty(SWoff_start_indices)
@@ -63,7 +59,6 @@ if isempty(SWoff_start_indices)
 end
 
 %关断结束时刻寻找
-valid_range = SWoff_start:min(ton2, length(Ic));
 SWoff_stop_indices = find(Ic(valid_range) <= Ictop*Eoffmode(2), 1, 'first');
 SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
 for i = 1:18

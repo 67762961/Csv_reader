@@ -1,11 +1,11 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW)
+function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntVge)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 
-SWon_start = cntSW(1);
-SWon_stop = cntSW(2);
-SWoff_start = cntSW(3);
-SWoff_stop = cntSW(4);
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
 
 % 阈值定义
 Ic_a  = Ictop * didtmode(1)/100;
@@ -19,9 +19,9 @@ valid_rise_start = [];
 valid_rise_end = [];
 
 % 动态窗口生成
-max_search_length = fix((SWon_stop - SWon_start)/3);
-Window_Start = fix(SWon_start - max_search_length);
-Window_Stop = fix(SWon_stop + max_search_length);
+% max_search_length = fix(2*min(cnton1,cnton2));
+Window_Start = ton2;
+Window_Stop = toff2;
 window_di = Window_Start : Window_Stop;
 
 % 状态机主循环
@@ -72,8 +72,8 @@ SWonlength = 5*fix(valid_rise_end - valid_rise_start);
 PicStart = valid_rise_start - SWonlength;
 PicEnd = valid_rise_end + SWonlength;
 PicLength = PicEnd - PicStart;
-PicTop = fix(1.05*max(abs(ch3(PicStart:PicEnd))));
-PicBottom = fix(-0.05*PicTop);
+PicTop = abs(fix(1.05*max(abs(ch3(PicStart:PicEnd)))));
+PicBottom = -1*fix(0.05*PicTop);
 PicHeight = PicTop - PicBottom;
 
 close all;
@@ -100,9 +100,8 @@ grid on;
 
 % ====================== 关断时刻 di/dt计算模块 ======================
 % 动态窗口生成
-max_search_length = fix((SWoff_stop - SWoff_start)/3);
-Window_Start = fix(SWoff_start - max_search_length);
-Window_Stop = fix(SWoff_stop + max_search_length);
+Window_Start = toff1;
+Window_Stop = ton2;
 window_di = Window_Start : Window_Stop;
 
 valid_fall_start = [];

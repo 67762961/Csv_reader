@@ -173,7 +173,7 @@ if (Ch_labels(3)~=0)
     [dvdt_on,dvdt_off,~] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
     
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntSW);
+    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntVge);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);

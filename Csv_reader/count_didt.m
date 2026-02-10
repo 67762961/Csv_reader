@@ -1,4 +1,4 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,Ictop,path,dataname,cntVge)
+function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 
@@ -8,10 +8,10 @@ ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
 
 % 阈值定义
-Ic_a  = Ictop * didtmode(1)/100;
-Ic_b  = Ictop * didtmode(2)/100;
-Ic_c  = Ictop * didtmode(3)/100;
-Ic_d  = Ictop * didtmode(4)/100;
+Ic_a  = I_Fuizai_on * didtmode(1)/100;
+Ic_b  = I_Fuizai_on * didtmode(2)/100;
+Ic_c  = I_Fuizai_off * didtmode(3)/100;
+Ic_d  = I_Fuizai_off * didtmode(4)/100;
 
 % 状态机参数初始化
 state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
@@ -89,13 +89,13 @@ plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 % 动态标注
 text(time(fix(valid_rise_start+0.03*PicLength)),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
 text(time(fix(valid_rise_end+0.03*PicLength)),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(Ictop)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_Fuizai_on)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_on+0.5)),'A/us'],'FontSize',13);
 plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
-title(['Ic=',num2str(fix(Ictop)),'A di/dt(on) 计算']);
+title(['Ic=',num2str(fix(I_Fuizai_on)),'A di/dt(on) 计算']);
 grid on;
 
 % ====================== 关断时刻 di/dt计算模块 ======================
@@ -165,18 +165,18 @@ plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 % 动态标注
 text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(3)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
 text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(Ictop+0.5)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_Fuizai_off+0.5)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
 
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
-title(['Ic=',num2str(fix(Ictop)),'A di/dt(off) 计算']);
+title(['Ic=',num2str(fix(I_Fuizai_off)),'A di/dt(off) 计算']);
 grid on;
 
 % 保存处理
 save_dir = fullfile(path, 'result', dataname, '05 didt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(Ictop)),'A didt.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(I_Fuizai_off)),'A didt.png']), 'png');
 close(gcf);
 hold off
 

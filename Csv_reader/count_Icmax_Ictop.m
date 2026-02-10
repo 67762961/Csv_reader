@@ -1,4 +1,4 @@
-function [Ictop_out,Icmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge)
+function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -14,10 +14,10 @@ Id_flag = Ch_labels(5);
 nspd = (time(2)-time(1))*1e9;
 
 % 传统计算法Ictop
-current_interval = ton1 + fix(cnton1/2) : toff1;    % 定义电流峰值搜索区间
+current_interval = toff1 : ton2;    % 定义电流峰值搜索区间
 [~, max_idx] = max(ch3(current_interval));          % 快速定位峰值索引 max_idx为相对索引
-tIcm = ton1 + fix(cnton1/2) + max_idx - 1;          % 转换为全局索引
-window_start = max(1, tIcm - fix(30/nspd));        % 窗口起始：峰值前10点（最小为1）
+tIcm = toff1 + max_idx - 1;          % 转换为全局索引
+window_start = max(1, tIcm - fix(30/nspd));        % 窗口起始：峰值前30ns（最小为1）
 Ictop = mean(ch3(window_start:tIcm));               % 计算均值
 
 % plot(time(current_interval), ch3(current_interval), 'b');
@@ -109,6 +109,18 @@ end
 
 if Ch_labels(3) ==0
     Ictop = FuzaiTop;
+end
+
+if Fuzaimode ~= 0
+    I_Fuizai_on  = mean(I_fuzai(ton2-fix(30/nspd):ton2+fix(30/nspd)));
+    I_Fuizai_off = mean(I_fuzai(toff1-fix(30/nspd):toff1+fix(30/nspd)));
+    plot(time(ton2), I_Fuizai_on, 'go');
+    text(time(ton2),I_Fuizai_on - fix(PicHeight*0.1),['I_on =',num2str(I_Fuizai_on),'A'], 'FontSize',10,'Color','g');
+    plot(time(toff1), I_Fuizai_off, 'go');
+    text(time(toff1),I_Fuizai_off - fix(PicHeight*0.1),['I_off =',num2str(I_Fuizai_off),'A'], 'FontSize',10,'Color','g');
+else
+    I_Fuizai_on = Ictop;
+    I_Fuizai_off = Ictop;
 end
 
 switch I_meature

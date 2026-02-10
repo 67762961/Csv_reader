@@ -159,18 +159,18 @@ end
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================
-    [Eon,SWon_start,SWon_stop,Eoff,SWoff_start,SWoff_stop] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode);
+    [Eon,Eoff] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode);
     
-    cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
+    % cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
 else
     Eon = " ";
     Eoff = " ";
-    cntSW = [ton2-fix(cnton1/5),ton2+fix(cnton1/5),toff1-fix(cnton1/5),toff1+fix(cnton1/5)];
+    % cntSW = [ton2-fix(cnton1/5),ton2+fix(cnton1/5),toff1-fix(cnton1/5),toff1+fix(cnton1/5)];
 end
 
 if (Ch_labels(3)~=0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,~] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    [dvdt_on,dvdt_off,~] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
     
     % ====================== di/dt计算模块 ======================
     [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge);
@@ -180,7 +180,7 @@ if (Ch_labels(3)~=0)
     
 elseif (Fuzaimode ~= 0)
     % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW);
+    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);

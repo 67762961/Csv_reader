@@ -1,9 +1,9 @@
-function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntSW)
+function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge)
 
-SWon_start = cntSW(1);
-SWon_stop = cntSW(2);
-SWoff_start = cntSW(3);
-SWoff_stop = cntSW(4);
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
 
 %% 关断dv/dt计算模块
 % 阈值定义
@@ -15,10 +15,7 @@ V_c  = Vcetop * dvdtmode(1)/100;
 V_d  = Vcetop * dvdtmode(2)/100;
 
 % 电压上升沿阈值检测
-max_search_length = fix((SWoff_stop - SWoff_start));
-window_dv_start = max(1, SWoff_start-max_search_length);  % 起始索引不低于1
-window_dv_end = min(length(Vce), SWoff_stop+max_search_length);  % 终止索引不超过数组长度
-window_dv = window_dv_start : window_dv_end;
+window_dv = toff1 : ton2;
 
 rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
 if isempty(rise_start_idx)
@@ -81,8 +78,8 @@ hold on;
 plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
 plot(time(rise_start_idx), Vce(rise_start_idx), 'ro', 'MarkerFaceColor','r');
 plot(time(rise_end_idx ), Vce(rise_end_idx ), 'ro', 'MarkerFaceColor','r');
-plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
-plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
+plot(time(window_dv(1)), Vce(window_dv(1)),'o','color','blue');
+plot(time(window_dv(end)), Vce(window_dv(end)),'o','color','blue');
 text(time(fix(rise_start_idx+0.03*PicLength)),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
 text(time(fix(rise_end_idx+0.03*PicLength)),Vce(rise_end_idx),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
@@ -105,10 +102,7 @@ grid on;
 dvdt_off = (dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90) * dvdt_a_b + (dvdtmode(3) == 10 && dvdtmode(4) == 90) * dvdt;
 
 %% 开通dv/dt计算模块
-max_search_length = fix((SWon_stop - SWon_start));
-window_dv_start = max(1, SWon_start-max_search_length);  % 起始索引不低于1
-window_dv_end = min(length(Vce), SWon_stop+max_search_length);  % 终止索引不超过数组长度
-window_dv = window_dv_start : window_dv_end;
+window_dv = ton2 : toff2;
 
 fall_start_idx_c = find(Vce(window_dv) <= V_c, 1, 'first') + window_dv(1) - 1;
 if isempty(fall_start_idx_c)
@@ -145,8 +139,8 @@ plot(time(fall_start_idx_c), Vce(fall_start_idx_c), 'ro', 'MarkerFaceColor','r')
 text(time(fix(fall_start_idx_c+0.03*PicLength)),Vce(fall_start_idx_c),['Vce{',num2str(dvdtmode(1)),'}=',num2str(Vce(fall_start_idx_c)),'V',],'FontSize',13);
 plot(time(fall_end_idx_d), Vce(fall_end_idx_d), 'ro', 'MarkerFaceColor','r');
 text(time(fix(fall_end_idx_d+0.03*PicLength)),Vce(fall_end_idx_d),['Vce{',num2str(dvdtmode(2)),'}=',num2str(Vce(fall_end_idx_d)),'V',],'FontSize',13);
-plot(time(window_dv_start), Vce(window_dv_start),'o','color','blue');
-plot(time(window_dv_end), Vce(window_dv_end),'o','color','blue');
+plot(time(window_dv(1)), Vce(window_dv(1)),'o','color','blue');
+plot(time(window_dv(end)), Vce(window_dv(end)),'o','color','blue');
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt = ',num2str(fix(dvdt_c_d+0.5)),'V/us'],'FontSize',13);
 

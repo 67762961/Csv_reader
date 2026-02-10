@@ -3,7 +3,6 @@ function [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ict
 cntsw = length(cntVge);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
-cnt2 = toff2 - ton2;
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
@@ -11,7 +10,7 @@ Prr_start_indices = find(ch5(ton2:toff2) > 0, 1, 'first');
 Prr_start = ton2 + Prr_start_indices - 1;
 
 Prr_end_indices = find(ch4(Prr_start:toff2) > Vcetop*0.9, 1, 'first');
-Prr_end = Prr_start + Prr_end_indices - 1 + fix(cnt2/5);
+Prr_end = Prr_start + Prr_end_indices - 1;
 
 % fprintf('%f\n%f\n%f\n',ton2,Prr_start_indices,Prr_end_indices);
 

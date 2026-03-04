@@ -111,7 +111,7 @@ if Ch_labels(3) ==0
     Ictop = FuzaiTop;
 end
 
-if Fuzaimode ~= 0
+if (Fuzaimode ~= 0) && (I_meature == "I_fuzai")
     I_Fuizai_on  = mean(I_fuzai(ton2-fix(30/nspd):ton2+fix(30/nspd)));
     I_Fuizai_off = mean(I_fuzai(toff1-fix(30/nspd):toff1+fix(30/nspd)));
     plot(time(ton2), I_Fuizai_on, 'go');

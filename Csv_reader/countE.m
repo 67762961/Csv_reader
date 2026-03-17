@@ -141,6 +141,8 @@ if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
     Ic = Ic - meanIc; % 电流探头较零
     ch3 = ch3 - meanIc;
     fprintf('       Ic偏移量:%03fA\n',meanIc);
+else
+    meanIc = 0;
 end
 
 if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
@@ -149,6 +151,8 @@ if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
     Id = Id - meanId;% 电流探头较零
     ch5 = ch5 - meanId;
     fprintf('       Id偏移量:%03fA\n',meanId);
+else
+    meanId = 0;
 end
 
 %% 各项数据计算
@@ -243,6 +247,10 @@ else
     I2dt_off = " ";
 end
 
+if (Fuzaimode == 0)
+    I_Fuizai_on = " ";
+    I_Fuizai_off = " ";
+end
 
 % 创建datamap数据字典
 dataMap = containers.Map;
@@ -250,6 +258,8 @@ dataMap('脉宽长(us)') = Length_ton0;
 dataMap('  CSV  ') = str2double(num);
 dataMap('Ic(A)') = Ictop;
 dataMap('Icmax(A)') = Icmax;
+dataMap('Icfix(A)') = -1*meanIc;
+dataMap('Idfix(A)') = -1*meanId;
 dataMap('Eon(mJ)') = Eon;
 dataMap('Eoff(mJ)') = Eoff;
 dataMap('VceMAX(V)') = Vcemax;

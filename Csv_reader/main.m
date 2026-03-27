@@ -99,10 +99,6 @@ DPI = dpiValue/96;
 
 Data_num = length(title);
 %% 数据读取与计算
-cnt=1;
-data1=zeros(datend-datstart+1,Data_num);
-data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
-
 parts = split(NameStyle,'-');
 if isstrprop(parts(end),'digit')
     step = str2double(parts(end));
@@ -110,18 +106,30 @@ if isstrprop(parts(end),'digit')
     NameStyle = parts(1);
 end
 
-switch NameStyle
-    case "横河"
-        EndFile = fullfile(location, [tablename, datend, '_00000.csv']);        % 修正路径拼接
-    case "泰克"
-        EndFile = (fullfile(location, [tablename, '_', num2str(datend, '%03d'), '_ALL.csv']));
-    case "飞仕得"
-        EndFile = fullfile(location, [tablename, '-I(',num2str(Frist + step*(datend-1)),')', '-',num2str(datend),'.csv']);     % 修正路径拼接
+for datend_fix = datend:-1:1
+    switch NameStyle
+        case "横河"
+            EndFile = fullfile(location, [tablename, datend_fix, '_00000.csv']);        % 修正路径拼接
+        case "泰克"
+            EndFile = (fullfile(location, [tablename, '_', num2str(datend_fix, '%03d'), '_ALL.csv']));
+        case "飞仕得"
+            EndFile = fullfile(location, [tablename, '-I(',num2str(Frist + step*(datend_fix-1)),')', '-',num2str(datend_fix),'.csv']);     % 修正路径拼接
+    end
+    if ~exist(EndFile,'file') % 存在性检测方法
+        % fprintf('未找到%s文件 自动检测更小数字%d\n', EndFile,datend_fix);
+        % fprintf('未找到%s文件 请检查文件数量和输入参数\n', EndFile);
+        % error('文件数量错误')
+    else
+        fprintf('找到%s文件 datend设置为%d\n\n', EndFile,datend_fix);
+        datend = datend_fix;
+        datnum = datend_fix-datstart+1;
+        break
+    end
 end
-if ~exist(EndFile,'file') % 存在性检测方法
-    fprintf('未找到%s文件 请检查文件数量和输入参数\n', EndFile);
-    error('文件数量错误')
-end
+
+cnt=1;
+data1=zeros(datend-datstart+1,Data_num);
+data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 
 for tablenum=datstart:datend
     % 拼接 名称

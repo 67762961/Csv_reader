@@ -8,9 +8,14 @@ toff2=cntVge(cntsw);
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-ch1_po = ch1(ch1>=0);
-High_Thresh = quantile(ch1_po, 0.95);
-Low_Thresh = quantile(ch1_po, 0.90);
+PicLength = fix((ton2 - toff1)*2/11);
+PicStart = max(ton1 - PicLength,1);
+PicEnd = min(toff2 + 2*PicLength,length(ch1));
+
+ch1_count = ch1(PicStart:PicEnd);
+ch1_po = ch1_count(ch1_count>=0);
+High_Thresh = quantile(ch1_po, 0.97);
+Low_Thresh = quantile(ch1_po, 0.93);
 ch1_top = ch1_po((Low_Thresh <= ch1_po)&(ch1_po <= High_Thresh));
 Vgetop = median(ch1_top);
 
@@ -28,9 +33,9 @@ end
 
 %% ================ Vgebase计算 ================
 % 计算Vge低电平电压（使用中值避免噪声干扰）
-ch1_ne = ch1(ch1<=0);
-High_Thresh = quantile(ch1_ne, 0.10);
-Low_Thresh = quantile(ch1_ne, 0.05);
+ch1_ne = ch1_count(ch1_count<=0);
+High_Thresh = quantile(ch1_ne, 0.07);
+Low_Thresh = quantile(ch1_ne, 0.03);
 ch1_base = ch1_ne((Low_Thresh <= ch1_ne)&(ch1_ne <= High_Thresh));
 Vgebase = median(ch1_base);
 

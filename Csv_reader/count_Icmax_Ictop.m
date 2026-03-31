@@ -1,14 +1,16 @@
-function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge)
+function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
-cnton1 = toff1-ton1;
 cntoff1 = ton2-toff1;
 
 Id_flag = Ch_labels(5);
+
+static_ic_interval = I_FixBar(1):I_FixBar(2);
+static_id_interval = I_FixBar(3):I_FixBar(4);
 
 %% 计算Ictop
 nspd = (time(2)-time(1))*1e9;
@@ -26,8 +28,8 @@ Ictop = mean(ch3(window_start:tIcm));               % 计算均值
 % error('1')
 
 PicLength = abs(toff2 - ton1);
-PicStart = max(ton1-fix(1*PicLength/5),1);
-PicEnd = min(toff2+fix(1*PicLength/5),length(time));
+PicStart = max(ton1-fix(1*PicLength/4),1);
+PicEnd = min(toff2+fix(2*PicLength/4),length(time));
 PicLength = abs(PicEnd - PicStart);
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 PicTop = fix(1.1*Max);
@@ -36,18 +38,17 @@ PicBottom = fix(min(1.3*Min,-0.1*PicTop));
 PicHeight = PicTop - PicBottom;
 
 barheight = 0.02*PicHeight;
-barStart =fix(toff1 + cntoff1/4);
-barEnd = fix(ton2 - cntoff1/4);
 
 close all;
 figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
 
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0
-    static_id_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
-    Idbase =  mean(ch5(static_id_interval)); % 关断时平均Id作为Ictop
+    Idbase =  mean(ch5(static_ic_interval)); % 关断时平均Id作为Ictop
     
     % Idbase水平线及标注
+    barStart = static_ic_interval(1);
+    barEnd = static_ic_interval(end);
     line([time(barStart),time(barEnd)],[Idbase,Idbase],'Color', [0.5 0.5 0.5],'LineStyle','--');
     hold on;
     line([time(barStart),time(barStart)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);
@@ -55,8 +56,8 @@ if Id_flag~=0
     text(time(barStart),Idbase - fix(PicHeight*0.05),['Idbase =',num2str(Idbase),'A'], 'FontSize',13,'Color','b');
     
     % Id校准线及标注
-    barStart = fix(ton1 + cnton1/2);
-    barEnd = fix(toff1 - cnton1/4);
+    barStart = static_id_interval(1);
+    barEnd = static_id_interval(end);
     line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
     line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
@@ -70,8 +71,8 @@ if Fuzaimode~=0
     FuzaiTop =  mean(I_fuzai(static_Fuzai_interval)); % 关断时平均Ifuzai作为Ictop
     
     % FuzaiTop水平线及标注
-    barStart =fix(toff1 + cntoff1/4);
-    barEnd = fix(ton2 - cntoff1/4);
+    barStart = static_ic_interval(1);
+    barEnd = static_ic_interval(end);
     line([time(barStart),time(barEnd)],[FuzaiTop,FuzaiTop],'Color', [0.5 0.5 0.5],'LineStyle','--');
     line([time(barStart),time(barStart)],[FuzaiTop-barheight, FuzaiTop+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[FuzaiTop-barheight, FuzaiTop+barheight], 'Color', [0.5 0.5 0.5]);
@@ -87,8 +88,8 @@ if Fuzaimode~=0
 end
 
 % Ic校准线及标注
-barStart = fix(toff1 + cntoff1/4);
-barEnd = fix(ton2 - cntoff1/4);
+barStart = static_ic_interval(1);
+barEnd = static_ic_interval(end);
 line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
 line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
 line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);

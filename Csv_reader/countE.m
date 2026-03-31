@@ -135,8 +135,8 @@ cntoff1 = ton2-toff1;
 if (I_Fix(1) == 1) || (I_Fix(2) == 1)
     fprintf('探头自动较零:\n');
 end
+static_ic_interval = fix(toff1 + cntoff1/2) : fix(ton2 - cntoff1/4);
 if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
-    static_ic_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
     meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
     Ic = Ic - meanIc; % 电流探头较零
     ch3 = ch3 - meanIc;
@@ -145,8 +145,8 @@ else
     meanIc = 0;
 end
 
+static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
 if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
-    static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
     meanId = mean(Id(static_id_interval));
     Id = Id - meanId;% 电流探头较零
     ch5 = ch5 - meanId;
@@ -155,9 +155,11 @@ else
     meanId = 0;
 end
 
+I_FixBar = [static_ic_interval(1),static_ic_interval(end), static_id_interval(1),static_id_interval(end)];
+
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge);
+[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar);
 
 [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
 

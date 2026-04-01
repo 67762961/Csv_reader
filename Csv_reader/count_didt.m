@@ -69,8 +69,9 @@ end
 % tIcm = Window_Start + max_idx - 1;          % 转换为全局索引
 
 SWonlength = 5*fix(valid_rise_end - valid_rise_start);
-PicStart = valid_rise_start - SWonlength;
-PicEnd = valid_rise_end + SWonlength;
+Half_PicLength = fix(SWonlength/abs(didtmode(2)-didtmode(1))*200);
+PicStart = valid_rise_start - Half_PicLength;
+PicEnd = valid_rise_end + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = abs(fix(1.05*max(abs(ch3(PicStart:PicEnd)))));
 PicBottom = -1*fix(0.05*PicTop);
@@ -146,8 +147,9 @@ if isempty(didt_off)
 end
 
 SWonlength = 5*fix(valid_fall_end - valid_fall_start);
-PicStart = valid_fall_start - SWonlength;
-PicEnd = valid_fall_end + SWonlength;
+Half_PicLength = fix(SWonlength/abs(didtmode(4)-didtmode(3))*100);
+PicStart = valid_fall_start - Half_PicLength;
+PicEnd = valid_fall_end + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.5*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.1*PicTop);

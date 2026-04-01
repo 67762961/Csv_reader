@@ -62,9 +62,9 @@ end
 
 % 保持原始绘图逻辑
 Riselength = fix((rise_end_idx - rise_start_idx));
-
-PicStart = rise_start_idx - Riselength;
-PicEnd = rise_end_idx + 2*Riselength;
+Half_PicLength = fix(Riselength/abs(dvdtmode(3)-dvdtmode(4))*100);
+PicStart = rise_start_idx - Half_PicLength;
+PicEnd = rise_end_idx + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
@@ -124,8 +124,9 @@ else
 end
 
 Falllength = abs(fix((fall_end_idx_d - fall_start_idx_c)));
-PicStart = fall_start_idx_c - 2*Falllength;
-PicEnd = fall_end_idx_d + 2*Falllength;
+Half_PicLength = fix(Falllength/abs(dvdtmode(2)-dvdtmode(1))*200);
+PicStart = fall_start_idx_c - Half_PicLength;
+PicEnd = fall_end_idx_d + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);

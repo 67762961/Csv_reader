@@ -51,14 +51,6 @@ assert(~isempty(Prr_end), '反向恢复时间Prr结束点检测失败');
 assert(~isempty(Erec_start), '反向恢复时间Erec起始点检测失败');
 assert(~isempty(Erec_stop), '反向恢复时间Erec结束点检测失败');
 
-% 反向恢复能量计算（向量化优化）
-valid_indices = Erec_start:Erec_stop;
-Erec = sum(Prr(valid_indices(2:end)) .* diff(time(valid_indices))) * 1000; % 单位mJ
-
-valid_time = time(Erec_start:Prr_end);       % 时间向量 [s]
-valid_Prr = Prr(Erec_start:Prr_end);         % 瞬时功率向量 [W]
-Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
-
 % 可视化
 PrrLength = fix((Erec_stop - Erec_start));
 PicStart = Erec_start - fix(PrrLength/3);
@@ -68,12 +60,21 @@ PicTop = 2;
 PicBottom = -1;
 PicHeight = PicTop - PicBottom;
 
+% 反向恢复能量计算（向量化优化）
+valid_indices = Erec_start:PicEnd;
+Erec = sum(Prr(valid_indices(2:end)) .* diff(time(valid_indices))) * 1000; % 单位mJ
+
+valid_time = time(Erec_start:PicEnd);       % 时间向量 [s]
+valid_Prr = Prr(Erec_start:PicEnd);         % 瞬时功率向量 [W]
+Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
+
 close all;
 figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
 plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
 plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');
-plot(time(Erec_start:Prr_end),1.5*Erec_t(Erec_start:Prr_end)/max(Erec_t(Erec_start:Prr_end)),'c--');
+plot(time(Erec_start:PicEnd),1.5*Erec_t(Erec_start:PicEnd)/max(Erec_t(Erec_start:PicEnd)),'c--');
+plot(time(Erec_stop),1.5*Erec_t(Erec_stop)/max(Erec_t(Erec_stop)),'o','color','c');
 plot(time(Erec_start:Erec_stop),Prr(Erec_start:Erec_stop)/Prrmax/1000,'r',LineWidth=1.5);
 plot(time(Prr_start:Erec_start),Prr(Prr_start:Erec_start)/Prrmax/1000,'r--');
 plot(time(Erec_stop:Prr_end),Prr(Erec_stop:Prr_end)/Prrmax/1000,'r--');

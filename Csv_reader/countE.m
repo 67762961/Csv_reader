@@ -119,12 +119,23 @@ end
 
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
 
-% 第一次开通时间点
 ton1=cntVge(cntsw-3);
-% 第一次关断时间点
+Ton1 = time(ton1);
 toff1=cntVge(cntsw-2);
-% 第二次开通时间点
+Toff1 = time(toff1);
 ton2=cntVge(cntsw-1);
+Ton2 = time(ton2);
+toff2=cntVge(cntsw);
+Toff2 = time(toff2);
+if (cntsw>4)
+    ton0=cntVge(cntsw-5);
+    Ton0 = time(ton0);
+    toff0=cntVge(cntsw-4);
+    Toff0 = time(toff0);
+else
+    Ton0 = "  ";
+    Toff0 = "  ";
+end
 
 % 计算第一开通时长
 cnton1 = toff1-ton1;
@@ -161,7 +172,7 @@ I_FixBar = [static_ic_interval(1),static_ic_interval(end), static_id_interval(1)
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 [Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar);
 
-[Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
+[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================
@@ -174,28 +185,42 @@ else
     % cntSW = [ton2-fix(cnton1/5),ton2+fix(cnton1/5),toff1-fix(cnton1/5),toff1+fix(cnton1/5)];
 end
 
+% ====================== dv/dt计算模块 ======================
+[dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
+
+Tdvdt_fall_start = time(Tdvdt(1));
+Tdvdt_fall_end = time(Tdvdt(2));
+Tdvdt_rise_start = time(Tdvdt(3));
+Tdvdt_rise_end = time(Tdvdt(4));
+
 if (Ch_labels(3)~=0)
-    % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,~] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
-    
     % ====================== di/dt计算模块 ======================
     [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
     
-elseif (Fuzaimode ~= 0)
-    % ====================== dv/dt计算模块 ======================
-    [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
+    Tdidt_rise_start = time(Tdidt(1));
+    Tdidt_rise_end = time(Tdidt(2));
+    Tdidt_fall_start = time(Tdidt(3));
+    Tdidt_fall_end = time(Tdidt(4));
     
+elseif (Fuzaimode ~= 0)
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
+    
+    Tdidt_rise_start = " ";
+    Tdidt_rise_end = " ";
+    Tdidt_fall_start = " ";
+    Tdidt_fall_end = " ";
     
     didt_on = " ";
     didt_off = " ";
 else
-    dvdt_on = " ";
-    dvdt_off = " ";
+    Tdidt_rise_start = " ";
+    Tdidt_rise_end = " ";
+    Tdidt_fall_start = " ";
+    Tdidt_fall_end = " ";
     didt_on = " ";
     didt_off = " ";
     tdon = " ";
@@ -291,7 +316,22 @@ dataMap('I2dt_off') = I2dt_off;
 dataMap('I_Fuizai_on') = I_Fuizai_on;
 dataMap('I_Fuizai_off') = I_Fuizai_off;
 dataMap('    ') = " ";
-
+dataMap('Ton0') = Ton0;
+dataMap('Toff0') = Toff0;
+dataMap('Ton1') = Ton1;
+dataMap('Toff1') = Toff1;
+dataMap('Ton2') = Ton2;
+dataMap('Toff2') = Toff2;
+dataMap('T_Vcemax') = T_Vcemax;
+dataMap('T_Vdmax') = T_Vdmax;
+dataMap('Tdvdt_fs') = Tdvdt_fall_start;
+dataMap('Tdvdt_fe') = Tdvdt_fall_end;
+dataMap('Tdvdt_rs') = Tdvdt_rise_start;
+dataMap('Tdvdt_re') = Tdvdt_rise_end;
+dataMap('Tdidt_rs') = Tdidt_rise_start;
+dataMap('Tdidt_re') = Tdidt_rise_end;
+dataMap('Tdidt_fs') = Tdidt_fall_start;
+dataMap('Tdidt_fe') = Tdidt_fall_end;
 
 %% 输出表
 output=zeros(length(title),1);
@@ -304,6 +344,7 @@ end
 output_backup = zeros(length(Full_title),1);
 for i = 1:length(Full_title)
     currentKey = Full_title{i};
+    disp(currentKey);
     currentValue = dataMap(currentKey);
     output_backup(i) = currentValue;
 end

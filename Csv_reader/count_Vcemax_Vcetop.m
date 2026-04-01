@@ -1,4 +1,4 @@
-function [Vcemax,Vcetop,Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
+function [Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
@@ -18,14 +18,16 @@ Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
 % 找出最大值
 [Vcemax, cemax_idx] = max(ch2(toff1 - cnton2:fix(ton2)));
 cemax_idx = toff1 - cnton2 + cemax_idx - 1;  % 转换为全局索引
-
+T_Vcemax = time(cemax_idx);
 
 %% ================ Vdmax计算 ================
 if 0 ~= Vd_flag
     [Vdmax, dmax_idx] = max(ch4(ton2 - cnton2:toff2));
     dmax_idx = ton2 - cnton2 + dmax_idx - 1;
+    T_Vdmax = time(dmax_idx);
 else
     Vdmax = "   ";
+    T_Vdmax = "   ";
 end
 
 % 绘图

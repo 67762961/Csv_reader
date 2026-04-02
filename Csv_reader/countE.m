@@ -258,8 +258,7 @@ else
 end
 
 % ====================== 脉宽长度计算 ======================
-nspd = (time(2)-time(1))*1e9;
-Length_ton0 = 2*fix(((cntVge(2)-cntVge(1))/nspd) /(2000/nspd) + 0.5);
+Length_ton0 = fix((time(cntVge(2))-time(cntVge(1)))*1e6 + 0.5);
 
 % ====================== 纯C方案的Irms辅助计算 ======================
 if (INTG_I2t~=0)

@@ -1,20 +1,20 @@
 Output_Path = "D:\_TOOLS\Csv_reader_TestLib\test";
-dataname = '²âÊÔ½á¹û';
+dataname = 'æµ‹è¯•ç»“æœ';
 
 File_Path_1 =  "D:\_TOOLS\Csv_reader_TestLib\test";
 filename_1 = fullfile(File_Path_1, "INVB_001_ALL.csv");
-VarNames_CSV1 =["Ch1_¸ßÎÂ", "Ch1_Current", "Ch1_Power", "Ch1_Status", "Ch1_Temp"];
+VarNames_CSV1 =["Ch1_é«˜æ¸©", "Ch1_Current", "Ch1_Power", "Ch1_Status", "Ch1_Temp"];
 
 
 File_Path_2 =  "D:\_TOOLS\Csv_reader_TestLib\test";
 filename_2 = fullfile(File_Path_2, "INVB_000_ALL.csv");
-VarNames_CSV2 =["Ch2_³£ÎÂ", "Ch2_Current", "Ch2_Power", "Ch2_Status", "Ch2_Temp"];
+VarNames_CSV2 =["Ch2_å¸¸æ¸©", "Ch2_Current", "Ch2_Power", "Ch2_Status", "Ch2_Temp"];
 
 target_1 = 'Ton2';
 
 target_2 = 'Ton1';
 
-% Ä£Ê½ÅäÖÃ²ÎÊı
+% æ¨¡å¼é…ç½®å‚æ•°
 Para_mode.Chmode        = 'setch';
 Para_mode.Ch_labels     = [1, 2, 3, 4, 5];
 Para_mode.Smooth_Win    = [1, 1, 1, 1, 1];
@@ -33,8 +33,8 @@ Para_mode.gate_Erec     = 30;
 Para_mode.Vgeth         = 3;
 
 
-% --- µÚÒ»²¿·Ö£º¼ÆËãÊ±ÑÓ ---
-Full_title = {'Âö¿í³¤(us)', '  CSV  ', 'Ic(A)', 'Icfix(A)', 'Idfix(A)' ,'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'I2dt_on','I2dt_off','Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','I_Fuizai_on','I_Fuizai_off','Ton0', 'Toff0','Ton1', 'Toff1','Ton2', 'Toff2','T_Vcemax','T_Vdmax','Tdvdt_fs','Tdvdt_fe','Tdvdt_rs','Tdvdt_re','Tdidt_rs','Tdidt_re','Tdidt_fs','Tdidt_fe'};
+% --- ç¬¬ä¸€éƒ¨åˆ†ï¼šè®¡ç®—æ—¶å»¶ ---
+Full_title = {'è„‰å®½é•¿(us)', '  CSV  ', 'Ic(A)', 'Icfix(A)', 'Idfix(A)' ,'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'I2dt_on','I2dt_off','Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','I_Fuizai_on','I_Fuizai_off','Ton0', 'Toff0','Ton1', 'Toff1','Ton2', 'Toff2','T_Vcemax','T_Vdmax','Tdvdt_fs','Tdvdt_fe','Tdvdt_rs','Tdvdt_re','Tdidt_rs','Tdidt_re','Tdidt_fs','Tdidt_fe'};
 title = Full_title;
 
 dpiValue = winqueryreg('HKEY_CURRENT_USER', 'Control Panel\Desktop\WindowMetrics', 'AppliedDPI');
@@ -44,45 +44,45 @@ DPI = dpiValue/96;
 num = '000';
 Out_name = [dataname, '.csv'];
 
-% --- ¼ÆËãÎÄ¼ş 1 Ê±ÑÓ ---
+% --- è®¡ç®—æ–‡ä»¶ 1 æ—¶å»¶ ---
 [~,output_backup] = countE(filename_1, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
 idx1 = strcmp(Full_title, target_1);
 Time_fix_1 = output_backup(idx1);
 
-% --- ¼ÆËãÎÄ¼ş 2 Ê±ÑÓ ---
+% --- è®¡ç®—æ–‡ä»¶ 2 æ—¶å»¶ ---
 [~,output_backup] = countE(filename_2, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
 idx2 = strcmp(Full_title, target_2);
 Time_fix_2 = output_backup(idx2);
 
-disp(['Ê±ÑÓ¼ÆËãÍê³É - ÎÄ¼ş1: ', num2str(Time_fix_1*1e6), ' us']);
-disp(['Ê±ÑÓ¼ÆËãÍê³É - ÎÄ¼ş2: ', num2str(Time_fix_2*1e6), ' us']);
+disp(['æ—¶å»¶è®¡ç®—å®Œæˆ - æ–‡ä»¶1: ', num2str(Time_fix_1*1e6), ' us']);
+disp(['æ—¶å»¶è®¡ç®—å®Œæˆ - æ–‡ä»¶2: ', num2str(Time_fix_2*1e6), ' us']);
 
-% --- µÚÈı²¿·Ö£º¶ÁÈ¡Óë¶ÔÆë ---
+% --- ç¬¬ä¸‰éƒ¨åˆ†ï¼šè¯»å–ä¸å¯¹é½ ---
 CSV_1 = readtable(filename_1, 'NumHeaderLines', 20);
 CSV_2 = readtable(filename_2, 'NumHeaderLines', 20);
 
-% ÌáÈ¡Ê±¼ä²¢Ó¦ÓÃÊ±ÑÓĞ£Õı
+% æå–æ—¶é—´å¹¶åº”ç”¨æ—¶å»¶æ ¡æ­£
 Time_1 = CSV_1{:, 1} - Time_fix_1;
 Time_2 = CSV_2{:, 1} - Time_fix_2;
 
-% --- 4. È·¶¨Í³Ò»µÄÊ±¼äÖá·¶Î§ ---
+% --- 4. ç¡®å®šç»Ÿä¸€çš„æ—¶é—´è½´èŒƒå›´ ---
 t_start = min(Time_1(1), Time_2(1));
 t_end   = max(Time_1(end), Time_2(end));
 
-% --- 5. È·¶¨×î´ó²ÉÑùÂÊ ---
+% --- 5. ç¡®å®šæœ€å¤§é‡‡æ ·ç‡ ---
 dt1 = mean(diff(Time_1));
 dt2 = mean(diff(Time_2));
-dt_min = min(dt1, dt2); % È¡¾«¶È×î¸ßµÄ¼ä¸ô
+dt_min = min(dt1, dt2); % å–ç²¾åº¦æœ€é«˜çš„é—´éš”
 
-% Éú³ÉÍ³Ò»µÄ¸ß¾«¶ÈÊ±¼äÖá
+% ç”Ÿæˆç»Ÿä¸€çš„é«˜ç²¾åº¦æ—¶é—´è½´
 t_uniform_vals = (t_start : dt_min : t_end)';
 t_uniform = seconds(t_uniform_vals);
 
-Time_1 = seconds(Time_1); % ½«ÊıÖµÃë×ª»»Îª duration ¶ÔÏó
-Time_2 = seconds(Time_2); % ½«ÊıÖµÃë×ª»»Îª duration ¶ÔÏó
+Time_1 = seconds(Time_1); % å°†æ•°å€¼ç§’è½¬æ¢ä¸º duration å¯¹è±¡
+Time_2 = seconds(Time_2); % å°†æ•°å€¼ç§’è½¬æ¢ä¸º duration å¯¹è±¡
 
-% --- 6. ¹¹½¨ Timetable ²¢Í¬²½ ---
-% Ö±½ÓÌáÈ¡Êı¾İÁĞ (2:end)£¬²»´¦Àí±äÁ¿Ãû£¬ÓÉÄãºóĞø×Ô¼º´¦Àí
+% --- 6. æ„å»º Timetable å¹¶åŒæ­¥ ---
+% ç›´æ¥æå–æ•°æ®åˆ— (2:end)ï¼Œä¸å¤„ç†å˜é‡åï¼Œç”±ä½ åç»­è‡ªå·±å¤„ç†
 data1 = CSV_1{:, 2:end};
 data2 = CSV_2{:, 2:end};
 
@@ -92,17 +92,17 @@ T_data2 = array2table(data2, 'VariableNames', VarNames_CSV2);
 T1_temp = [table(Time_1, 'VariableNames', {'Time_s'}), T_data1];
 T2_temp = [table(Time_2, 'VariableNames', {'Time_s'}), T_data2];
 
-% 4. ×ª»»Îª Timetable (¹Ø¼ü²½Öè£ºÏÔÊ½Ö¸¶¨ RowTimes)
+% 4. è½¬æ¢ä¸º Timetable (å…³é”®æ­¥éª¤ï¼šæ˜¾å¼æŒ‡å®š RowTimes)
 TT1 = table2timetable(T1_temp, 'RowTimes', 'Time_s');
 TT2 = table2timetable(T2_temp, 'RowTimes', 'Time_s');
 
-% Í¬²½ (Ê¹ÓÃ union »ò t_uniform)
+% åŒæ­¥ (ä½¿ç”¨ union æˆ– t_uniform)
 TT_Merged = synchronize(TT1, TT2, t_uniform, 'nearest');
 
-% --- 7. ×¼±¸Êä³ö ---
-% ÕâÀïÖ»Êä³öÊ±¼äÁĞºÍÍ¬²½ºóµÄÊı¾İ£¬±äÁ¿Ãû±£³ÖÄ¬ÈÏ
+% --- 7. å‡†å¤‡è¾“å‡º ---
+% è¿™é‡Œåªè¾“å‡ºæ—¶é—´åˆ—å’ŒåŒæ­¥åçš„æ•°æ®ï¼Œå˜é‡åä¿æŒé»˜è®¤
 T_out = timetable2table(TT_Merged);
 close all
 
 writetable(T_out, fullfile(Output_Path, Out_name), 'Encoding', 'GBK');
-fprintf('\nÊı¾İ¶ÔÆëÍê³É %s ÒÑÉú³É\n', Out_name);
+fprintf('\næ•°æ®å¯¹é½å®Œæˆ %s å·²ç”Ÿæˆ\n', Out_name);

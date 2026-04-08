@@ -1,5 +1,9 @@
 Output_Path = "D:\_TOOLS\Csv_reader_TestLib\test";
-dataname = '测试结果';
+dataname = '测试文件名';
+Title_1 = '测试大标题';
+Title_2 = '测试二标题';
+Title_3 = '测试三标题';
+Title_4 = '测试四标题';
 
 File_Path_1 =  "D:\_TOOLS\Csv_reader_TestLib\test";
 filename_1 = fullfile(File_Path_1, "INVB_001_ALL.csv");
@@ -11,7 +15,6 @@ filename_2 = fullfile(File_Path_2, "INVB_000_ALL.csv");
 VarNames_CSV2 =["Ch2_常温", "Ch2_Current", "Ch2_Power", "Ch2_Status", "Ch2_Temp"];
 
 target_1 = 'Ton2';
-
 target_2 = 'Ton1';
 
 % 模式配置参数
@@ -104,6 +107,17 @@ TT_Merged = synchronize(TT1, TT2, t_uniform, 'nearest');
 T_out = timetable2table(TT_Merged);
 close all
 
-writetable(T_out, fullfile(Output_Path, Out_name), 'Encoding', 'GBK');
+OutFile = fullfile(Output_Path, Out_name);
+
+HeaderLines = {    Title_1;    Title_2;    Title_3;    Title_4;};
+
+writecell(HeaderLines, OutFile, 'Delimiter', 'comma', 'Encoding', 'GBK');
+
+writetable(T_out, OutFile, ...
+    'WriteMode', 'append', ...      % 追加模式
+    'WriteVariableNames', true, ... % 写入变量名（作为第 5 行）
+    'Delimiter', 'comma', ...
+    'Encoding', 'GBK');
+
 fprintf('\n数据对齐完成 %s 已生成\n', Out_name);
 winopen(Output_Path);

@@ -106,3 +106,4 @@ close all
 
 writetable(T_out, fullfile(Output_Path, Out_name), 'Encoding', 'GBK');
 fprintf('\n数据对齐完成 %s 已生成\n', Out_name);
+winopen(Output_Path);

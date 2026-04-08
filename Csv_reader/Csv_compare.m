@@ -7,11 +7,13 @@ Title_4 = '测试四标题';
 
 File_Path_1 =  "D:\_TOOLS\Csv_reader_TestLib\test";
 filename_1 = fullfile(File_Path_1, "INVB_001_ALL.csv");
+Back_name_1 = "111";
 VarNames_CSV1 =["Ch1_高温", "Ch1_Current", "Ch1_Power", "Ch1_Status", "Ch1_Temp"];
 
 
 File_Path_2 =  "D:\_TOOLS\Csv_reader_TestLib\test";
 filename_2 = fullfile(File_Path_2, "INVB_000_ALL.csv");
+Back_name_2 = "222";
 VarNames_CSV2 =["Ch2_常温", "Ch2_Current", "Ch2_Power", "Ch2_Status", "Ch2_Temp"];
 
 target_1 = 'Ton2';
@@ -89,8 +91,11 @@ Time_2 = seconds(Time_2); % 将数值秒转换为 duration 对象
 data1 = CSV_1{:, 2:end};
 data2 = CSV_2{:, 2:end};
 
-T_data1 = array2table(data1, 'VariableNames', VarNames_CSV1);
-T_data2 = array2table(data2, 'VariableNames', VarNames_CSV2);
+New_VarNames_1 = VarNames_CSV1 + "-" + Back_name_1;
+New_VarNames_2 = VarNames_CSV2 + "-" + Back_name_2;
+
+T_data1 = array2table(data1, 'VariableNames', New_VarNames_1);
+T_data2 = array2table(data2, 'VariableNames', New_VarNames_2);
 
 T1_temp = [table(Time_1, 'VariableNames', {'Time_s'}), T_data1];
 T2_temp = [table(Time_2, 'VariableNames', {'Time_s'}), T_data2];

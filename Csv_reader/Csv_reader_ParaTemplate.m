@@ -4,11 +4,11 @@ clear;
 clc;
 
 %% 参数配置
-Para_file.location   = 'D:\_TOOLS\Csv_reader_TestLib\20251229';         %% 读取文件夹       文件夹以八位日期命名
+Para_file.location   = 'C:\_TOOLS\Csv_reader_TestLib\20251229';         %% 读取文件夹       文件夹以八位日期命名
 Para_file.tablename  = 'INVB';                                          %% csv文件名        一般为BOOSTH(L) 或 INVA(BC)
 Para_file.dataname   = '赤霄-BT2正-25℃-半1150-旧器件';                  %% 输出数据标签     (机型)-(器件)-(温度)-(电压)-(Ron)-(Roff)
 Para_file.datstart   = 00;                                              %% csv序号起始点    该工况的首个CSV文件序号
-Para_file.datnum     = 16;                                              %% 本组csv文件      该工况一共测试组数 BOOST 12 INV 16
+Para_file.datnum     = 20;                                              %% 本组csv文件      该工况一共测试组数 BOOST 12 INV 16
 
 % 模式配置参数
 Para_mode.Chmode        = 'setch';                          %% 通道分配模式     'setch'或'findch'

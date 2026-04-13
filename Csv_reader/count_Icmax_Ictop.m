@@ -40,7 +40,7 @@ PicHeight = PicTop - PicBottom;
 barheight = 0.02*PicHeight;
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0

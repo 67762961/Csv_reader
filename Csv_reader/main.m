@@ -95,7 +95,7 @@ end
 
 dpiValue = winqueryreg('HKEY_CURRENT_USER', 'Control Panel\Desktop\WindowMetrics', 'AppliedDPI');
 dpiValue = double(dpiValue);
-DPI = dpiValue/96;
+DPI = dpiValue/92.16;
 
 Data_num = length(title);
 %% 数据读取与计算

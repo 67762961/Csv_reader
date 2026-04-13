@@ -35,7 +35,7 @@ PicEnd = I2_on_window(end);
 PicLength = PicEnd - PicStart;
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 hold on
 yyaxis left

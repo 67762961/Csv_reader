@@ -71,7 +71,7 @@ PicBottom = fix(-0.05*Vcemax);
 PicHeight = PicTop - PicBottom;
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;

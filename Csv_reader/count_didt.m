@@ -78,7 +78,7 @@ PicBottom = -1*fix(0.05*PicTop);
 PicHeight = PicTop - PicBottom;
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'b');
 hold on;

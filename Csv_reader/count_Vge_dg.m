@@ -32,7 +32,7 @@ cemax_idx_on_max = cemax_idx_on_max + PicStart -1;
 cemax_idx_on_min = cemax_idx_on_min + PicStart -1;
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vge_dg(PicStart:PicEnd), 'b');
 hold on;

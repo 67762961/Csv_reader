@@ -73,7 +73,7 @@ end
 %% ================ 绘图 ================
 
 close all;
-figure('Position', [320, 240, 1600/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 hold on;
 % 背景区间（绿色）
 plot(time(PicStart:PicEnd), ch1(PicStart:PicEnd), 'Color', [0.2 0.8 0.2]);

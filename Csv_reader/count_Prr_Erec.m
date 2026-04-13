@@ -69,7 +69,7 @@ valid_Prr = Prr(Erec_start:PicEnd);         % 瞬时功率向量 [W]
 Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
 
 close all;
-figure('Position', [560, 240, 800/DPI/DPI, 600/DPI/DPI]);
+figure('Position', [560, 240, 800/DPI, 600/DPI]);
 plot(time(PicStart:PicEnd),Id(PicStart:PicEnd)./max(Id(PicStart:PicEnd))*1.5,'b');
 hold on
 plot(time(PicStart:PicEnd),Vd(PicStart:PicEnd)./Vcetop,'g');

@@ -1,22 +1,23 @@
-Output_Path = "D:\_TOOLS\Csv_reader_TestLib\test";
-dataname = '测试文件名';
-Title_1 = '测试大标题';
-Title_2 = '测试二标题';
-Title_3 = '测试三标题';
-Title_4 = '测试四标题';
+Output_Path = "C:\_TOOLS\Csv_reader_TestLib\compare";
+dataname = '400自主通用与定制器件对比-门极-开通';
+Title_1 = dataname;
+Title_2 = '2100V 200A 25℃';
+Title_3 = '000-400通用-2T2-常温-2100-1.7-3.4';
+Title_4 = '020-400定制-3T2-常温-2100-2.5-5';
 
-File_Path_1 =  "D:\_TOOLS\Csv_reader_TestLib\test";
-filename_1 = fullfile(File_Path_1, "INVB_001_ALL.csv");
-Back_name_1 = "111";
-VarNames_CSV1 =["Ch1_高温", "Ch1_Current", "Ch1_Power", "Ch1_Status", "Ch1_Temp"];
+File_Path_1 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260317";
+filename_1 = fullfile(File_Path_1, "BOOSTT2_014_ALL.csv");
+Back_name_1 = "通用";
+VarNames_CSV1 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
 
-File_Path_2 =  "D:\_TOOLS\Csv_reader_TestLib\test";
-filename_2 = fullfile(File_Path_2, "INVB_000_ALL.csv");
-Back_name_2 = "222";
-VarNames_CSV2 =["Ch2_常温", "Ch2_Current", "Ch2_Power", "Ch2_Status", "Ch2_Temp"];
+File_Path_2 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260416";
+filename_2 = fullfile(File_Path_2, "BOOSTT2_035_ALL.csv");
+Back_name_2 = "定制";
+VarNames_CSV2 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
 
+% Ton2 Toff1 Tdvdt_fs Tdidt_rs
 target_1 = 'Ton2';
-target_2 = 'Ton1';
+target_2 = 'Ton2';
 
 % 模式配置参数
 Para_mode.Chmode        = 'setch';

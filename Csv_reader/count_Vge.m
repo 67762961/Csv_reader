@@ -129,7 +129,6 @@ if length(cntVge) > 4
             if gate < 0.9
                 if Print_Flag == 0
                     fprintf('门极判断点阈值调整:\n');
-                    Print_Flag = 1;
                 end
                 fprintf('       第零关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
             end

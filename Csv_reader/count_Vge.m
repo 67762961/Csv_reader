@@ -19,16 +19,40 @@ Low_Thresh = quantile(ch1_po, 0.93);
 ch1_top = ch1_po((Low_Thresh <= ch1_po)&(ch1_po <= High_Thresh));
 Vgetop = median(ch1_top);
 
-toff90_1_indices = find(ch1(toff1:-1:ton1) > 0.9 * Vgetop, 1, 'first');
-toff90_1 = toff1 - toff90_1_indices + 1; % 转换为原始索引
-if isempty(toff90_1_indices)
-    error('第一关断时间点识别失败')
+Print_Flag = 0;
+
+for gate = 0.99:-0.01:0.5
+    toff90_1_indices = find(ch1(toff1:-1:ton1) > gate * Vgetop, 1, 'first');
+    toff90_1 = toff1 - toff90_1_indices + 1; % 转换为原始索引
+    if isempty(toff90_1_indices)
+        % fprintf('第一关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+    else
+        if gate < 0.9
+            if Print_Flag == 0
+                fprintf('门极判断点阈值调整:\n');
+                Print_Flag = 1;
+            end
+            fprintf('       第一关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+        end
+        break;
+    end
 end
 
-toff90_2_indices = find(ch1(toff2:-1:ton2) > 0.9 * Vgetop, 1, 'first');
-toff90_2 = toff2 - toff90_2_indices + 1; % 转换为原始索引
-if isempty(toff90_2_indices)
-    error('第二关断时间点识别失败')
+for gate = 0.99:-0.01:0.5
+    toff90_2_indices = find(ch1(toff2:-1:ton2) > gate * Vgetop, 1, 'first');
+    toff90_2 = toff2 - toff90_2_indices + 1; % 转换为原始索引
+    if isempty(toff90_2_indices)
+        % fprintf('第二关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+    else
+        if gate < 0.9
+            if Print_Flag == 0
+                fprintf('门极判断点阈值调整:\n');
+                Print_Flag = 1;
+            end
+            fprintf('       第二关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+        end
+        break;
+    end
 end
 
 %% ================ Vgebase计算 ================
@@ -39,34 +63,79 @@ Low_Thresh = quantile(ch1_ne, 0.03);
 ch1_base = ch1_ne((Low_Thresh <= ch1_ne)&(ch1_ne <= High_Thresh));
 Vgebase = median(ch1_base);
 
-ton10_2_indices = find(ch1(ton2:-1:toff1) < 0.8 * Vgebase, 1, 'first');
-ton10_2 = ton2 - ton10_2_indices + 1;
-if isempty(ton10_2_indices)
-    error('第二开通时间点识别失败')
+% disp(['Vge高电平电压Vgetop = ', num2str(Vgetop), ' V']);
+% disp(['Vge低电平电压Vgebase = ', num2str(Vgebase), ' V']);
+
+for gate = 0.99:-0.01:0.5
+    ton10_2_indices = find(ch1(ton2:-1:toff1) < gate * Vgebase, 1, 'first');
+    ton10_2 = ton2 - ton10_2_indices + 1;
+    if isempty(ton10_2_indices)
+        % fprintf('第二开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+    else
+        if gate < 0.9
+            if Print_Flag == 0
+                fprintf('门极判断点阈值调整:\n');
+                Print_Flag = 1;
+            end
+            fprintf('       第二开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+        end
+        break;
+    end
 end
 
-ton10_1_indices = find(ch1(ton1:-1:1) < 0.8 * Vgebase, 1, 'first');
-ton10_1 = ton1 - ton10_1_indices + 1;
-if isempty(ton10_1_indices)
-    error('第一开通时间点识别失败')
+for gate = 0.99:-0.01:0.5
+    ton10_1_indices = find(ch1(ton1:-1:1) < gate * Vgebase, 1, 'first');
+    ton10_1 = ton1 - ton10_1_indices + 1;
+    if isempty(ton10_1_indices)
+        % fprintf('第一开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+    else
+        if gate < 0.9
+            if Print_Flag == 0
+                fprintf('门极判断点阈值调整:\n');
+                Print_Flag = 1;
+            end
+            fprintf('       第一开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+        end
+        break;
+    end
 end
 
 if length(cntVge) > 4
     ton0=cntVge(1);
     toff0=cntVge(2);
-    
-    ton10_0_indices = find(ch1(ton0:-1:1) < 0.8 * Vgebase, 1, 'first');
-    ton10_0 = ton0 - ton10_0_indices + 1;
-    if isempty(ton10_0_indices)
-        error('第零开通时间点识别失败')
+    for gate = 0.99:-0.01:0.5
+        ton10_0_indices = find(ch1(ton0:-1:1) < gate * Vgebase, 1, 'first');
+        ton10_0 = ton0 - ton10_0_indices + 1;
+        if isempty(ton10_0_indices)
+            % fprintf('第零开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+        else
+            if gate < 0.9
+                if Print_Flag == 0
+                    fprintf('门极判断点阈值调整:\n');
+                    Print_Flag = 1;
+                end
+                fprintf('       第零开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+            end
+            break;
+        end
     end
     
-    toff90_0_indices = find(ch1(toff0:-1:ton0) > 0.9 * Vgetop, 1, 'first');
-    toff90_0 = toff0 - toff90_0_indices + 1; % 转换为原始索引
-    if isempty(toff90_0_indices)
-        error('第零关断时间点识别失败')
+    for gate = 0.99:-0.01:0.5
+        toff90_0_indices = find(ch1(toff0:-1:ton0) > gate * Vgetop, 1, 'first');
+        toff90_0 = toff0 - toff90_0_indices + 1; % 转换为原始索引
+        if isempty(toff90_0_indices)
+            % fprintf('第零关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+        else
+            if gate < 0.9
+                if Print_Flag == 0
+                    fprintf('门极判断点阈值调整:\n');
+                    Print_Flag = 1;
+                end
+                fprintf('       第零关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
+            end
+            break;
+        end
     end
-    
     cntVge(cntsw-5) = ton10_0;
     cntVge(cntsw-4) = toff90_0;
 end

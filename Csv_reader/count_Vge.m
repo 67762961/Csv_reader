@@ -21,7 +21,7 @@ Vgetop = median(ch1_top);
 
 Print_Flag = 0;
 
-for gate = 0.99:-0.01:0.5
+for gate = 0.90:-0.01:0.5
     toff90_1_indices = find(ch1(toff1:-1:ton1) > gate * Vgetop, 1, 'first');
     toff90_1 = toff1 - toff90_1_indices + 1; % 转换为原始索引
     if isempty(toff90_1_indices)
@@ -38,7 +38,7 @@ for gate = 0.99:-0.01:0.5
     end
 end
 
-for gate = 0.99:-0.01:0.5
+for gate = 0.90:-0.01:0.5
     toff90_2_indices = find(ch1(toff2:-1:ton2) > gate * Vgetop, 1, 'first');
     toff90_2 = toff2 - toff90_2_indices + 1; % 转换为原始索引
     if isempty(toff90_2_indices)
@@ -66,7 +66,7 @@ Vgebase = median(ch1_base);
 % disp(['Vge高电平电压Vgetop = ', num2str(Vgetop), ' V']);
 % disp(['Vge低电平电压Vgebase = ', num2str(Vgebase), ' V']);
 
-for gate = 0.99:-0.01:0.5
+for gate = 0.90:-0.01:0.5
     ton10_2_indices = find(ch1(ton2:-1:toff1) < gate * Vgebase, 1, 'first');
     ton10_2 = ton2 - ton10_2_indices + 1;
     if isempty(ton10_2_indices)
@@ -83,7 +83,7 @@ for gate = 0.99:-0.01:0.5
     end
 end
 
-for gate = 0.99:-0.01:0.5
+for gate = 0.90:-0.01:0.5
     ton10_1_indices = find(ch1(ton1:-1:1) < gate * Vgebase, 1, 'first');
     ton10_1 = ton1 - ton10_1_indices + 1;
     if isempty(ton10_1_indices)
@@ -103,7 +103,7 @@ end
 if length(cntVge) > 4
     ton0=cntVge(1);
     toff0=cntVge(2);
-    for gate = 0.99:-0.01:0.5
+    for gate = 0.90:-0.01:0.5
         ton10_0_indices = find(ch1(ton0:-1:1) < gate * Vgebase, 1, 'first');
         ton10_0 = ton0 - ton10_0_indices + 1;
         if isempty(ton10_0_indices)
@@ -120,7 +120,7 @@ if length(cntVge) > 4
         end
     end
     
-    for gate = 0.99:-0.01:0.5
+    for gate = 0.90:-0.01:0.5
         toff90_0_indices = find(ch1(toff0:-1:ton0) > gate * Vgetop, 1, 'first');
         toff90_0 = toff0 - toff90_0_indices + 1; % 转换为原始索引
         if isempty(toff90_0_indices)

@@ -14,7 +14,7 @@ function zer = indzer(Vge, t, min_interval)
 
 % 参数默认值设置
 if nargin < 3
-    min_interval = 600;  % 若未输入min_interval，则默认600
+    min_interval = 100;  % 若未输入min_interval，则默认100
 end
 
 Vge = Vge - t;          % 信号偏移

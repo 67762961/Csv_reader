@@ -104,9 +104,18 @@ end
 %% 开通关断区块划分
 
 % Vge过零点位置记录
-cntVge = indzer(Vge,Vgeth);
+nspd = time(2)-time(1); % 时间分辨率
+cntVge = indzer(Vge,Vgeth,fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
 % Vge过零点次数记录
 cntsw = length(cntVge);
+
+% fprintf('\n Vge开通阈值位置有%d处 \n',cntsw)
+% cntVge_time=zeros(1,cntsw);
+% for i=1:cntsw
+%     cntVge_time(i) = time(cntVge(i))*1e6;
+% end
+% disp(cntVge_time)
+
 if (cntsw ~= 6) && (cntsw ~= 4)
     fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
     cntVge_time=zeros(1,cntsw);
@@ -118,6 +127,8 @@ if (cntsw ~= 6) && (cntsw ~= 4)
 end
 
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
+
+% disp(cntVge);
 
 ton1=cntVge(cntsw-3);
 Ton1 = time(ton1);

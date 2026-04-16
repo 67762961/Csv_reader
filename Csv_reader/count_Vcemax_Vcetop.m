@@ -12,7 +12,7 @@ cnton2 = toff2 - ton2;
 % 计算Vcetop
 start_idx = fix(toff1 + cntoff1/4);         % 起始索引：关断后1/20周期
 end_idx = fix(ton2 - cntoff1/4);          % 结束索引：下一次导通前1/20周期
-Vcetop = mean(ch2(start_idx:end_idx));       % 使用均值
+Vcetop = median(ch2(start_idx:end_idx));       % 使用均值
 
 %% Vcemax计算
 % 找出最大值

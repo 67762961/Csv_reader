@@ -1,4 +1,4 @@
-Output_Path = "C:\_TOOLS\Csv_reader_TestLib\compare";
+Output_Path = 'C:\_TOOLS\Csv_reader_TestLib\compare';
 dataname = '400自主通用与定制器件对比-门极-开通';
 Title_1 = dataname;
 Title_2 = '2100V 200A 25℃';
@@ -135,6 +135,8 @@ writetable(T_out, OutFile, ...
     'WriteVariableNames', true, ... % 写入变量名（作为第 5 行）
     'Delimiter', 'comma', ...
     'Encoding', 'GBK');
+
+TemplateCopy(Output_Path, dataname);
 
 fprintf('\n数据对齐完成 %s 已生成\n', Out_name);
 winopen(Output_Path);

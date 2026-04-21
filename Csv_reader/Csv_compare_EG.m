@@ -72,7 +72,6 @@ CSV_2 = readtable(filename_2, 'NumHeaderLines', 20);
 Time_1 = double(CSV_1{:, 1}) - Time_fix_1;
 Time_2 = double(CSV_2{:, 1}) - Time_fix_2;
 
-% 确保时间列为列向量
 Time_1 = Time_1(:);
 Time_2 = Time_2(:);
 
@@ -89,8 +88,12 @@ dt_min = min(dt1, dt2); % 取精度最高的间隔
 t_uniform = (t_start : dt_min : t_end)';
 
 % --- 6. 数据插值对齐 ---
-data1 = double(CSV_1{:, 2:end});
-data2 = double(CSV_2{:, 2:end});
+raw_data1 = double(CSV_1{:, 2:end});
+raw_data2 = double(CSV_2{:, 2:end});
+
+% 如果 Ch_labels_1 = [1, 3, 6]，则提取 raw_data1 的第 1、3、6 列
+data1 = raw_data1(:, Ch_labels_1);
+data2 = raw_data2(:, Ch_labels_2);
 
 % 预分配插值结果数组
 numPoints = length(t_uniform);
@@ -111,10 +114,11 @@ for i = 1:numCols2
 end
 
 % --- 7. 准备输出 ---
-New_VarNames_1 = VarNames_CSV1 + "-" + Back_name_1;
-New_VarNames_2 = VarNames_CSV2 + "-" + Back_name_2;
+% 动态截取变量名，确保名字数量和提取的列数一致
+New_VarNames_1 = VarNames_CSV1(1:numCols1) + "-" + Back_name_1;
+New_VarNames_2 = VarNames_CSV2(1:numCols2) + "-" + Back_name_2;
 
-% 将插值后的矩阵转换为表格（自动处理多列）
+% 将插值后的矩阵转换为表格
 data1_table = array2table(data1_interp, 'VariableNames', New_VarNames_1);
 data2_table = array2table(data2_interp, 'VariableNames', New_VarNames_2);
 

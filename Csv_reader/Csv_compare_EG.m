@@ -8,11 +8,13 @@ Title_4 = '020-400定制-3T2-常温-2100-2.5-5';
 File_Path_1 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260317";
 filename_1 = fullfile(File_Path_1, "BOOSTT2_014_ALL.csv");
 Back_name_1 = "通用";
+Ch_labels_1 = [1, 2, 3, 4, 5];
 VarNames_CSV1 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
 
 File_Path_2 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260416";
 filename_2 = fullfile(File_Path_2, "BOOSTT2_035_ALL.csv");
 Back_name_2 = "定制";
+Ch_labels_2 = [1, 2, 3, 4, 5];
 VarNames_CSV2 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
 
 % Ton2 Toff1 Tdvdt_fs Tdidt_rs
@@ -21,7 +23,6 @@ target_2 = 'Ton2';
 
 % 模式配置参数
 Para_mode.Chmode        = 'setch';
-Para_mode.Ch_labels     = [1, 2, 3, 4, 5];
 Para_mode.Smooth_Win    = [1, 1, 1, 1, 1];
 Para_mode.Eonmode       = [0.1, 0.02, 0.2, 0];
 Para_mode.Eoffmode      = [0.1, 0.02, 0.2, 0];
@@ -49,11 +50,13 @@ num = '000';
 Out_name = [dataname, '.csv'];
 
 % --- 计算文件 1 时延 ---
+Para_mode.Ch_labels = Ch_labels_1(1:5);
 [~,output_backup] = countE(filename_1, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
 idx1 = strcmp(Full_title, target_1);
 Time_fix_1 = output_backup(idx1);
 
 % --- 计算文件 2 时延 ---
+Para_mode.Ch_labels = Ch_labels_2(1:5);
 [~,output_backup] = countE(filename_2, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
 idx2 = strcmp(Full_title, target_2);
 Time_fix_2 = output_backup(idx2);

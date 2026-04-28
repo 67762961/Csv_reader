@@ -6,7 +6,6 @@ toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
 cntoff1 = ton2 - toff1;
-cnton2 = toff2 - ton2;
 
 %% Vcetop Ictop 计算
 % 计算Vcetop

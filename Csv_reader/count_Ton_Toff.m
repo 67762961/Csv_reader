@@ -20,19 +20,9 @@ PicBottom = -15;
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-toff90_indices = find(ch1(toff1:-1:ton1) > 0.9 * Vgetop, 1, 'first');
-toff90 = toff1 - toff90_indices + 1; % 转换为原始索引
-if isempty(toff90_indices)
-    print('关断时Vge=90%的时间点识别失败')
-    error('关断时Vge=90%的时间点识别失败')
-end
+toff90 = toff1;
 
-ton10_indices = find(ch1(ton2:-1:toff1) < 0.8 * Vgebase, 1, 'first');
-ton10 = ton2 - ton10_indices + 1;
-if isempty(ton10_indices)
-    print('开通时Vge=10%的时间点识别失败')
-    error('开通时Vge=10%的时间点识别失败')
-end
+ton10 = ton2;
 
 %% ================ 开通时间（Ton）计算与绘图 ================
 % 索引边界保护

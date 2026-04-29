@@ -109,13 +109,13 @@ end
 
 %% 电流采信选择
 for i = 1:4
-    if Id_flag==0
+    if Id_flag==0 && I_meature == "Id"
         I_meature = "Ic";
         
-    elseif Ic_flag ==0
+    elseif Ic_flag ==0 && I_meature == "Ic"
         I_meature = "I_fuzai";
         
-    elseif Fuzaimode == 0
+    elseif Fuzaimode == 0 && I_meature == "I_fuzai"
         I_meature = "Id";
     end
     % disp(['I_meature = ', I_meature]);

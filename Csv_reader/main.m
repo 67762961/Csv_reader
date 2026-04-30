@@ -110,7 +110,7 @@ end
 for datend_fix = datend:-1:1
     switch NameStyle
         case "横河"
-            EndFile = fullfile(location, [tablename, datend_fix, '_00000.csv']);        % 修正路径拼接
+            EndFile = fullfile(location, [tablename, datend_fix, '.csv']);        % 修正路径拼接
         case "泰克"
             EndFile = (fullfile(location, [tablename, '_', num2str(datend_fix, '%03d'), '_ALL.csv']));
         case "飞仕得"
@@ -141,7 +141,7 @@ for tablenum=datstart:datend
     num = num2str(tablenum, '%03d');
     switch NameStyle
         case '横河'
-            filename = fullfile(location, [tablename, num, '_00000.csv']);        % 修正路径拼接
+            filename = fullfile(location, [tablename, num, '.csv']);        % 修正路径拼接
         case '泰克'
             filename = fullfile(location, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
         case '飞仕得'

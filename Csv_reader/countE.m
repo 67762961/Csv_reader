@@ -1,4 +1,4 @@
-function [output,output_backup] = countE(filename,num,path,dataname,DPI,title,Full_title,Para_mode)
+function [output,output_backup] = countE(filename,num,path,dataname,DPI,title,Full_title,Para_mode,Wave_count)
 
 % 模式配置参数
 Chmode      = Para_mode.Chmode   ;       %% 通道分配模式
@@ -107,6 +107,7 @@ end
 nspd = time(2)-time(1); % 时间分辨率
 cntVge = indzer(Vge,Vgeth,fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
 % Vge过零点次数记录
+cntVge = cntVge(Wave_count(1):Wave_count(2)); % 仅保留指定范围内的过零点索引
 cntsw = length(cntVge);
 
 % fprintf('\n Vge开通阈值位置有%d处 \n',cntsw)

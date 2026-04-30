@@ -34,6 +34,7 @@ gate_didt   = Para_mode.gate_didt;      %% didt上升沿检测允许回落阈值
 gate_Erec   = Para_mode.gate_Erec;      %% Erec下降沿检测允许抬升阈值
 Vgeth       = Para_mode.Vgeth    ;      %% 门极开关门槛值 依据器件手册提供 一般为0
 NameStyle   = Para_mode.NameStyle;      %% 文件命名风格     横河 或 泰克
+CSV_mode    = Para_mode.CSV_mode;       %% CSV波形类型 影响文件读取方式和过零点判断 目前支持 "zmk" 特殊模式
 
 % 输出数据配置
 titlemode   = Para_out.titlemode;
@@ -128,9 +129,13 @@ for datend_fix = datend:-1:1
 end
 
 cnt=1;
-data1=zeros(datend-datstart+1,Data_num);
-data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
-
+if CSV_mode == "窄脉宽"
+    data1=zeros(2*(datend-datstart+1),Data_num);
+    data_backup=zeros(2*(datend-datstart+1),length(titleMap('Full')));
+else
+    data1=zeros(datend-datstart+1,Data_num);
+    data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
+end
 for tablenum=datstart:datend
     % 拼接 名称
     num = num2str(tablenum, '%03d');
@@ -145,7 +150,13 @@ for tablenum=datstart:datend
             error('未识别的文件命名风格 请检查NameStyle参数 仅支持 横河 、 泰克 两种');
     end
     
-    [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode);
+    if CSV_mode == "窄脉宽"
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,6]);
+        cnt=cnt+1;
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,4]);
+    else
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,6]);
+    end
     cnt=cnt+1;
 end
 % 表头修正

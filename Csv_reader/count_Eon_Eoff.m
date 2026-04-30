@@ -59,8 +59,8 @@ if isempty(SWoff_start_indices)
 end
 
 %关断结束时刻寻找
-SWoff_stop_indices = find(Ic(valid_range) <= Ictop*Eoffmode(2), 1, 'first');
-SWoff_stop = valid_range(1) + SWoff_stop_indices - 1;
+SWoff_stop_indices = find(Ic(SWoff_start+1:valid_range(end)) <= Ictop*Eoffmode(2), 1, 'first');
+SWoff_stop = SWoff_start+1 + SWoff_stop_indices - 1;
 for i = 1:18
     if ~isempty(SWoff_stop_indices)
         if(i~=1)

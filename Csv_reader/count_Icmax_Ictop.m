@@ -144,7 +144,7 @@ if Ic_flag
     plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
     text(time(Icmax_idx+fix(PicLength*0.05)),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
 else
-    Icmax = 0;
+    Icmax = "   ";
 end
 
 ylim([PicBottom, PicTop]);

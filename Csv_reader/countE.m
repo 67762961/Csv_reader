@@ -175,8 +175,13 @@ if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
     Ic = Ic - meanIc; % 电流探头较零
     ch3 = ch3 - meanIc;
     fprintf('       Ic偏移量:%03fA\n',meanIc);
+    Icfix = -1*meanIc;
+elseif (Ch_labels(3)==0)
+    meanIc = "  ";
+    Icfix = meanIc;
 else
     meanIc = 0;
+    Icfix = meanIc;
 end
 
 static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
@@ -185,8 +190,13 @@ if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
     Id = Id - meanId;% 电流探头较零
     ch5 = ch5 - meanId;
     fprintf('       Id偏移量:%03fA\n',meanId);
+    Idfix = -1*meanId;
+elseif (Ch_labels(5)==0)
+    meanId = "  ";
+    Idfix = meanId;
 else
     meanId = 0;
+    Idfix = meanId;
 end
 
 I_FixBar = [static_ic_interval(1),static_ic_interval(end), static_id_interval(1),static_id_interval(end)];
@@ -270,13 +280,16 @@ end
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0)
     % ====================== Prr/Erec计算 ======================
     [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
-    
-    % ====================== 反向恢复极限功率 ======================
-    Delta_Ic = Icmax - Ictop;
-    PrrPROMAX = Delta_Ic * Vdmax / 1000; % 单位kW
 else
     Prrmax = " ";
     Erec = " ";
+end
+
+% ====================== 反向恢复极限功率 ======================
+if (Ch_labels(3)~=0) && (Ch_labels(4)~=0)
+    Delta_Ic = Icmax - Ictop;
+    PrrPROMAX = Delta_Ic * Vdmax / 1000; % 单位kW
+else
     PrrPROMAX = " ";
 end
 
@@ -307,8 +320,8 @@ dataMap('脉宽长(us)') = Length_ton0;
 dataMap('  CSV  ') = str2double(num);
 dataMap('Ic(A)') = Ictop;
 dataMap('Icmax(A)') = Icmax;
-dataMap('Icfix(A)') = -1*meanIc;
-dataMap('Idfix(A)') = -1*meanId;
+dataMap('Icfix(A)') = Icfix;
+dataMap('Idfix(A)') = Idfix;
 dataMap('Eon(mJ)') = Eon;
 dataMap('Eoff(mJ)') = Eoff;
 dataMap('VceMAX(V)') = Vcemax;

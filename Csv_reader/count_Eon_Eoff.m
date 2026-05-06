@@ -1,14 +1,35 @@
-function [Eon,Eoff] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode)
+function [Eon,Eoff] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode,Wave_count)
 
-cntsw = length(cntVge);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
+
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量
 %开通起始时刻寻找
-valid_range = ton2:toff2;
+valid_range = Posedge;
 SWon_start_indices = find(Ic(valid_range) >= max(Eonmode(1)*Ictop, 3), 1, 'first');
 SWon_start = valid_range(1) + SWon_start_indices - 1;
 if isempty(SWon_start_indices)
@@ -50,7 +71,7 @@ Eon = sum(Pon(windowEon(2:end)) .* dt); % 梯形积分法（mJ）
 
 %% ====================== 关断损耗计算（Eoff） ======================
 %关断起始时刻寻找
-valid_range = toff1:ton2;
+valid_range = Negedge;
 SWoff_start_indices = find(Vce(valid_range) >= Vcetop*Eoffmode(1), 1, 'first');
 SWoff_start = valid_range(1) + SWoff_start_indices - 1;
 if isempty(SWoff_start_indices)

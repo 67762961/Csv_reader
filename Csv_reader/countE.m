@@ -157,7 +157,7 @@ else
 end
 
 % ====================== dv/dt计算模块 ======================
-[dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge);
+[dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count);
 
 Tdvdt_fall_start = time(Tdvdt(1));
 Tdvdt_fall_end = time(Tdvdt(2));

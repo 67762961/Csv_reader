@@ -131,8 +131,10 @@ if (cntsw ~= 6) && (cntsw ~= 4)
     error('过零点判断异常')
 end
 
+%% 修正门极控制时间
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
 
+%% 探头偏置校正（静态区间均值）
 [I_FixBar, meanIc, Icfix, meanId, Idfix] = count_I_Fix(Ic,Id,Ch_labels,I_Fix,cntVge);
 
 Id = Id - meanId;% 电流探头较零

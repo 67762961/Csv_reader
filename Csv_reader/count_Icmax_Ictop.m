@@ -158,7 +158,7 @@ if Ic_flag
     Icmax_idx = Posedge(1) + Icmax_idx - 1;
     % 绘图
     plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
-    text(time(Icmax_idx+fix(PicLength*0.05)),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
+    text(time(Icmax_idx),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
 else
     Icmax = "   ";
 end

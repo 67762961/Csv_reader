@@ -160,46 +160,15 @@ else
     Toff0 = "  ";
 end
 
-% 计算第一开通时长
-cnton1 = toff1-ton1;
 % 计算两次脉冲间关断时长
 cntoff1 = ton2-toff1;
 
-%% 探头偏置校正（静态区间均值）
-if (I_Fix(1) == 1) || (I_Fix(2) == 1)
-    fprintf('探头自动较零:\n');
-end
-static_ic_interval = fix(toff1 + cntoff1/2) : fix(ton2 - cntoff1/4);
-if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
-    meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
-    Ic = Ic - meanIc; % 电流探头较零
-    ch3 = ch3 - meanIc;
-    fprintf('       Ic偏移量:%03fA\n',meanIc);
-    Icfix = -1*meanIc;
-elseif (Ch_labels(3)==0)
-    meanIc = "  ";
-    Icfix = meanIc;
-else
-    meanIc = 0;
-    Icfix = meanIc;
-end
+[I_FixBar, meanIc, Icfix, meanId, Idfix] = count_I_Fix(Ic,Id,Ch_labels,I_Fix,cntVge);
 
-static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
-if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
-    meanId = mean(Id(static_id_interval));
-    Id = Id - meanId;% 电流探头较零
-    ch5 = ch5 - meanId;
-    fprintf('       Id偏移量:%03fA\n',meanId);
-    Idfix = -1*meanId;
-elseif (Ch_labels(5)==0)
-    meanId = "  ";
-    Idfix = meanId;
-else
-    meanId = 0;
-    Idfix = meanId;
-end
-
-I_FixBar = [static_ic_interval(1),static_ic_interval(end), static_id_interval(1),static_id_interval(end)];
+Id = Id - meanId;% 电流探头较零
+ch5 = ch5 - meanId;
+Ic = Ic - meanIc; % 电流探头较零
+ch3 = ch3 - meanIc;
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================

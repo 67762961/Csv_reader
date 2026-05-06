@@ -1,17 +1,28 @@
-function [ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge)
+function [ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(time,ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge,Wave_count)
 
-cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-cntoff1=ton2-toff1;
-cnton1=toff1-ton1;
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
+
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
 
 % 探头偏置校正（静态区间均值）
 if (I_Fix(1) == 1) || (I_Fix(2) == 1)
     fprintf('探头自动较零:\n');
 end
-static_ic_interval = fix(toff1 + cntoff1/2) : fix(ton2 - cntoff1/4);
+static_ic_interval = fix(Negedge(1) + length(Negedge)/2) : fix(Negedge(end) - length(Negedge)/4);
 if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
     meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
     fprintf('       Ic偏移量:%03fA\n',meanIc);
@@ -26,7 +37,7 @@ else
     Icfix = meanIc;
 end
 
-static_id_interval = fix(ton1 + cnton1/2) : fix(toff1 - cnton1/4);
+static_id_interval = fix(Posedge(1) + length(Posedge)/2) : fix(Posedge(end) - length(Posedge)/4);
 if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
     meanId = mean(Id(static_id_interval));
     fprintf('       Id偏移量:%03fA\n',meanId);

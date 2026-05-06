@@ -137,13 +137,13 @@ end
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
 
 %% 探头偏置校正（静态区间均值）
-[ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge);
+[ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(time,ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge,Wave_count);
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar);
+[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar,Wave_count);
 
-[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge);
+[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,Wave_count);
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================

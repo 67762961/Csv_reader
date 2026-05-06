@@ -1,11 +1,27 @@
-function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar)
+function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar,Wave_count)
 
 cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
-cntoff1 = ton2-toff1;
+
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
+
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
+
 
 Id_flag = Ch_labels(5);
 Ic_flag = Ch_labels(3);
@@ -16,9 +32,9 @@ static_id_interval = I_FixBar(3):I_FixBar(4);
 %%
 nspd = (time(2)-time(1))*1e9;
 
-PicLength = abs(toff2 - ton1);
-PicStart = max(ton1-fix(1*PicLength/4),1);
-PicEnd = min(toff2+fix(2*PicLength/4),length(time));
+PicLength = cntVge(end) - cntVge(1);
+PicStart = max(cntVge(1)-fix(1*PicLength/4),1);
+PicEnd = min(cntVge(end)+fix(2*PicLength/4),length(time));
 PicLength = abs(PicEnd - PicStart);
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
@@ -35,9 +51,9 @@ figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 
 if Ic_flag~=0
     % 传统计算法Ictop
-    current_interval = toff1 : ton2;    % 定义电流峰值搜索区间
+    current_interval = Negedge;    % 定义电流峰值搜索区间
     [~, max_idx] = max(ch3(current_interval));          % 快速定位峰值索引 max_idx为相对索引
-    tIcm = toff1 + max_idx - 1;          % 转换为全局索引
+    tIcm = Negedge(1) + max_idx - 1;          % 转换为全局索引
     window_start = max(1, tIcm - fix(30/nspd));        % 窗口起始：峰值前30ns（最小为1）
     Ictop = mean(ch3(window_start:tIcm));               % 计算均值
     % Ic校准线及标注
@@ -78,7 +94,7 @@ end
 
 % 若有I_Fuzai输入 则以静态区I_Fuzai值作为
 if Fuzaimode~=0
-    static_Fuzai_interval = fix(toff1 + cntoff1/4) : fix(ton2 - cntoff1/4);
+    static_Fuzai_interval = fix(Negedge(1) + length(Negedge)/4) : fix(Negedge(end) - length(Negedge)/4);
     FuzaiTop =  mean(I_fuzai(static_Fuzai_interval)); % 关断时平均Ifuzai作为Ictop
     
     % FuzaiTop水平线及标注
@@ -138,8 +154,8 @@ end
 
 %% Icmax 计算
 if Ic_flag
-    [Icmax, Icmax_idx] = max(ch3(ton2:toff2));
-    Icmax_idx = ton2 + Icmax_idx - 1;
+    [Icmax, Icmax_idx] = max(ch3(Posedge));
+    Icmax_idx = Posedge(1) + Icmax_idx - 1;
     % 绘图
     plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
     text(time(Icmax_idx+fix(PicLength*0.05)),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');

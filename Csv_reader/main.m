@@ -151,11 +151,11 @@ for tablenum=datstart:datend
     end
     
     if CSV_mode == "窄脉宽"
-        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,6]);
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,1]);
         cnt=cnt+1;
-        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,4]);
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,3]);
     else
-        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,6]);
+        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,2]);
     end
     cnt=cnt+1;
 end

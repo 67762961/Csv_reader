@@ -268,10 +268,6 @@ Length_ton0 = fix((time(cntVge(2))-time(cntVge(1)))*1e7 + 0.5)/10;
 % ====================== 纯C方案的Irms辅助计算 ======================
 if (INTG_I2t~=0)
     I_cap = data0(:,INTG_I2t+1);        % 电容电流
-    static_ic_interval = fix(ton2 - cntoff1*3/10) : fix(ton2 - cntoff1/10);
-    meanI_cap = mean(I_cap(static_ic_interval)); % 关断时平均电流视为参考0电流
-    I_cap = I_cap - meanI_cap; % 电流探头较零
-    fprintf('       I_cap:%03fA\n',meanI_cap);
     [I2dt_on,I2dt_off] = count_i2dt(num,DPI,time,I_cap,Ictop,path,dataname,cntVge,Tdidt);
 else
     I2dt_on = " ";

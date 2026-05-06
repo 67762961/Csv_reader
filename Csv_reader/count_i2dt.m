@@ -5,6 +5,12 @@ ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 toff2=cntVge(cntsw);
 cnton1 = toff1-ton1;
+cntoff1 = ton2-toff1;
+
+static_ic_interval = fix(toff1 + cntoff1/2) : fix(ton2 - cntoff1/4);
+meanI_cap = mean(I_cap(static_ic_interval)); % 关断时平均电流视为参考0电流
+I_cap = I_cap - meanI_cap; % 电流探头较零
+fprintf('       I_cap:%03fA\n',meanI_cap);
 
 valid_rise_start = Tdidt(1);
 valid_fall_start = Tdidt(3);

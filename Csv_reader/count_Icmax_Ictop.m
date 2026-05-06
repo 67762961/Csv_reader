@@ -35,7 +35,6 @@ nspd = (time(2)-time(1))*1e9;
 PicLength = cntVge(end) - cntVge(1);
 PicStart = max(cntVge(1)-fix(1*PicLength/4),1);
 PicEnd = min(cntVge(end)+fix(2*PicLength/4),length(time));
-PicLength = abs(PicEnd - PicStart);
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
 PicTop = fix(1.1*Max);

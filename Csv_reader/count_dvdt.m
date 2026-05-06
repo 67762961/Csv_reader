@@ -17,23 +17,6 @@ switch Wave_count(2)
     case 3
         Negedge = cntVge(6):length(time);
 end
-switch Wave_count(1)
-    case 1
-        Posedge = cntVge(1):cntVge(2);
-    case 2
-        Posedge = cntVge(3):cntVge(4);
-    case 3
-        Posedge = cntVge(5):cntVge(6);
-end
-
-switch Wave_count(2)
-    case 1
-        Negedge = cntVge(2):cntVge(3);
-    case 2
-        Negedge = cntVge(4):cntVge(5);
-    case 3
-        Negedge = cntVge(6):length(time);
-end
 
 %% 关断dv/dt计算模块
 % 阈值定义

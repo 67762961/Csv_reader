@@ -17,14 +17,7 @@ switch Wave_count(2)
     case 3
         Negedge = cntVge(6):length(time);
 end
-switch Wave_count(1)
-    case 1
-        Posedge = cntVge(1):cntVge(2);
-    case 2
-        Posedge = cntVge(3):cntVge(4);
-    case 3
-        Posedge = cntVge(5):cntVge(6);
-end
+
 
 %% ====================== 开通损耗计算（Eon） ======================
 % 初始化并计算开通损耗能量

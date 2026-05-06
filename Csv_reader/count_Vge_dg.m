@@ -1,10 +1,22 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,DPI,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,DPI,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num,Wave_count)
 
-cntsw = length(cntVge);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
-cnton2 = toff2-ton2;
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
+
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
 
 %% 对管门极监测
 Vge_dg_mean = mean(Vge_dg);
@@ -16,9 +28,9 @@ Vge_dg_max = max(Vge_dg);
 Vge_dg_min = min(Vge_dg);
 
 % 开通段绘图
-PicLength = fix(cnton2/2);
-PicStart = ton2 - fix(PicLength/3);
-PicEnd =  ton2 + fix(2*PicLength/3);
+PicLength = min(length(Posedge), length(Negedge));
+PicStart = Posedge(1) - fix(PicLength/3);
+PicEnd =  Posedge(1) + fix(2*PicLength/3);
 
 [Vge_dg_on_max , cemax_idx_on_max]= max(Vge_dg(PicStart:PicEnd));
 [Vge_dg_on_min , cemax_idx_on_min]= min(Vge_dg(PicStart:PicEnd));
@@ -43,7 +55,7 @@ text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.87, ['V_g_e对管
 text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.80, ['V_g_e对管onmin=',num2str(Vge_dg_on_min),'V'], 'FontSize',13);
 
 nspd = (time(2)-time(1))*1e9;
-barlength = fix(cnton2/50);
+barlength = fix(PicLength/50);
 bartimelength = barlength * nspd;
 barheight = 0.01*PicHeight;
 line([time(cemax_idx_on_max-barlength),time(cemax_idx_on_max+barlength)],[Vge_dg_on_max,Vge_dg_on_max],'Color', [0.5 0.5 0.5]);
@@ -57,8 +69,8 @@ title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-on']);
 grid on;
 
 % 关断段绘图
-PicStart = toff1 - fix(PicLength/3);
-PicEnd =  toff1 + fix(2*PicLength/3);
+PicStart = Negedge(1) - fix(PicLength/3);
+PicEnd =  Negedge(1) + fix(2*PicLength/3);
 
 [Vge_dg_off_max , cemax_idx_off_max]= max(Vge_dg(PicStart:PicEnd));
 [Vge_dg_off_min , cemax_idx_off_min]= min(Vge_dg(PicStart:PicEnd));

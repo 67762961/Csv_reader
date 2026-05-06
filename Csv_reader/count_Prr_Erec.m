@@ -1,18 +1,21 @@
-function [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge)
+function [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge,Wave_count)
 
-cntsw = length(cntVge);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
 
 %% ====================== Prr/Erec计算 ======================
 % 峰值功率计算
-Prr_start_indices = find(ch5(ton2:toff2) > 0, 1, 'first');
-Prr_start = ton2 + Prr_start_indices - 1;
+Prr_start_indices = find(ch5(Posedge) > 0, 1, 'first');
+Prr_start = Posedge(1) + Prr_start_indices - 1;
 
-Prr_end_indices = find(ch4(Prr_start:toff2) > Vcetop*0.9, 1, 'first');
+Prr_end_indices = find(ch4(Prr_start:Posedge(end)) > Vcetop*0.9, 1, 'first');
 Prr_end = Prr_start + Prr_end_indices - 1;
-
-% fprintf('%f\n%f\n%f\n',ton2,Prr_start_indices,Prr_end_indices);
 
 % 恢复起始点：首次从负到正跨越零点的位置
 Erec_start = Prr_start;
@@ -28,7 +31,7 @@ t_Prrmax = Prr_start + max_idx - 1;
 Prrmax = Prrmax_value / 1000;  % 单位kW
 
 % 动态窗口生成
-window_di = t_Prrmax: fix(toff2)+gate_Erec;
+window_di = t_Prrmax: fix(Posedge(end))+gate_Erec;
 
 for i = window_di
     % fprintf('采样点 %f\n',Prr(i))

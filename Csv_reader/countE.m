@@ -207,7 +207,7 @@ Vge_dg_min = strings(1,length(DuiguanCH));
 
 for gd_num = 1:length(DuiguanCH)
     if (DuiguanCH(gd_num)~=0)
-        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,DPI,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num));
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,DPI,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num),Wave_count);
     else
         Vge_dg_mean(gd_num) = " ";
         Vge_dg_max(gd_num) = " ";
@@ -217,7 +217,7 @@ end
 
 if (Ch_labels(5)~=0) && (Ch_labels(4)~=0)
     % ====================== Prr/Erec计算 ======================
-    [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge);
+    [Prrmax,Erec] = count_Prr_Erec(num,DPI,gate_Erec,time,Id,Vd,ch4,ch5,Ictop,Vcetop,path,dataname,cntVge,Wave_count);
 else
     Prrmax = " ";
     Erec = " ";

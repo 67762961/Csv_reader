@@ -93,12 +93,16 @@ Vce = smoothdata(ch2, 'movmedian', Smooth_Win(2), 'omitnan');
 % 集电极电流：移动平均滤波
 if (Ch_labels(3)~=0)
     Ic = smoothdata(ch3, 'movmean', Smooth_Win(3));
+else
+    Ic = time*0;
 end
 
 Vd = smoothdata(ch4, 'movmedian', Smooth_Win(4), 'omitnan');
 
 if (Ch_labels(5)~=0)
     Id = smoothdata(ch5, 'movmean', Smooth_Win(5));
+else
+    Id = time*0;
 end
 
 %% 开通关断区块划分
@@ -106,8 +110,6 @@ end
 % Vge过零点位置记录
 nspd = time(2)-time(1); % 时间分辨率
 cntVge = indzer(Vge,Vgeth,fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
-% Vge过零点次数记录
-cntVge = cntVge(Wave_count(1):Wave_count(2)); % 仅保留指定范围内的过零点索引
 cntsw = length(cntVge);
 
 if (cntsw ~= 6) && (cntsw ~= 4)
@@ -135,12 +137,7 @@ end
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
 
 %% 探头偏置校正（静态区间均值）
-[I_FixBar, meanIc, Icfix, meanId, Idfix] = count_I_Fix(Ic,Id,Ch_labels,I_Fix,cntVge);
-
-Id = Id - meanId;% 电流探头较零
-ch5 = ch5 - meanId;
-Ic = Ic - meanIc; % 电流探头较零
-ch3 = ch3 - meanIc;
+[ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge);
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
@@ -303,7 +300,7 @@ dataMap('Toff0') = Toff0;
 dataMap('Ton1') = time(cntVge(cntsw-3));
 dataMap('Toff1') = time(cntVge(cntsw-2));
 dataMap('Ton2') = time(cntVge(cntsw-1));
-dataMap('Toff2') = time(cntVge(cntsw));;
+dataMap('Toff2') = time(cntVge(cntsw));
 dataMap('T_Vcemax') = T_Vcemax;
 dataMap('T_Vdmax') = T_Vdmax;
 dataMap('Tdvdt_fs') = Tdvdt_fall_start;

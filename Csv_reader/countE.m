@@ -176,9 +176,9 @@ if (Ch_labels(3)~=0)
     Tdidt_fall_start = time(Tdidt(3));
     Tdidt_fall_end = time(Tdidt(4));
     
-elseif (Fuzaimode ~= 0)
+elseif (Fuzaimode ~= 0 || (Ch_labels(5)~=0))
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt,Wave_count);
     
     Tdidt_rise_start = " ";
     Tdidt_rise_end = " ";

@@ -1,28 +1,41 @@
-function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Vgetop,Vgebase,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt)
+function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Vgetop,Vgebase,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt,Wave_count)
 
-cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
+
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
 
 valid_rise_start = Td_dt(1);
 valid_rise_end = Td_dt(2);
 valid_fall_start = Td_dt(3);
 valid_fall_end = Td_dt(4);
 
-PicLength = fix((ton2 - toff1)*2/11);
-PicStart = max(ton1 - PicLength,1);
-PicEnd = min(toff2 + 2*PicLength,length(ch1));
+% 绘图
+PicLength = cntVge(end) - cntVge(1);
+PicStart = max(cntVge(1)-fix(1*PicLength/5),1);
+PicEnd = min(cntVge(end)+fix(1*PicLength/5),length(time));
 PicLength = PicEnd - PicStart;
 PicTop = 20;
 PicBottom = -15;
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
-toff90 = toff1;
+toff90 = Negedge(1);
 
-ton10 = ton2;
+ton10 = Posedge(1);
 
 %% ================ 开通时间（Ton）计算与绘图 ================
 % 索引边界保护

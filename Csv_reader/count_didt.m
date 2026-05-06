@@ -1,11 +1,23 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge)
+function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge,Wave_count)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
+switch Wave_count(1)
+    case 1
+        Posedge = cntVge(1):cntVge(2);
+    case 2
+        Posedge = cntVge(3):cntVge(4);
+    case 3
+        Posedge = cntVge(5):cntVge(6);
+end
 
-cntsw = length(cntVge);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
+switch Wave_count(2)
+    case 1
+        Negedge = cntVge(2):cntVge(3);
+    case 2
+        Negedge = cntVge(4):cntVge(5);
+    case 3
+        Negedge = cntVge(6):length(time);
+end
 
 % 阈值定义
 Ic_a  = I_Fuizai_on * didtmode(1)/100;
@@ -20,8 +32,8 @@ valid_rise_end = [];
 
 % 动态窗口生成
 % max_search_length = fix(2*min(cnton1,cnton2));
-Window_Start = ton2;
-Window_Stop = toff2;
+Window_Start = Posedge(1);
+Window_Stop = Posedge(end);
 window_di = Window_Start : Window_Stop;
 
 % 状态机主循环
@@ -101,8 +113,8 @@ grid on;
 
 % ====================== 关断时刻 di/dt计算模块 ======================
 % 动态窗口生成
-Window_Start = toff1;
-Window_Stop = ton2;
+Window_Start = Negedge(1);
+Window_Stop = Negedge(end);
 window_di = Window_Start : Window_Stop;
 
 valid_fall_start = [];

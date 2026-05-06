@@ -166,10 +166,10 @@ Tdvdt_rise_end = time(Tdvdt(4));
 
 if (Ch_labels(3)~=0)
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge);
+    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge,Wave_count);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt,Wave_count);
     
     Tdidt_rise_start = time(Tdidt(1));
     Tdidt_rise_end = time(Tdidt(2));

@@ -41,9 +41,16 @@ else
 end
 
 % 绘图
-PicLength = cntVge(end) - cntVge(1);
-PicStart = max(cntVge(1)-fix(1*PicLength/5),1);
-PicEnd = min(cntVge(end)+fix(1*PicLength/5),length(time));
+if Wave_count(1) == 3 && Wave_count(2) == 2
+    PicStart = cntVge(3);
+    PicEnd = cntVge(6);
+else
+    PicStart = cntVge(1);
+    PicEnd = cntVge(end);
+end
+PicLength = PicEnd - PicStart;
+PicStart = max(PicStart-fix(1*PicLength/5),1);
+PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));
 % PicLength = abs(PicEnd - PicStart);
 PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
 PicBottom = -fix(0.1*PicTop);

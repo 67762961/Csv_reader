@@ -24,9 +24,16 @@ valid_fall_start = Td_dt(3);
 valid_fall_end = Td_dt(4);
 
 % 绘图
-PicLength = cntVge(end) - cntVge(1);
-PicStart = max(cntVge(1)-fix(1*PicLength/5),1);
-PicEnd = min(cntVge(end)+fix(1*PicLength/5),length(time));
+if Wave_count(1) == 3 && Wave_count(2) == 2
+    PicStart = cntVge(3);
+    PicEnd = cntVge(6);
+else
+    PicStart = cntVge(1);
+    PicEnd = cntVge(end);
+end
+PicLength = PicEnd - PicStart;
+PicStart = max(PicStart-fix(1*PicLength/5),1);
+PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));
 PicLength = PicEnd - PicStart;
 PicTop = 20;
 PicBottom = -15;

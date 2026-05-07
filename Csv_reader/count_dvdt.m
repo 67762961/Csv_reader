@@ -20,8 +20,6 @@ end
 
 %% 关断dv/dt计算模块
 % 阈值定义
-V_10 = Vcetop * 0.1;
-V_90 = Vcetop * 0.9;
 V_a  = Vcetop * dvdtmode(3)/100;
 V_b  = Vcetop * dvdtmode(4)/100;
 V_c  = Vcetop * dvdtmode(1)/100;
@@ -30,54 +28,30 @@ V_d  = Vcetop * dvdtmode(2)/100;
 % 电压上升沿阈值检测
 window_dv = Negedge;
 
-rise_start_idx = find(Vce(window_dv) >= V_10, 1, 'first') + window_dv(1) - 1;
-if isempty(rise_start_idx)
+rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
+if isempty(rise_start_idx_a)
     print('dvdt_off起始点识别失败')
     error('dvdt_off起始点识别失败')
 end
-rise_end_idx  = find(Vce(rise_start_idx:window_dv(end)) >= V_90, 1, 'first') + rise_start_idx - 1;
-if isempty(rise_end_idx)
+rise_end_idx_b  = find(Vce(rise_start_idx_a:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx_a - 1;
+if isempty(rise_end_idx_b)
     print('dvdt_off结束点识别失败')
     error('dvdt_off结束点识别失败')
 end
-delta_time = time(rise_end_idx) - time(rise_start_idx); % 时间差(ns转秒)
+delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
 
-
-if (rise_end_idx - rise_start_idx)>0
-    dvdt = (Vce(rise_end_idx ) - Vce(rise_start_idx)) / delta_time * 1e-6;
+if (rise_end_idx_b - rise_start_idx_a)>0
+    dvdt_a_b = (Vce(rise_end_idx_b) - Vce(rise_start_idx_a)) / delta_time_a_b * 1e-6;
 else
-    dvdt = 0;
+    dvdt_a_b = 0;
     warning('dvdt_off段落识别出现异常')
 end
 
-if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
-    rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
-    if isempty(rise_start_idx_a)
-        print('dvdt_off起始点识别失败')
-        error('dvdt_off起始点识别失败')
-    end
-    rise_end_idx_b  = find(Vce(rise_start_idx:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx - 1;
-    if isempty(rise_end_idx_b)
-        print('dvdt_off结束点识别失败')
-        error('dvdt_off结束点识别失败')
-    end
-    delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
-    
-    if (rise_end_idx - rise_start_idx)>0
-        dvdt_a_b = (Vce(rise_end_idx_b) - Vce(rise_start_idx_a)) / delta_time_a_b * 1e-6;
-    else
-        dvdt_a_b = 0;
-        warning('dvdt_off段落识别出现异常')
-    end
-else
-    dvdt_a_b = 0;
-end
-
 % 保持原始绘图逻辑
-Riselength = fix((rise_end_idx - rise_start_idx));
+Riselength = fix((rise_end_idx_b - rise_start_idx_a));
 Half_PicLength = fix(Riselength/abs(dvdtmode(3)-dvdtmode(4))*100);
-PicStart = rise_start_idx - Half_PicLength;
-PicEnd = rise_end_idx + Half_PicLength;
+PicStart = rise_start_idx_a - Half_PicLength;
+PicEnd = rise_end_idx_b + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.05*Vcemax);
@@ -88,31 +62,23 @@ figure('Position', [320, 240, 1600/DPI, 600/DPI]);
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');
 hold on;
-plot(time(rise_start_idx:rise_end_idx ), Vce(rise_start_idx:rise_end_idx ), 'r', 'LineWidth',1.5);
-plot(time(rise_start_idx), Vce(rise_start_idx), 'ro', 'MarkerFaceColor','r');
-plot(time(rise_end_idx ), Vce(rise_end_idx ), 'ro', 'MarkerFaceColor','r');
+plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'r', 'LineWidth',1.5);
+plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','r');
+plot(time(rise_end_idx_b ), Vce(rise_end_idx_b ), 'ro', 'MarkerFaceColor','r');
 plot(time(window_dv(1)), Vce(window_dv(1)),'o','color','blue');
 plot(time(window_dv(end)), Vce(window_dv(end)),'o','color','blue');
-text(time(fix(rise_start_idx+0.03*PicLength)),Vce(rise_start_idx),['Vce{10}=',num2str(Vce(rise_start_idx)),'V',],'FontSize',13);
-text(time(fix(rise_end_idx+0.03*PicLength)),Vce(rise_end_idx),['Vce{90}=',num2str(Vce(rise_end_idx )),'V'],'FontSize',13);
+text(time(fix(rise_start_idx_a+0.03*PicLength)),Vce(rise_start_idx_a),['Vce{10}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
+text(time(fix(rise_end_idx_b+0.03*PicLength)),Vce(rise_end_idx_b),['Vce{90}=',num2str(Vce(rise_end_idx_b )),'V'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Vcetop = ',num2str(fix(Vcetop+0.5)),'V'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt = ',num2str(fix(dvdt+0.5)),'V/us'],'FontSize',13);
-if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
-    plot(time(rise_start_idx_a:rise_end_idx_b ), Vce(rise_start_idx_a:rise_end_idx_b ), 'g', 'LineWidth',1.5);
-    plot(time(rise_start_idx_a), Vce(rise_start_idx_a), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_start_idx_a+3),Vce(rise_start_idx_a),['Vce{',num2str(dvdtmode(3)),'}=',num2str(Vce(rise_start_idx_a)),'V',],'FontSize',13);
-    plot(time(rise_end_idx_b), Vce(rise_end_idx_b), 'ro', 'MarkerFaceColor','g');
-    text(time(rise_end_idx_b+3),Vce(rise_end_idx_b),['Vce{',num2str(dvdtmode(4)),'}=',num2str(Vce(rise_end_idx_b)),'V',],'FontSize',13);
-    text(time(rise_start_idx-fix(Riselength*0.9)),Vcemax*0.7,['dv/dt(',num2str(dvdtmode(3)),'-',num2str(dvdtmode(4)),') = ',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
-end
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['dv/dt = ',num2str(fix(dvdt_a_b+0.5)),'V/us'],'FontSize',13);
+
 % 坐标轴设置
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A dv/dt(off)计算']);
 grid on;
 
-% 若启动额外dvdt计算 则dvdt表格输出按照手动设置组输出
-dvdt_off = (dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90) * dvdt_a_b + (dvdtmode(3) == 10 && dvdtmode(4) == 90) * dvdt;
+dvdt_off = dvdt_a_b;
 
 %% 开通dv/dt计算模块
 window_dv = Posedge;
@@ -172,8 +138,5 @@ close(gcf);
 hold off
 
 dvdt_on = dvdt_c_d;
-if dvdtmode(3) ~= 10 || dvdtmode(4) ~= 90
-    Tdvdt = [fall_start_idx_c,fall_end_idx_d,rise_start_idx_a,rise_end_idx_b];
-else
-    Tdvdt = [fall_start_idx_c,fall_end_idx_d,rise_start_idx,rise_end_idx];
-end
+
+Tdvdt = [fall_start_idx_c,fall_end_idx_d,rise_start_idx_a,rise_end_idx_b];

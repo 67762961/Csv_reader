@@ -169,6 +169,10 @@ title_fix = strrep(title_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)
 
 
 %% 数据写入
+if CSV_mode == "窄脉宽"
+    datnum = datnum*2;
+end
+
 totalRows = 10 + size(data1, 1);
 % 总列数: 取所有单元格数组和数值矩阵中最大的列数
 maxCols = max([length(Paratable1), length(Paradata1), ...

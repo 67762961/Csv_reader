@@ -136,6 +136,7 @@ else
     data1=zeros(datend-datstart+1,Data_num);
     data_backup=zeros(datend-datstart+1,length(titleMap('Full')));
 end
+
 for tablenum=datstart:datend
     % 拼接 名称
     num = num2str(tablenum, '%03d');
@@ -152,8 +153,7 @@ for tablenum=datstart:datend
     
     if CSV_mode == "窄脉宽"
         [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,3]);
-        cnt=cnt+1;
-        [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,1]);
+        [data1(datend-datstart+1+cnt,:),data_backup(datend-datstart+1+cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,1]);
     else
         [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,2]);
     end

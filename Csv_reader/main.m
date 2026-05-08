@@ -115,6 +115,8 @@ for datend_fix = datend:-1:1
             EndFile = (fullfile(location, [tablename, '_', num2str(datend_fix, '%03d'), '_ALL.csv']));
         case "飞仕得"
             EndFile = fullfile(location, [tablename, '-I(',num2str(Frist + step*(datend_fix-1)),')', '-',num2str(datend_fix),'.csv']);     % 修正路径拼接
+        case '麦克信'
+            EndFile = (fullfile(location, [tablename, '_', num2str(datend_fix, '%03d'), '.csv']));
     end
     if ~exist(EndFile,'file') % 存在性检测方法
         % fprintf('未找到%s文件 自动检测更小数字%d\n', EndFile,datend_fix);
@@ -147,6 +149,8 @@ for tablenum=datstart:datend
             filename = fullfile(location, [tablename, '_', num, '_ALL.csv']);     % 修正路径拼接
         case '飞仕得'
             filename = fullfile(location, [tablename, '-I(',num2str(Frist + step*(str2double(num)-1)),')', '-',num2str(tablenum),'.csv']);     % 修正路径拼接
+        case '麦克信'
+            filename = fullfile(location, [tablename, '_', num, '.csv']);     % 修正路径拼接
         otherwise
             error('未识别的文件命名风格 请检查NameStyle参数 仅支持 横河 、 泰克 两种');
     end

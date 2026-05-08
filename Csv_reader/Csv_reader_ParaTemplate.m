@@ -28,7 +28,7 @@ Para_mode.gate_didt     = [3,30];                           %% didt回落容错 
 Para_mode.gate_Erec     = 30;                               %% Erec抬升容错     Erec计算中下降沿过滤毛刺阈值
 Para_mode.Vgeth         = 3;                                %% 门极开关阈值     Vge开通阈值 器件手册提供 实在不行可以填0
 Para_mode.CSV_mode      = "双脉冲";                         %% CSV波形类型 影响文件读取方式和过零点判断 目前支持 "窄脉宽" 特殊模式
-Para_mode.NameStyle     = "泰克";                           %% 文件命名风格     横河 或 泰克
+Para_mode.NameStyle     = "泰克";                           %% 文件命名风格     横河 或 泰克 或 麦克信
 
 % 输出数据配置
 Para_out.titlemode      = 'Standard';                            %% Full Standard 2Duiguan Manual

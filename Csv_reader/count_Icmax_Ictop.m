@@ -31,10 +31,17 @@ static_id_interval = I_FixBar(3):I_FixBar(4);
 
 %%
 nspd = (time(2)-time(1))*1e9;
-
-PicLength = cntVge(end) - cntVge(1);
-PicStart = max(cntVge(1)-fix(1*PicLength/4),1);
-PicEnd = min(cntVge(end)+fix(2*PicLength/4),length(time));
+% 绘图
+if Wave_count(1) == 3 && Wave_count(2) == 2
+    PicStart = cntVge(3);
+    PicEnd = cntVge(6);
+else
+    PicStart = cntVge(1);
+    PicEnd = cntVge(end);
+end
+PicLength = PicEnd - PicStart;
+PicStart = max(PicStart-fix(1*PicLength/5),1);
+PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
 PicTop = fix(1.1*Max);

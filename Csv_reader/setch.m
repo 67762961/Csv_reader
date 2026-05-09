@@ -65,11 +65,10 @@ for i = 1:length(Ch_labels)
         if (Fuzaimode ~= 0)
             fprintf('    %s(通道%d)', "I_fuzai", abs(Fuzaimode));
         end
-        if (DuiguanCH(1) ~= 0)
-            fprintf('    %s(通道%d)', "Vge_dg", DuiguanCH(1));
-        end
-        if (DuiguanCH(2) ~= 0)
-            fprintf('    %s(通道%d)', "Vge_dg", DuiguanCH(2));
+        for j = 1:length(DuiguanCH)
+            if (DuiguanCH(j) ~= 0)
+                fprintf('    %s(通道%d)', ['Vge_dg', num2str(j)], DuiguanCH(j));
+            end
         end
         fprintf('\n');
     end

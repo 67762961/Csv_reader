@@ -93,6 +93,7 @@ else
     fprintf('       titlemode "%s" 无效，已使用默认模式 "%s"\n' , titlemode, defaultMode); % 输出
     title = titleMap(defaultMode);
 end
+title_Full = titleMap('Full');
 
 dpiValue = winqueryreg('HKEY_CURRENT_USER', 'Control Panel\Desktop\WindowMetrics', 'AppliedDPI');
 dpiValue = double(dpiValue);
@@ -171,6 +172,13 @@ title_fix = strrep(title_fix, 'Vgedg2max(V)', ['VgemaxT',num2str(DuiguanMARK(2))
 title_fix = strrep(title_fix, 'Vgedg2min(V)', ['VgeminT',num2str(DuiguanMARK(2)),'(V)']);
 title_fix = strrep(title_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)),'(V)']);
 
+title_Full_fix = strrep(title_Full    , 'Vgedg1max(V)', ['VgemaxT',num2str(DuiguanMARK(1)),'(V)']);
+title_Full_fix = strrep(title_Full_fix, 'Vgedg1min(V)', ['VgeminT',num2str(DuiguanMARK(1)),'(V)']);
+title_Full_fix = strrep(title_Full_fix, 'Vgedg1mean(V)',['VgemeanT',num2str(DuiguanMARK(1)),'(V)']);
+title_Full_fix = strrep(title_Full_fix, 'Vgedg2max(V)', ['VgemaxT',num2str(DuiguanMARK(2)),'(V)']);
+title_Full_fix = strrep(title_Full_fix, 'Vgedg2min(V)', ['VgeminT',num2str(DuiguanMARK(2)),'(V)']);
+title_Full_fix = strrep(title_Full_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)),'(V)']);
+
 
 %% 数据写入
 if CSV_mode == "窄脉宽"
@@ -199,7 +207,7 @@ combinedCell(10, 1:length(title)) = title_fix;          % A10
 % 将数值矩阵 data1 转换为单元格数组，并放入第11行及后续行
 combinedCell(11:size(data1,1)+10, 1:size(data1,2)) = num2cell(data1); % A11开始
 
-combinedCell(21+datnum, 1:length(titleMap('Full'))) = titleMap('Full');
+combinedCell(21+datnum, 1:length(titleMap('Full'))) = title_Full_fix; % A(21+datnum)
 combinedCell(22+datnum:size(data_backup,1)+21+datnum, 1:size(data_backup,2)) = num2cell(data_backup);
 
 % 使用 writecell 一次性写入整个单元格数组到

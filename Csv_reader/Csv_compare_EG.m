@@ -51,13 +51,13 @@ Out_name = [dataname, '.csv'];
 
 % --- 计算文件 1 时延 ---
 Para_mode.Ch_labels = Ch_labels_1(1:5);
-[~,output_backup] = countE(filename_1, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
+[~,output_backup] = countE(filename_1, num, Output_Path, dataname, DPI, title, Full_title, Para_mode,[3,2]);
 idx1 = strcmp(Full_title, target_1);
 Time_fix_1 = output_backup(idx1);
 
 % --- 计算文件 2 时延 ---
 Para_mode.Ch_labels = Ch_labels_2(1:5);
-[~,output_backup] = countE(filename_2, num, Output_Path, dataname, DPI, title, Full_title, Para_mode);
+[~,output_backup] = countE(filename_2, num, Output_Path, dataname, DPI, title, Full_title, Para_mode,[3,2]);
 idx2 = strcmp(Full_title, target_2);
 Time_fix_2 = output_backup(idx2);
 

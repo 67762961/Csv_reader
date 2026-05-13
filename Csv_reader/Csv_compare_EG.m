@@ -9,13 +9,14 @@ File_Path_1 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260317";
 filename_1 = fullfile(File_Path_1, "BOOSTT2_014_ALL.csv");
 Back_name_1 = "通用";
 Ch_labels_1 = [1, 2, 3, 4, 5];
-VarNames_CSV1 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
+VarNames_CSV1 =["Vge", "Vce", "Ic", "Vd", "Id"];
 
 File_Path_2 =  "C:\_TOOLS\Csv_reader_TestLib\compare\20260416";
 filename_2 = fullfile(File_Path_2, "BOOSTT2_035_ALL.csv");
 Back_name_2 = "定制";
 Ch_labels_2 = [1, 2, 3, 4, 5];
-VarNames_CSV2 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
+% VarNames_CSV2 =["Vge", "Vce", "Ic", "Vd", "Id","Vdg"];
+VarNames_CSV2 =["Vge", "Vce", "Ic", "Vd", "Id"];
 
 % Ton2 Toff1 Tdvdt_fs Tdidt_rs
 target_1 = 'Ton2';
@@ -105,18 +106,19 @@ data1_interp = zeros(numPoints, numCols1);
 data2_interp = zeros(numPoints, numCols2);
 
 % 对每个数据列进行插值
-for i = 1:numCols1
-    data1_interp(:, i) = interp1(Time_1, data1(:, i), t_uniform, 'nearest', 'extrap');
+for i = 1:length(Ch_labels_1)
+    data1_interp(:, i) = interp1(Time_1, raw_data1(:, Ch_labels_1(i)), t_uniform, 'nearest', 'extrap');
 end
 
-for i = 1:numCols2
-    data2_interp(:, i) = interp1(Time_2, data2(:, i), t_uniform, 'nearest', 'extrap');
+for i = 1:length(Ch_labels_2)
+    data2_interp(:, i) = interp1(Time_2, raw_data2(:, Ch_labels_2(i)), t_uniform, 'nearest', 'extrap');
 end
 
 % --- 7. 准备输出 ---
 % 动态截取变量名，确保名字数量和提取的列数一致
-New_VarNames_1 = VarNames_CSV1(1:numCols1) + "-" + Back_name_1;
-New_VarNames_2 = VarNames_CSV2(1:numCols2) + "-" + Back_name_2;
+% 根据Ch_labels_1和Ch_labels_2的数量来取对应的变量名
+New_VarNames_1 = VarNames_CSV1(1:length(Ch_labels_1)) + "-" + Back_name_1;
+New_VarNames_2 = VarNames_CSV2(1:length(Ch_labels_2)) + "-" + Back_name_2;
 
 % 将插值后的矩阵转换为表格
 data1_table = array2table(data1_interp, 'VariableNames', New_VarNames_1);

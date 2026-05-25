@@ -89,6 +89,14 @@ plot(time(cemax_idx_off_min), Vge_dg_off_min, 'ro', 'MarkerFaceColor','r');
 text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.94, ['V_g_e对管mean=',num2str(Vge_dg_mean),'V'], 'FontSize',13);
 text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.87, ['V_g_e对管offmax =',num2str(Vge_dg_off_max),'V'], 'FontSize',13);
 text(time(PicStart+fix(PicLength*0.03)), PicBottom+PicHeight*0.80, ['V_g_e对管offmin =',num2str(Vge_dg_off_min),'V'], 'FontSize',13);
+
+bartimelength = barlength * nspd;
+barheight = 0.01*PicHeight;
+line([time(cemax_idx_off_max-barlength),time(cemax_idx_off_max+barlength)],[Vge_dg_off_max,Vge_dg_off_max],'Color', [0.5 0.5 0.5]);
+line([time(cemax_idx_off_max-barlength),time(cemax_idx_off_max-barlength)],[Vge_dg_off_max-barheight, Vge_dg_off_max+barheight], 'Color', [0.5 0.5 0.5]);
+line([time(cemax_idx_off_max+barlength),time(cemax_idx_off_max+barlength)],[Vge_dg_off_max-barheight, Vge_dg_off_max+barheight], 'Color', [0.5 0.5 0.5]);
+text(time(cemax_idx_off_max+barlength+5), Vge_dg_off_max, [num2str(2*bartimelength),'ns'], 'FontSize', 9,'Color', [0.5 0.5 0.5]);
+
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vge-dg-off']);

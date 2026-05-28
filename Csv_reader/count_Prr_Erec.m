@@ -63,13 +63,11 @@ PicTop = 2;
 PicBottom = -1;
 PicHeight = PicTop - PicBottom;
 
-% 反向恢复能量计算（向量化优化）
-valid_indices = Erec_start:PicEnd;
-Erec = sum(Prr(valid_indices(2:end)) .* diff(time(valid_indices))) * 1000; % 单位mJ
-
+% 反向恢复能量计算
 valid_time = time(Erec_start:PicEnd);       % 时间向量 [s]
 valid_Prr = Prr(Erec_start:PicEnd);         % 瞬时功率向量 [W]
-Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1e3];
+Erec_t = [zeros(Erec_start-1,1); cumtrapz(valid_time, valid_Prr) * 1000];
+Erec = Erec_t(Erec_stop);
 
 close all;
 figure('Position', [560, 240, 800/DPI, 600/DPI]);

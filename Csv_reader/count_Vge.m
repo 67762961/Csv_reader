@@ -38,6 +38,11 @@ for gate = 0.90:-0.01:0.5
     end
 end
 
+if isempty(toff90_1_indices)
+    print('门极1次关断点识别失败')
+    error('门极1次关断点识别失败')
+end
+
 for gate = 0.90:-0.01:0.5
     toff90_2_indices = find(ch1(toff2:-1:ton2) > gate * Vgetop, 1, 'first');
     toff90_2 = toff2 - toff90_2_indices + 1; % 转换为原始索引
@@ -53,6 +58,11 @@ for gate = 0.90:-0.01:0.5
         end
         break;
     end
+end
+
+if isempty(toff90_2_indices)
+    print('门极2次关断点识别失败')
+    error('门极2次关断点识别失败')
 end
 
 %% ================ Vgebase计算 ================
@@ -83,6 +93,11 @@ for gate = 0.90:-0.01:0.5
     end
 end
 
+if isempty(ton10_2_indices)
+    print('门极2次开通点识别失败')
+    error('门极2次开通点识别失败')
+end
+
 for gate = 0.90:-0.01:0.5
     ton10_1_indices = find(ch1(ton1:-1:1) < gate * Vgebase, 1, 'first');
     ton10_1 = ton1 - ton10_1_indices + 1;
@@ -98,6 +113,11 @@ for gate = 0.90:-0.01:0.5
         end
         break;
     end
+end
+
+if isempty(ton10_1_indices)
+    print('门极1次开通点识别失败')
+    error('门极1次开通点识别失败')
 end
 
 if length(cntVge) > 4
@@ -140,6 +160,10 @@ if length(cntVge) > 4
 end
 
 %% ================ 更新cntVge ================
+% disp(ton10_1);
+% disp(toff90_1);
+% disp(ton10_2);
+% disp(toff90_2);
 cntVge(cntsw-3) = ton10_1;
 cntVge(cntsw-2) = toff90_1;
 cntVge(cntsw-1) = ton10_2;

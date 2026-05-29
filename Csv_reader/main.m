@@ -160,7 +160,7 @@ for tablenum=datstart:datend
         [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,3]);
         [data1(datend-datstart+1+cnt,:),data_backup(datend-datstart+1+cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[1,1]);
     else
-        if NameStyle == "飞仕得"
+        if (NameStyle == "飞仕得") || (NameStyle == "麦克信")
             [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[2,1]);
         else
             [data1(cnt,:),data_backup(cnt,:)]=countE(filename,num,location,dataname,DPI,title,Full_title,Para_mode,[3,2]);

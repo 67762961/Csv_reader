@@ -233,7 +233,7 @@ else
 end
 
 % ====================== 脉宽长度计算 ======================
-if Wave_count(1) == 3 && Wave_count(1) == 2
+if Wave_count(1) == 3 && Wave_count(2) == 2
     Length_ton0 = fix((time(cntVge(2))-time(cntVge(1)))*1e7 + 0.5)/10;
 else
     Length_ton0 = fix(abs(time(cntVge(Wave_count(1)*2-1))-time(cntVge(Wave_count(2)*2)))*1e7 + 0.5)/10;

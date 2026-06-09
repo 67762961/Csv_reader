@@ -76,18 +76,18 @@ Vgebase = median(ch1_base);
 % disp(['Vge高电平电压Vgetop = ', num2str(Vgetop), ' V']);
 % disp(['Vge低电平电压Vgebase = ', num2str(Vgebase), ' V']);
 
-for gate = 0.90:-0.01:0.5
+for gate = 0.00:0.01:2
     ton10_2_indices = find(ch1(ton2:-1:toff1) < gate * Vgebase, 1, 'first');
     ton10_2 = ton2 - ton10_2_indices + 1;
     if isempty(ton10_2_indices)
-        % fprintf('第二开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+        % fprintf('第二开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
     else
         if gate < 0.9
             if Print_Flag == 0
                 fprintf('门极判断点阈值调整:\n');
                 Print_Flag = 1;
             end
-            fprintf('       第二开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+            fprintf('       第二开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
         end
         break;
     end
@@ -98,18 +98,18 @@ if isempty(ton10_2_indices)
     error('门极2次开通点识别失败')
 end
 
-for gate = 0.90:-0.01:0.5
+for gate = 0.00:0.01:2
     ton10_1_indices = find(ch1(ton1:-1:1) < gate * Vgebase, 1, 'first');
     ton10_1 = ton1 - ton10_1_indices + 1;
     if isempty(ton10_1_indices)
-        % fprintf('第一开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+        % fprintf('第一开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
     else
         if gate < 0.9
             if Print_Flag == 0
                 fprintf('门极判断点阈值调整:\n');
                 Print_Flag = 1;
             end
-            fprintf('       第一开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+            fprintf('       第一开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
         end
         break;
     end

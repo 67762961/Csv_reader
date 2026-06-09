@@ -82,7 +82,7 @@ for gate = 0.00:0.01:2
     if isempty(ton10_2_indices)
         % fprintf('第二开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
     else
-        if gate < 0.9
+        if gate > 0
             if Print_Flag == 0
                 fprintf('门极判断点阈值调整:\n');
                 Print_Flag = 1;
@@ -104,7 +104,7 @@ for gate = 0.00:0.01:2
     if isempty(ton10_1_indices)
         % fprintf('第一开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
     else
-        if gate < 0.9
+        if gate > 0
             if Print_Flag == 0
                 fprintf('门极判断点阈值调整:\n');
                 Print_Flag = 1;

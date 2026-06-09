@@ -168,3 +168,8 @@ cntVge(cntsw-3) = ton10_1;
 cntVge(cntsw-2) = toff90_1;
 cntVge(cntsw-1) = ton10_2;
 cntVge(cntsw)   = toff90_2;
+
+if (cntsw == 4)
+    cntVge(5) = length(ch1);
+    cntVge(6) = length(ch1);
+end

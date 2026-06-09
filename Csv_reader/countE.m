@@ -135,6 +135,7 @@ end
 
 %% 修正门极控制时间
 [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
+cntsw = length(cntVge);
 
 %% 探头偏置校正（静态区间均值）
 [ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(time,ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge,Wave_count);

@@ -34,7 +34,7 @@ nspd = (time(2)-time(1))*1e9;
 % 绘图
 if Wave_count(1) == 3 && Wave_count(2) == 2
     PicStart = cntVge(3);
-    PicEnd = cntVge(6);
+    PicEnd = length(time);
 else
     PicStart = cntVge(1);
     PicEnd = cntVge(end);

@@ -20,8 +20,8 @@ end
 
 %% Vcetop Ictop 计算
 % 计算Vcetop
-start_idx = fix(Negedge(1) + length(Negedge)/4);         % 起始索引：关断后1/20周期
-end_idx = fix(Negedge(end) - length(Negedge)/4);          % 结束索引：下一次导通前1/20周期
+start_idx = fix(Negedge(1) + 3*length(Negedge)/8);         % 起始索引：关断后1/20周期
+end_idx = fix(Negedge(end) - 3*length(Negedge)/8);          % 结束索引：下一次导通前1/20周期
 Vcetop = median(ch2(start_idx:end_idx));       % 使用均值
 
 %% Vcemax计算
@@ -76,7 +76,7 @@ if 0 ~= Vd_flag
     text(time(fix(dmax_idx)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
 end
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(fix(cemax_idx)), Vcemax + 0.15*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);

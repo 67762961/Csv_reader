@@ -62,17 +62,17 @@ if Ic_flag~=0
     tIcm = Negedge(1) + max_idx - 1;          % 转换为全局索引
     window_start = max(1, tIcm - fix(30/nspd));        % 窗口起始：峰值前30ns（最小为1）
     Ictop = mean(ch3(window_start:tIcm));               % 计算均值
+    % Ic绘图
+    plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
+    hold on;
+    plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
+    text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
     % Ic校准线及标注
     barStart = static_ic_interval(1);
     barEnd = static_ic_interval(end);
     line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
     line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
-    % Ic绘图
-    plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
-    hold on;
-    plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
-    text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
 end
 
 % 若有Id输入 则以静态区Id值作为Ictop

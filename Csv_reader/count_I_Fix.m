@@ -22,7 +22,7 @@ end
 if (I_Fix(1) == 1) || (I_Fix(2) == 1)
     fprintf('探头自动较零:\n');
 end
-static_ic_interval = fix(Negedge(1) + length(Negedge)/2) : fix(Negedge(end) - length(Negedge)/4);
+static_ic_interval = fix(Negedge(1) + 3*length(Negedge)/8) : fix(Negedge(end) - 3*length(Negedge)/8);
 if (Ch_labels(3)~=0) && (I_Fix(1) == 1)
     meanIc = mean(Ic(static_ic_interval)); % 关断时平均电流视为参考0电流
     fprintf('       Ic偏移量:%03fA\n',meanIc);
@@ -37,7 +37,7 @@ else
     Icfix = meanIc;
 end
 
-static_id_interval = fix(Posedge(1) + length(Posedge)/2) : fix(Posedge(end) - length(Posedge)/4);
+static_id_interval = fix(Posedge(1) + 3*length(Posedge)/8) : fix(Posedge(end) - 3*length(Posedge)/8);
 if (Ch_labels(5)~=0) && (I_Fix(2) == 1)
     meanId = mean(Id(static_id_interval));
     fprintf('       Id偏移量:%03fA\n',meanId);

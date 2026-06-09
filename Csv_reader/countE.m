@@ -233,8 +233,11 @@ else
 end
 
 % ====================== 脉宽长度计算 ======================
-Length_ton0 = fix((time(cntVge(2))-time(cntVge(1)))*1e7 + 0.5)/10;
-
+if Wave_count(1) == 3 && Wave_count(1) == 2
+    Length_ton0 = fix((time(cntVge(2))-time(cntVge(1)))*1e7 + 0.5)/10;
+else
+    Length_ton0 = fix(abs(time(cntVge(Wave_count(1)*2-1))-time(cntVge(Wave_count(2)*2)))*1e7 + 0.5)/10;
+end
 % ====================== 纯C方案的Irms辅助计算 ======================
 if (INTG_I2t~=0)
     I_cap = data0(:,INTG_I2t+1);        % 电容电流

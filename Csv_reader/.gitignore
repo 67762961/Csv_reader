@@ -13,7 +13,8 @@
 !count_Ton_Toff.m
 !count_Vcemax_Vcetop.m
 !count_Vge_dg.m
-!count_Vge.m
+!count_Cnt_Vge.m
+!count_Cnt_Vce_Ic.m
 !countE.m
 !Csv_reader_ParaTemplate.m
 !Csv_compare_EG.m

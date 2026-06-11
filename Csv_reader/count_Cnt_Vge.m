@@ -1,4 +1,4 @@
-function [Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge)
+function [Vgetop,Vgebase,cntVge] = count_Cnt_Vge(ch1,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);

@@ -134,7 +134,7 @@ if (cntsw ~= 6) && (cntsw ~= 4)
 end
 
 %% 修正门极控制时间
-[Vgetop,Vgebase,cntVge] = count_Vge(ch1,cntVge);
+[Vgetop,Vgebase,cntVge] = count_Cnt_Vge(ch1,cntVge);
 cntsw = length(cntVge);
 
 %% 探头偏置校正（静态区间均值）

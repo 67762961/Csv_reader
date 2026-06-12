@@ -140,13 +140,13 @@ cntsw = length(cntVge);
 [cntVce,RangeVce] = count_Cnt_Vce(time,ch2,cntVge,DPI,Wave_count);
 
 %% 探头偏置校正（静态区间均值）
-[ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(time,ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVge,Wave_count);
+[ch3,Ic,ch5,Id,I_FixBar,Icfix,Idfix] = count_I_Fix(time,ch3,Ic,ch5,Id,Ch_labels,I_Fix,cntVce,Wave_count);
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVce,RangeVce,I_FixBar,Wave_count);
+[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
 
-[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVce,RangeVce,Wave_count);
+[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count);
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================
@@ -172,7 +172,7 @@ if (Ch_labels(3)~=0)
     [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge,Wave_count);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdidt',Tdidt,Wave_count);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,'Tdidt',Tdidt,Wave_count);
     
     Tdidt_rise_start = time(Tdidt(1));
     Tdidt_rise_end = time(Tdidt(2));
@@ -181,7 +181,7 @@ if (Ch_labels(3)~=0)
     
 elseif (Fuzaimode ~= 0 || (Ch_labels(5)~=0))
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,'Tdvdt',Tdvdt,Wave_count);
+    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,'Tdvdt',Tdvdt,Wave_count);
     
     Tdidt_rise_start = " ";
     Tdidt_rise_end = " ";
@@ -210,7 +210,7 @@ Vge_dg_min = strings(1,length(DuiguanCH));
 
 for gd_num = 1:length(DuiguanCH)
     if (DuiguanCH(gd_num)~=0)
-        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,DPI,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVge,DuiguanMARK(gd_num),Wave_count);
+        [Vge_dg_mean(gd_num),Vge_dg_max(gd_num),Vge_dg_min(gd_num)] = count_Vge_dg(num,DPI,time,Vge_dg(:,gd_num),Ictop,path,dataname,cntVce,DuiguanMARK(gd_num),Wave_count);
     else
         Vge_dg_mean(gd_num) = " ";
         Vge_dg_max(gd_num) = " ";

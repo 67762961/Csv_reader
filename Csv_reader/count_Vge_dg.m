@@ -1,21 +1,21 @@
-function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,DPI,time,Vge_dg,Ictop,path,dataname,cntVge,gd_num,Wave_count)
+function [Vge_dg_mean,Vge_dg_max,Vge_dg_min] = count_Vge_dg(num,DPI,time,Vge_dg,Ictop,path,dataname,cntVce,gd_num,Wave_count)
 
 switch Wave_count(1)
     case 1
-        Posedge = cntVge(1):cntVge(2);
+        Posedge = cntVce(1):cntVce(2);
     case 2
-        Posedge = cntVge(3):cntVge(4);
+        Posedge = cntVce(3):cntVce(4);
     case 3
-        Posedge = cntVge(5):cntVge(6);
+        Posedge = cntVce(5):cntVce(6);
 end
 
 switch Wave_count(2)
     case 1
-        Negedge = cntVge(2):cntVge(3);
+        Negedge = cntVce(2):cntVce(3);
     case 2
-        Negedge = cntVge(4):cntVge(5);
+        Negedge = cntVce(4):cntVce(5);
     case 3
-        Negedge = cntVge(6):length(time);
+        Negedge = cntVce(6):length(time);
 end
 
 %% 对管门极监测

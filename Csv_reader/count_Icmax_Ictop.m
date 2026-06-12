@@ -1,25 +1,32 @@
-function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVce,RangeVce,I_FixBar,Wave_count)
+function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
 
-cntsw = length(cntVce);
-toff1=cntVce(cntsw-2);
-ton2=cntVce(cntsw-1);
+cntsw = length(cntVge);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
 
 switch Wave_count(1)
     case 1
-        Posedge = cntVce(1):cntVce(2);
+        Posedge = cntVge(1):cntVge(2);
+        posedge = cntVce(1):cntVce(2);
     case 2
-        Posedge = cntVce(3):cntVce(4);
+        Posedge = cntVge(3):cntVge(4);
+        posedge = cntVce(3):cntVce(4);
+        
     case 3
-        Posedge = cntVce(5):cntVce(6);
+        Posedge = cntVge(5):cntVge(6);
+        posedge = cntVce(5):cntVce(6);
 end
 
 switch Wave_count(2)
     case 1
-        Negedge = cntVce(2):cntVce(3);
+        Negedge = cntVge(2):cntVge(3);
+        negedge = cntVce(2):cntVce(3);
     case 2
-        Negedge = cntVce(4):cntVce(5);
+        Negedge = cntVge(4):cntVge(5);
+        negedge = cntVce(4):cntVce(5);
     case 3
-        Negedge = cntVce(6):length(time);
+        Negedge = cntVge(6):length(time);
+        negedge = cntVce(6):length(time);
 end
 
 
@@ -33,6 +40,7 @@ static_id_interval = I_FixBar(3):I_FixBar(4);
 nspd = (time(2)-time(1))*1e9;
 PicStart = RangeVce(1);
 PicEnd = RangeVce(2);
+PicLength = PicEnd - PicStart;
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
 PicTop = fix(1.1*Max);
@@ -91,7 +99,7 @@ end
 
 % 若有I_Fuzai输入 则以静态区I_Fuzai值作为
 if Fuzaimode~=0
-    static_Fuzai_interval = fix(Negedge(1) + length(Negedge)/4) : fix(Negedge(end) - length(Negedge)/4);
+    static_Fuzai_interval = fix(negedge(1) + length(negedge)/4) : fix(negedge(end) - length(negedge)/4);
     FuzaiTop =  mean(I_fuzai(static_Fuzai_interval)); % 关断时平均Ifuzai作为Ictop
     
     % FuzaiTop水平线及标注
@@ -151,11 +159,14 @@ end
 
 %% Icmax 计算
 if Ic_flag
-    [Icmax, Icmax_idx] = max(ch3(Posedge));
-    Icmax_idx = Posedge(1) + Icmax_idx - 1;
+    Length_Range_Icmax = posedge(end)-Posedge(1);
+    Range_Icmax = Posedge(1) - Length_Range_Icmax : posedge(end) + Length_Range_Icmax;
+    Range_Icmax = max(Range_Icmax(1),1) : min(Range_Icmax(end), length(time));
+    [Icmax, Icmax_idx] = max(ch3(Range_Icmax));
+    Icmax_idx = Range_Icmax(1) + Icmax_idx - 1;
     % 绘图
     plot(time(Icmax_idx), Icmax, 'ro', 'MarkerFaceColor','r');
-    text(time(Icmax_idx),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
+    text(time(Icmax_idx + fix(0.03 * PicLength)),Icmax,['Icmax=',num2str(Icmax),'A'], 'FontSize',13,'Color','r');
 else
     Icmax = "   ";
 end

@@ -1,4 +1,4 @@
-function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Vgetop,Vgebase,Ictop,path,dataname,cntVge,Type_Td_dt,Td_dt,Wave_count)
+function [tdon,tr,tdoff,tf,Vgetop,Vgebase] = count_Ton_Toff(num,DPI,time,ch1,ch_,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,Type_Td_dt,Td_dt,Wave_count)
 
 switch Wave_count(1)
     case 1
@@ -24,13 +24,13 @@ valid_fall_start = Td_dt(3);
 valid_fall_end = Td_dt(4);
 
 % 绘图
-if Wave_count(1) == 3 && Wave_count(2) == 2
-    PicStart = cntVge(3);
-    PicEnd = length(time);
-else
-    PicStart = cntVge(1);
-    PicEnd = cntVge(end);
-end
+Range(1) = max(min(Wave_count(1)*2-1,Wave_count(2)*2) - 1,1);
+Range(2) = min(max(Wave_count(1)*2-1,Wave_count(2)*2) + 1,length(cntVge));
+
+PicLength = abs(cntVce(Range(2)) - cntVge(Range(1)))*1.2;
+PicStart = max(cntVge(Range(1)) - fix(PicLength/10),1);
+PicEnd = min(cntVce(Range(2)) + fix(PicLength/10),length(time));
+
 PicLength = PicEnd - PicStart;
 PicStart = max(PicStart-fix(1*PicLength/5),1);
 PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));

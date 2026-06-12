@@ -85,7 +85,7 @@ end
 
 % 信号滤波（抑制噪声）
 % 门极电压：移动中值滤波
-Vge = smoothdata(ch1, 'movmedian', Smooth_Win(1));
+Vge = smoothdata(ch1, 'movmean', Smooth_Win(1));
 
 % 集射电压：移动中值滤波
 Vce = smoothdata(ch2, 'movmedian', Smooth_Win(2), 'omitnan');
@@ -134,7 +134,7 @@ if (cntsw ~= 6) && (cntsw ~= 4)
 end
 
 %% 修正门极控制时间
-[Vgetop,Vgebase,cntVge] = count_Cnt_Vge(ch1,cntVge);
+[Vgetop,Vgebase,cntVge] = count_Cnt_Vge(Vge,cntVge);
 cntsw = length(cntVge);
 
 [cntVce,RangeVce] = count_Cnt_Vce(time,ch2,cntVge,DPI,Wave_count);

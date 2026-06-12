@@ -4,6 +4,10 @@ cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 
+if Wave_count(1) == Wave_count(2)
+    Wave_count(2) = max(1,Wave_count(2)-1);
+end
+
 switch Wave_count(1)
     case 1
         Posedge = cntVge(1):cntVge(2);
@@ -76,11 +80,12 @@ end
 
 % 若有Id输入 则以静态区Id值作为Ictop
 if Id_flag~=0
-    Idbase =  mean(ch5(static_ic_interval)); % 关断时平均Id作为Ictop
+    Range_Idbase = fix(negedge(1) + 3*length(negedge)/8) : fix(negedge(end) - 3*length(negedge)/8);
+    Idbase =  mean(ch5(Range_Idbase)); % 关断时平均Id作为Ictop
     
     % Idbase水平线及标注
-    barStart = static_ic_interval(1);
-    barEnd = static_ic_interval(end);
+    barStart = Range_Idbase(1);
+    barEnd = Range_Idbase(end);
     line([time(barStart),time(barEnd)],[Idbase,Idbase],'Color', [0.5 0.5 0.5],'LineStyle','--');
     hold on;
     line([time(barStart),time(barStart)],[Idbase-barheight, Idbase+barheight], 'Color', [0.5 0.5 0.5]);

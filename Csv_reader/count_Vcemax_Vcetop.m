@@ -47,6 +47,9 @@ PicStart = RangeVce(1);
 PicEnd = RangeVce(2);
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
+if 0 ~= Vd_flag
+    PicTop = max(PicTop, fix(1.1*max(ch4(PicStart:PicEnd))));
+end
 PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;
 
@@ -67,10 +70,10 @@ plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
 if 0 ~= Vd_flag
     plot(time(PicStart:PicEnd), ch4(PicStart:PicEnd), 'g');
     plot(time(dmax_idx), Vdmax, 'ro', 'MarkerFaceColor','r');
-    text(time(fix(dmax_idx)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
+    text(time(fix(dmax_idx-0.10 * PicLength)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
 end
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(fix(cemax_idx-0.21 * PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx-0.10 * PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);

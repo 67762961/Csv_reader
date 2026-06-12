@@ -69,7 +69,7 @@ if Ic_flag~=0
     plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
     hold on;
     plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
-    text(time(tIcm),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
+    text(time(fix(tIcm-0.07 * PicLength)),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
     % Ic校准线及标注
     barStart = static_ic_interval(1);
     barEnd = static_ic_interval(end);

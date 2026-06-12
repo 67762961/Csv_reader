@@ -1,4 +1,4 @@
-function [Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge,Wave_count)
+function [Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge,RangeVce,Wave_count)
 
 switch Wave_count(1)
     case 1
@@ -40,18 +40,9 @@ else
     T_Vdmax = "   ";
 end
 
-% 绘图
-if Wave_count(1) == 3 && Wave_count(2) == 2
-    PicStart = cntVge(3);
-    PicEnd = length(time);
-else
-    PicStart = cntVge(1);
-    PicEnd = cntVge(end);
-end
-PicLength = PicEnd - PicStart;
-PicStart = max(PicStart-fix(1*PicLength/5),1);
-PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));
-% PicLength = abs(PicEnd - PicStart);
+PicStart = RangeVce(1);
+PicEnd = RangeVce(2);
+
 PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
 PicBottom = -fix(0.1*PicTop);
 PicHeight = PicTop - PicBottom;

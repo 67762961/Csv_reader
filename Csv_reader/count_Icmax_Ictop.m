@@ -1,25 +1,25 @@
-function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,I_FixBar,Wave_count)
+function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVce,RangeVce,I_FixBar,Wave_count)
 
-cntsw = length(cntVge);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
+cntsw = length(cntVce);
+toff1=cntVce(cntsw-2);
+ton2=cntVce(cntsw-1);
 
 switch Wave_count(1)
     case 1
-        Posedge = cntVge(1):cntVge(2);
+        Posedge = cntVce(1):cntVce(2);
     case 2
-        Posedge = cntVge(3):cntVge(4);
+        Posedge = cntVce(3):cntVce(4);
     case 3
-        Posedge = cntVge(5):cntVge(6);
+        Posedge = cntVce(5):cntVce(6);
 end
 
 switch Wave_count(2)
     case 1
-        Negedge = cntVge(2):cntVge(3);
+        Negedge = cntVce(2):cntVce(3);
     case 2
-        Negedge = cntVge(4):cntVge(5);
+        Negedge = cntVce(4):cntVce(5);
     case 3
-        Negedge = cntVge(6):length(time);
+        Negedge = cntVce(6):length(time);
 end
 
 
@@ -31,17 +31,8 @@ static_id_interval = I_FixBar(3):I_FixBar(4);
 
 %%
 nspd = (time(2)-time(1))*1e9;
-% 绘图
-if Wave_count(1) == 3 && Wave_count(2) == 2
-    PicStart = cntVge(3);
-    PicEnd = length(time);
-else
-    PicStart = cntVge(1);
-    PicEnd = cntVge(end);
-end
-PicLength = PicEnd - PicStart;
-PicStart = max(PicStart-fix(1*PicLength/5),1);
-PicEnd = min(PicEnd+fix(1*PicLength/5),length(time));
+PicStart = RangeVce(1);
+PicEnd = RangeVce(2);
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
 PicTop = fix(1.1*Max);

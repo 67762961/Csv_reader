@@ -15,7 +15,6 @@ switch Wave_count(1)
     case 2
         Posedge = cntVge(3):cntVge(4);
         posedge = cntVce(3):cntVce(4);
-        
     case 3
         Posedge = cntVge(5):cntVge(6);
         posedge = cntVce(5):cntVce(6);
@@ -164,8 +163,8 @@ end
 
 %% Icmax 计算
 if Ic_flag
-    Length_Range_Icmax = posedge(end)-Posedge(1);
-    Range_Icmax = Posedge(1) - Length_Range_Icmax : posedge(end) + Length_Range_Icmax;
+    Length_Range_Icmax = posedge(1)-Posedge(1);
+    Range_Icmax = posedge(1) - Length_Range_Icmax : posedge(1) + Length_Range_Icmax;
     Range_Icmax = max(Range_Icmax(1),1) : min(Range_Icmax(end), length(time));
     [Icmax, Icmax_idx] = max(ch3(Range_Icmax));
     Icmax_idx = Range_Icmax(1) + Icmax_idx - 1;

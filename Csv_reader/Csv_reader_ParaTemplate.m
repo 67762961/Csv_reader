@@ -32,7 +32,7 @@ Para_mode.NameStyle     = "泰克";                           %% 文件命名风
 
 % 输出数据配置
 Para_out.titlemode      = 'Standard';                            %% Full Standard 2Duiguan Manual
-Para_out.title_Manual   = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dt(V/us)', 'di/dton(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)', 'Vgedg1min(V)', '    ','    ','    '};
+Para_out.title_Manual   = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dtoff(V/us)', 'di/dton(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'Tdon(ns)', 'Tdoff(ns)', 'Vgedg1max(V)','Vgedg1min(V)','    '};
 
 % 绘图配置参数
 Prra_draw.Vmax          = 1350 ;                            %% IGBT极限电压     Vce最大耐压值 器件手册提供

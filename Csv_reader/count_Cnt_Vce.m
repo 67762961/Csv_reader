@@ -1,13 +1,18 @@
 function [cntVce,RangeVce] = count_Cnt_Vce(time,ch2,cntVge,DPI,Wave_count)
 
-Diff_ch2 = diff(ch2);
-Diff_Vce = smoothdata(Diff_ch2, 'movmean',30);
-Diff_Vce = abs(Diff_Vce);
+% Diff_ch2 = diff(ch2);
+% Diff_Vce = smoothdata(Diff_ch2, 'movmean',30);
+% Diff_Vce = abs(Diff_Vce);
 
+Vce = smoothdata(ch2, 'movmean',100);
+Vcemax = max(Vce);
 nspd = time(2)-time(1); % 时间分辨率
-[~, cntVce] = findpeaks(Diff_Vce, ...
-    'MinPeakProminence', 3, ...      % 这里填入你观察得出的合适阈值
-    'MinPeakDistance', fix(200/nspd*1e-9));
+cntVce = indzer(Vce,fix(Vcemax/2),fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
+
+% nspd = time(2)-time(1); % 时间分辨率
+% [~, cntVce] = findpeaks(Diff_Vce, ...
+%     'MinPeakProminence', 3, ...      % 这里填入你观察得出的合适阈值
+%     'MinPeakDistance', fix(200/nspd*1e-9));
 
 % disp(['检测到Vce跳变点数量: ', num2str(length(cntVce))]);
 % disp(cntVce);
@@ -17,8 +22,8 @@ if (length(cntVce) ~= 4) && (cntVge(5) == length(time)) || (length(cntVce) ~= 6)
     figure('Position', [320, 240, 1600/DPI, 600/DPI]);
     hold on;
     % Vce跳变点绘图
-    plot(time(1:end-1), Diff_Vce(1:end), 'b');
-    plot(time(cntVce), Diff_Vce(cntVce), 'ro', 'MarkerFaceColor','r');
+    plot(time(1:end-1), Vce(1:end), 'b');
+    plot(time(cntVce), Vce(cntVce), 'ro', 'MarkerFaceColor','r');
     
     %Vce分段绘图
     % plot(time, ch2, 'b');

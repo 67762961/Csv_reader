@@ -77,7 +77,7 @@ Vgebase = median(Vge_base);
 % disp(['Vge低电平电压Vgebase = ', num2str(Vgebase), ' V']);
 
 for gate = 0.00:0.01:2
-    ton10_2_indices = find(Vge(ton2:-1:toff1) < gate * Vgebase, 1, 'first');
+    ton10_2_indices = find(Vge(ton2:-1:toff1) < Vgebase + gate*Vgebase, 1, 'first');
     ton10_2 = ton2 - ton10_2_indices + 1;
     if isempty(ton10_2_indices)
         % fprintf('第二开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
@@ -99,7 +99,7 @@ if isempty(ton10_2_indices)
 end
 
 for gate = 0.00:0.01:2
-    ton10_1_indices = find(Vge(ton1:-1:1) < gate * Vgebase, 1, 'first');
+    ton10_1_indices = find(Vge(ton1:-1:1) <  Vgebase + gate*Vgebase, 1, 'first');
     ton10_1 = ton1 - ton10_1_indices + 1;
     if isempty(ton10_1_indices)
         % fprintf('第一开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
@@ -123,8 +123,8 @@ end
 if length(cntVge) > 4
     ton0=cntVge(1);
     toff0=cntVge(2);
-    for gate = 0.90:-0.01:0.5
-        ton10_0_indices = find(Vge(ton0:-1:1) < gate * Vgebase, 1, 'first');
+    for gate = 0.00:0.01:2
+        ton10_0_indices = find(Vge(ton0:-1:1) <  Vgebase + gate*Vgebase, 1, 'first');
         ton10_0 = ton0 - ton10_0_indices + 1;
         if isempty(ton10_0_indices)
             % fprintf('第零开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
@@ -134,7 +134,7 @@ if length(cntVge) > 4
                     fprintf('门极判断点阈值调整:\n');
                     Print_Flag = 1;
                 end
-                fprintf('       第零开通时间门极电压阈值降低到 %.2f Vgebase = %.2f\n', gate, gate * Vgebase);
+                fprintf('       第零开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase + gate*Vgebase);
             end
             break;
         end

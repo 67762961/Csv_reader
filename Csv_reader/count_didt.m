@@ -38,26 +38,37 @@ window_di = Window_Start : Window_Stop;
 
 % 状态机主循环
 for i = window_di
-    % if ch3(i) >= 0
-    %     fprintf('采样点 %f\n',ch3(i))
-    % end
+    % fprintf('采样点 %f\n',ch3(i))
     switch state
         case 0 % 等待触发
             if ch3(i) >= Ic_a
                 valid_rise_start = i;
-                % fprintf('触发值 %f\n',ch3(valid_rise_start))
+                % fprintf('起始点 %f 大于 %.2f Ictop = %f 触发\n',ch3(valid_rise_start),didtmode(1)/100,didtmode(1)/100*I_Fuizai_on)
                 state = 1;
+                Diff1 = abs(ch3(valid_rise_start) - didtmode(1)/100*I_Fuizai_on);
+                Diff2 = abs(ch3(valid_rise_start - 1) - didtmode(1)/100*I_Fuizai_on);
+                if Diff1 > Diff2
+                    valid_rise_start = valid_rise_start - 1;
+                    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_rise_start),Diff2,Diff1);
+                end
             end
             
         case 1 % 低阈值触发
             if max(ch3(i:i+gate_didt(1))) < ch3(i-1)
-                % fprintf('因为 %f < %f 触发回落\n',min(ch3(i:i+10)), ch3(i-1))
+                % fprintf('因为 %f < %f 触发回落\n',min(ch3(i:i+gate_didt(1))), ch3(i-1))
                 state = 0; % 发现回落重置
                 valid_rise_start = [];
             else
                 if ch3(i) >= Ic_b
                     valid_rise_end = i;
                     % 完成检测
+                    % fprintf('结束点 %f 大于 %.2f Ictop = %f 触发 \n',ch3(valid_rise_end),didtmode(2)/100,didtmode(2)/100*I_Fuizai_on)
+                    Diff1 = abs(ch3(valid_rise_end) - didtmode(2)/100*I_Fuizai_on);
+                    Diff2 = abs(ch3(valid_rise_end - 1) - didtmode(2)/100*I_Fuizai_on);
+                    if Diff1 > Diff2
+                        valid_rise_start = valid_rise_start - 1;
+                        % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_rise_end),Diff2,Diff1);
+                    end
                     break;
                 end
             end
@@ -123,12 +134,19 @@ state = 0;
 
 % 状态机主循环
 for i = window_di
+    % fprintf('采样点 %f\n',ch3(i))
     switch state
         case 0 % 等待触发
             if ch3(i) <= Ic_c
                 valid_fall_start = i;
-                % fprintf('触发值 %f\n',ch3(valid_fall_start))
+                % fprintf('起始点 %f 小于 %.2f Ictop = %f 触发\n',ch3(valid_fall_start),didtmode(3)/100,didtmode(3)/100*I_Fuizai_off)
                 state = 1;
+                Diff1 = abs(ch3(valid_fall_start) - didtmode(3)/100*I_Fuizai_off);
+                Diff2 = abs(ch3(valid_fall_start - 1) - didtmode(3)/100*I_Fuizai_off);
+                if Diff1 > Diff2
+                    valid_fall_start = valid_fall_start - 1;
+                    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_fall_start),Diff2,Diff1);
+                end
             end
             
         case 1 % 低阈值触发
@@ -140,6 +158,13 @@ for i = window_di
                 if ch3(i) <= Ic_d
                     valid_fall_end = i;
                     % 完成检测
+                    % fprintf('结束点 %f 小于 %.2f Ictop = %f 触发 \n',ch3(valid_fall_end),didtmode(4)/100,didtmode(4)/100*I_Fuizai_off)
+                    Diff1 = abs(ch3(valid_fall_end) - didtmode(4)/100*I_Fuizai_off);
+                    Diff2 = abs(ch3(valid_fall_end - 1) - didtmode(4)/100*I_Fuizai_off);
+                    if Diff1 > Diff2
+                        valid_fall_end = valid_fall_end - 1;
+                        % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_fall_end),Diff2,Diff1);
+                    end
                     break;
                 end
             end

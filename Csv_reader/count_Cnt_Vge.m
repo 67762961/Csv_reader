@@ -67,6 +67,7 @@ end
 
 %% ================ Vgebase计算 ================
 % 计算Vge低电平电压（使用中值避免噪声干扰）
+Vge_count = Vge(toff90_1:toff90_2);
 Vge_ne = Vge_count(Vge_count<=0);
 High_Thresh = quantile(Vge_ne, 0.07);
 Low_Thresh = quantile(Vge_ne, 0.03);

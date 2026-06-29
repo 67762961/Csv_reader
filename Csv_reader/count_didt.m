@@ -1,4 +1,4 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge,Wave_count)
+function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 switch Wave_count(1)
@@ -20,10 +20,10 @@ switch Wave_count(2)
 end
 
 % 阈值定义
-Ic_a  = I_Fuizai_on * didtmode(1)/100;
-Ic_b  = I_Fuizai_on * didtmode(2)/100;
-Ic_c  = I_Fuizai_off * didtmode(3)/100;
-Ic_d  = I_Fuizai_off * didtmode(4)/100;
+Ic_a  = I_on * didtmode(1)/100;
+Ic_b  = I_on * didtmode(2)/100;
+Ic_c  = I_off * didtmode(3)/100;
+Ic_d  = I_off * didtmode(4)/100;
 
 % 状态机参数初始化
 state = 0; % 0:等待触发 1:低阈值触发 2:完成检测
@@ -43,10 +43,10 @@ for i = window_di
         case 0 % 等待触发
             if ch3(i) >= Ic_a
                 valid_rise_start = i;
-                % fprintf('起始点 %f 大于 %.2f Ictop = %f 触发\n',ch3(valid_rise_start),didtmode(1)/100,didtmode(1)/100*I_Fuizai_on)
+                % fprintf('起始点 %f 大于 %.2f Ictop = %f 触发\n',ch3(valid_rise_start),didtmode(1)/100,didtmode(1)/100*I_on)
                 state = 1;
-                Diff1 = abs(ch3(valid_rise_start) - didtmode(1)/100*I_Fuizai_on);
-                Diff2 = abs(ch3(valid_rise_start - 1) - didtmode(1)/100*I_Fuizai_on);
+                Diff1 = abs(ch3(valid_rise_start) - didtmode(1)/100*I_on);
+                Diff2 = abs(ch3(valid_rise_start - 1) - didtmode(1)/100*I_on);
                 if Diff1 > Diff2
                     valid_rise_start = valid_rise_start - 1;
                     % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_rise_start),Diff2,Diff1);
@@ -62,9 +62,9 @@ for i = window_di
                 if ch3(i) >= Ic_b
                     valid_rise_end = i;
                     % 完成检测
-                    % fprintf('结束点 %f 大于 %.2f Ictop = %f 触发 \n',ch3(valid_rise_end),didtmode(2)/100,didtmode(2)/100*I_Fuizai_on)
-                    Diff1 = abs(ch3(valid_rise_end) - didtmode(2)/100*I_Fuizai_on);
-                    Diff2 = abs(ch3(valid_rise_end - 1) - didtmode(2)/100*I_Fuizai_on);
+                    % fprintf('结束点 %f 大于 %.2f Ictop = %f 触发 \n',ch3(valid_rise_end),didtmode(2)/100,didtmode(2)/100*I_on)
+                    Diff1 = abs(ch3(valid_rise_end) - didtmode(2)/100*I_on);
+                    Diff2 = abs(ch3(valid_rise_end - 1) - didtmode(2)/100*I_on);
                     if Diff1 > Diff2
                         valid_rise_start = valid_rise_start - 1;
                         % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_rise_end),Diff2,Diff1);
@@ -113,13 +113,13 @@ plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 % 动态标注
 text(time(fix(valid_rise_start+0.03*PicLength)),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
 text(time(fix(valid_rise_end+0.03*PicLength)),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_Fuizai_on)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_on)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_on+0.5)),'A/us'],'FontSize',13);
 plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
-title(['Ic=',num2str(fix(I_Fuizai_on)),'A di/dt(on) 计算']);
+title(['Ic=',num2str(fix(I_on)),'A di/dt(on) 计算']);
 grid on;
 
 % ====================== 关断时刻 di/dt计算模块 ======================
@@ -139,10 +139,10 @@ for i = window_di
         case 0 % 等待触发
             if ch3(i) <= Ic_c
                 valid_fall_start = i;
-                % fprintf('起始点 %f 小于 %.2f Ictop = %f 触发\n',ch3(valid_fall_start),didtmode(3)/100,didtmode(3)/100*I_Fuizai_off)
+                % fprintf('起始点 %f 小于 %.2f Ictop = %f 触发\n',ch3(valid_fall_start),didtmode(3)/100,didtmode(3)/100*I_off)
                 state = 1;
-                Diff1 = abs(ch3(valid_fall_start) - didtmode(3)/100*I_Fuizai_off);
-                Diff2 = abs(ch3(valid_fall_start - 1) - didtmode(3)/100*I_Fuizai_off);
+                Diff1 = abs(ch3(valid_fall_start) - didtmode(3)/100*I_off);
+                Diff2 = abs(ch3(valid_fall_start - 1) - didtmode(3)/100*I_off);
                 if Diff1 > Diff2
                     valid_fall_start = valid_fall_start - 1;
                     % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_fall_start),Diff2,Diff1);
@@ -158,9 +158,9 @@ for i = window_di
                 if ch3(i) <= Ic_d
                     valid_fall_end = i;
                     % 完成检测
-                    % fprintf('结束点 %f 小于 %.2f Ictop = %f 触发 \n',ch3(valid_fall_end),didtmode(4)/100,didtmode(4)/100*I_Fuizai_off)
-                    Diff1 = abs(ch3(valid_fall_end) - didtmode(4)/100*I_Fuizai_off);
-                    Diff2 = abs(ch3(valid_fall_end - 1) - didtmode(4)/100*I_Fuizai_off);
+                    % fprintf('结束点 %f 小于 %.2f Ictop = %f 触发 \n',ch3(valid_fall_end),didtmode(4)/100,didtmode(4)/100*I_off)
+                    Diff1 = abs(ch3(valid_fall_end) - didtmode(4)/100*I_off);
+                    Diff2 = abs(ch3(valid_fall_end - 1) - didtmode(4)/100*I_off);
                     if Diff1 > Diff2
                         valid_fall_end = valid_fall_end - 1;
                         % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',ch3(valid_fall_end),Diff2,Diff1);
@@ -204,18 +204,18 @@ plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 % 动态标注
 text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(3)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
 text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
-text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_Fuizai_off+0.5)),'A'],'FontSize',13);
+text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_off+0.5)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
 
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
-title(['Ic=',num2str(fix(I_Fuizai_off)),'A di/dt(off) 计算']);
+title(['Ic=',num2str(fix(I_off)),'A di/dt(off) 计算']);
 grid on;
 
 % 保存处理
 save_dir = fullfile(path, 'result', dataname, '05 didt');
 if ~exist(save_dir, 'dir'), mkdir(save_dir); end
-saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(I_Fuizai_off)),'A didt.png']), 'png');
+saveas(gcf, fullfile(save_dir, [ num,' Ic=',num2str(fix(I_off)),'A didt.png']), 'png');
 close(gcf);
 hold off
 

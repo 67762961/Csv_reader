@@ -1,4 +1,4 @@
-function [Ictop_out,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
+function [Ictop_out,Icmax,I_on,I_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
 
 cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
@@ -28,6 +28,19 @@ switch Wave_count(2)
         negedge = cntVce(6):length(time);
 end
 
+if Wave_count(2) ~= Wave_count(2)-1
+    switch Wave_count(2)
+        case 1
+            Negedge_back = 1:cntVge(1);
+            negedge_back = 1:cntVce(1);
+        case 2
+            Negedge_back = cntVge(2):cntVge(3);
+            negedge_back = cntVce(2):cntVce(3);
+        case 3
+            Negedge_back = cntVge(4):cntVge(5);
+            negedge_back = cntVce(4):cntVce(5);
+    end
+end
 
 Id_flag = Ch_labels(5);
 Ic_flag = Ch_labels(3);
@@ -71,6 +84,26 @@ if Ic_flag~=0
     line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
     line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+    
+    if Wave_count(2) ~= Wave_count(2)-1
+        % 传统计算法Ictop
+        current_interval = Negedge_back;    % 定义电流峰值搜索区间
+        [~, max_idx] = max(ch3(current_interval));          % 快速定位峰值索引 max_idx为相对索引
+        tIcm = Negedge_back(1) + max_idx - 1;          % 转换为全局索引
+        window_start = max(1, tIcm - fix(30/nspd));        % 窗口起始：峰值前30ns（最小为1）
+        Ictop_on = mean(ch3(window_start:tIcm));               % 计算均值
+        % Ic绘图
+        plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
+        hold on;
+        plot(time(tIcm), Ictop_on, 'ro', 'MarkerFaceColor','r');
+        text(time(fix(tIcm-0.07 * PicLength)),Ictop_on + fix(PicHeight*0.05),['Ictop_on =',num2str(Ictop_on),'A'], 'FontSize',13,'Color','r');
+        % Ic校准线及标注
+        barStart = static_ic_interval(1);
+        barEnd = static_ic_interval(end);
+        line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
+        line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+        line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+    end
 end
 
 % 若有Id输入 则以静态区Id值作为Ictop
@@ -95,6 +128,29 @@ if Id_flag~=0
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     
     plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
+    
+    if Wave_count(2) ~= Wave_count(2)-1
+        Range_Idbase = fix(negedge_back(1) + 3*length(negedge_back)/8) : fix(negedge_back(end) - 3*length(negedge_back)/8);
+        Idbase_on =  mean(ch5(Range_Idbase)); % 关断时平均Id作为Ictop
+        
+        % Idbase水平线及标注
+        barStart = Range_Idbase(1);
+        barEnd = Range_Idbase(end);
+        line([time(barStart),time(barEnd)],[Idbase_on,Idbase_on],'Color', [0.5 0.5 0.5],'LineStyle','--');
+        hold on;
+        line([time(barStart),time(barStart)],[Idbase_on-barheight, Idbase_on+barheight], 'Color', [0.5 0.5 0.5]);
+        line([time(barEnd),time(barEnd)],[Idbase_on-barheight, Idbase_on+barheight], 'Color', [0.5 0.5 0.5]);
+        text(time(barStart),Idbase_on - fix(PicHeight*0.05),['Idbase_on =',num2str(Idbase_on),'A'], 'FontSize',13,'Color','b');
+        
+        % Id校准线及标注
+        barStart = static_id_interval(1);
+        barEnd = static_id_interval(end);
+        line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
+        line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+        line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+        
+        plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
+    end
 end
 
 % 若有I_Fuzai输入 则以静态区I_Fuzai值作为
@@ -120,12 +176,12 @@ if Fuzaimode~=0
 end
 
 if (Fuzaimode ~= 0) && (I_meature == "I_fuzai")
-    I_Fuizai_on  = mean(I_fuzai(ton2-fix(30/nspd):ton2+fix(30/nspd)));
-    I_Fuizai_off = mean(I_fuzai(toff1-fix(30/nspd):toff1+fix(30/nspd)));
-    plot(time(ton2), I_Fuizai_on, 'go');
-    text(time(ton2),I_Fuizai_on - fix(PicHeight*0.1),['I_on =',num2str(I_Fuizai_on),'A'], 'FontSize',10,'Color','g');
-    plot(time(toff1), I_Fuizai_off, 'go');
-    text(time(toff1),I_Fuizai_off - fix(PicHeight*0.1),['I_off =',num2str(I_Fuizai_off),'A'], 'FontSize',10,'Color','g');
+    I_on  = mean(I_fuzai(ton2-fix(30/nspd):ton2+fix(30/nspd)));
+    I_off = mean(I_fuzai(toff1-fix(30/nspd):toff1+fix(30/nspd)));
+    plot(time(ton2), I_on, 'go');
+    text(time(ton2),I_on - fix(PicHeight*0.1),['I_on =',num2str(I_on),'A'], 'FontSize',10,'Color','g');
+    plot(time(toff1), I_off, 'go');
+    text(time(toff1),I_off - fix(PicHeight*0.1),['I_off =',num2str(I_off),'A'], 'FontSize',10,'Color','g');
 end
 
 %% 电流采信选择
@@ -145,12 +201,12 @@ end
 switch I_meature
     case "Ic"
         Ictop_out = Ictop;
-        I_Fuizai_on = Ictop_out;
-        I_Fuizai_off = Ictop_out;
+        I_on = Ictop_on;
+        I_off = Ictop_out;
     case "Id"
         Ictop_out = -1*Idbase;
-        I_Fuizai_on = Ictop_out;
-        I_Fuizai_off = Ictop_out;
+        I_on = -1*Idbase_on;
+        I_off = Ictop_out;
     case "I_fuzai"
         Ictop_out = FuzaiTop;
     otherwise

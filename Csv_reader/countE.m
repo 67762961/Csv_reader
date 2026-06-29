@@ -144,7 +144,7 @@ cntsw = length(cntVge);
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,Icmax,I_Fuizai_on,I_Fuizai_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
+[Ictop,Icmax,I_on,I_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
 
 [Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count);
 
@@ -169,7 +169,7 @@ Tdvdt_rise_end = time(Tdvdt(4));
 
 if (Ch_labels(3)~=0)
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_Fuizai_on,I_Fuizai_off,path,dataname,cntVge,Wave_count);
+    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count);
     
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,'Tdidt',Tdidt,Wave_count);
@@ -250,8 +250,8 @@ else
 end
 
 if (Fuzaimode == 0)
-    I_Fuizai_on = " ";
-    I_Fuizai_off = " ";
+    I_on = " ";
+    I_off = " ";
 end
 
 if (cntsw>4)
@@ -298,8 +298,8 @@ dataMap('Vgetop(V)') = Vgetop;
 dataMap('Vgebase(V)') = Vgebase;
 dataMap('I2dt_on') = I2dt_on;
 dataMap('I2dt_off') = I2dt_off;
-dataMap('I_Fuizai_on') = I_Fuizai_on;
-dataMap('I_Fuizai_off') = I_Fuizai_off;
+dataMap('I_on') = I_on;
+dataMap('I_off') = I_off;
 dataMap('    ') = " ";
 dataMap('Ton0') = Ton0;
 dataMap('Toff0') = Toff0;

@@ -4,10 +4,6 @@ cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 
-if Wave_count(1) == Wave_count(2)
-    Wave_count(2) = max(1,Wave_count(2)-1);
-end
-
 switch Wave_count(1)
     case 1
         Posedge = cntVge(1):cntVge(2);

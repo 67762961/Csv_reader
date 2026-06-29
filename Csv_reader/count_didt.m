@@ -97,7 +97,7 @@ PicStart = valid_rise_start - Half_PicLength;
 PicEnd = valid_rise_end + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = abs(fix(1.05*max(abs(ch3(PicStart:PicEnd)))));
-PicBottom = -1*fix(0.05*PicTop);
+PicBottom = fix(-0.2*PicTop);
 PicHeight = PicTop - PicBottom;
 
 close all;
@@ -117,6 +117,11 @@ text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_on+0.5)),'A/us'],'FontSize',13);
 plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
+text(time(valid_rise_start),PicBottom+PicHeight*0.03,[num2str(time(valid_rise_start)*1e6),'us'],'FontSize',8,'color','r');
+text(time(valid_rise_end),PicBottom+PicHeight*0.07,[num2str(time(valid_rise_end)*1e6),'us'],'FontSize',8,'color','r');
+line([time(valid_rise_start),time(valid_rise_start)],[PicBottom+PicHeight*0.03,ch3(valid_rise_start)],'Color', 'r','LineStyle','--');
+line([time(valid_rise_end),time(valid_rise_end)],[PicBottom+PicHeight*0.07,ch3(valid_rise_end)],'Color', 'r','LineStyle','--');
+
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(I_on)),'A di/dt(on) 计算']);
@@ -189,7 +194,7 @@ PicStart = valid_fall_start - Half_PicLength;
 PicEnd = valid_fall_end + Half_PicLength;
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.5*max(abs(ch3(PicStart:PicEnd))));
-PicBottom = fix(-0.1*PicTop);
+PicBottom = fix(-0.2*PicTop);
 PicHeight = PicTop - PicBottom;
 
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);
@@ -206,6 +211,10 @@ text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2
 text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_off+0.5)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dt = ',num2str(fix(didt_off+0.5)),'A/us'],'FontSize',13);
+text(time(valid_fall_start),PicBottom+PicHeight*0.03,[num2str(time(valid_fall_start)*1e6),'us'],'FontSize',8,'color','r');
+text(time(valid_fall_end),PicBottom+PicHeight*0.07,[num2str(time(valid_fall_end)*1e6),'us'],'FontSize',8,'color','r');
+line([time(valid_fall_start),time(valid_fall_start)],[PicBottom+PicHeight*0.03,ch3(valid_fall_start)],'Color', 'r','LineStyle','--');
+line([time(valid_fall_end),time(valid_fall_end)],[PicBottom+PicHeight*0.07,ch3(valid_fall_end)],'Color', 'r','LineStyle','--');
 
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);

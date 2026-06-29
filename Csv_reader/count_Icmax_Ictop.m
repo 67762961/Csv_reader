@@ -28,7 +28,7 @@ switch Wave_count(2)
         negedge = cntVce(6):length(time);
 end
 
-if Wave_count(2) ~= Wave_count(2)-1
+if Wave_count(2) ~= Wave_count(1)-1
     switch Wave_count(2)
         case 1
             Negedge_back = 1:cntVge(1);
@@ -85,7 +85,7 @@ if Ic_flag~=0
     line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
     
-    if Wave_count(2) ~= Wave_count(2)-1
+    if Wave_count(2) ~= Wave_count(1)-1
         % 传统计算法Ictop
         current_interval = Negedge_back;    % 定义电流峰值搜索区间
         [~, max_idx] = max(ch3(current_interval));          % 快速定位峰值索引 max_idx为相对索引
@@ -103,6 +103,8 @@ if Ic_flag~=0
         line([time(barStart),time(barEnd)],[0,0],'Color', [0.5 0.5 0.5],'LineStyle','--');
         line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
         line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
+    else
+        Ictop_on = Ictop;
     end
 end
 
@@ -129,7 +131,7 @@ if Id_flag~=0
     
     plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
     
-    if Wave_count(2) ~= Wave_count(2)-1
+    if Wave_count(2) ~= Wave_count(1)-1
         Range_Idbase = fix(negedge_back(1) + 3*length(negedge_back)/8) : fix(negedge_back(end) - 3*length(negedge_back)/8);
         Idbase_on =  mean(ch5(Range_Idbase)); % 关断时平均Id作为Ictop
         
@@ -150,6 +152,8 @@ if Id_flag~=0
         line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
         
         plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
+    else
+        Idbase_on = Idbase;
     end
 end
 

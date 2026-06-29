@@ -33,11 +33,25 @@ if isempty(rise_start_idx_a)
     print('dvdt_off起始点识别失败')
     error('dvdt_off起始点识别失败')
 end
+Diff1 = abs(Vce(rise_start_idx_a) - V_a);
+Diff2 = abs(Vce(rise_start_idx_a - 1) - V_a);
+if Diff1 > Diff2
+    rise_start_idx_a = rise_start_idx_a - 1;
+    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',Vce(rise_start_idx_a),Diff2,Diff1);
+end
+
 rise_end_idx_b  = find(Vce(rise_start_idx_a:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx_a - 1;
 if isempty(rise_end_idx_b)
     print('dvdt_off结束点识别失败')
     error('dvdt_off结束点识别失败')
 end
+Diff1 = abs(Vce(rise_end_idx_b) - V_b);
+Diff2 = abs(Vce(rise_end_idx_b - 1) - V_b);
+if Diff1 > Diff2
+    rise_end_idx_b = rise_end_idx_b - 1;
+    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',Vce(rise_end_idx_b),Diff2,Diff1);
+end
+
 delta_time_a_b = time(rise_end_idx_b) - time(rise_start_idx_a); % 时间差(ns转秒)
 
 if (rise_end_idx_b - rise_start_idx_a)>0
@@ -88,11 +102,25 @@ if isempty(fall_start_idx_c)
     print('dvdt_on起始点识别失败')
     error('dvdt_on起始点识别失败')
 end
+Diff1 = abs(Vce(fall_start_idx_c) - V_c);
+Diff2 = abs(Vce(fall_start_idx_c - 1) - V_c);
+if Diff1 > Diff2
+    fall_start_idx_c = fall_start_idx_c - 1;
+    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',Vce(fall_start_idx_c),Diff2,Diff1);
+end
+
 fall_end_idx_d  = find(Vce(fall_start_idx_c:window_dv(end)) <= V_d, 1, 'first') + fall_start_idx_c - 1;
 if isempty(fall_end_idx_d)
     print('dvdt_on结束点识别失败')
     error('dvdt_on结束点识别失败')
 end
+Diff1 = abs(Vce(fall_end_idx_d) - V_d);
+Diff2 = abs(Vce(fall_end_idx_d - 1) - V_d);
+if Diff1 > Diff2
+    fall_end_idx_d = fall_end_idx_d - 1;
+    % fprintf('前一采样点 %f 与阈值差异更小 %f < %f回退一个采样点\n',Vce(fall_end_idx_d),Diff2,Diff1);
+end
+
 delta_time_c_d = time(fall_end_idx_d) - time(fall_start_idx_c); % 时间差(ns转秒)
 
 if (fall_end_idx_d - fall_start_idx_c)>0

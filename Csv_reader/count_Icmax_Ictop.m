@@ -55,7 +55,7 @@ PicEnd = RangeVce(2);
 PicLength = PicEnd - PicStart;
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));
-PicTop = fix(1.1*Max);
+PicTop = fix(1.3*Max);
 Min = min(min(ch3(PicStart:PicEnd)),min(ch5(PicStart:PicEnd)));
 Min = min(Min, min(I_fuzai(PicStart:PicEnd)));
 PicBottom = fix(min(1.3*Min,-0.1*PicTop));
@@ -77,7 +77,7 @@ if Ic_flag~=0
     plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
     hold on;
     plot(time(tIcm), Ictop, 'ro', 'MarkerFaceColor','r');
-    text(time(fix(tIcm-0.07 * PicLength)),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
+    text(time(fix(tIcm-0.05 * PicLength)),Ictop + fix(PicHeight*0.05),['Ictop =',num2str(Ictop),'A'], 'FontSize',13,'Color','r');
     % Ic校准线及标注
     barStart = static_ic_interval(1);
     barEnd = static_ic_interval(end);
@@ -96,7 +96,7 @@ if Ic_flag~=0
         plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'Color','r');
         hold on;
         plot(time(tIcm), Ictop_on, 'ro', 'MarkerFaceColor','r');
-        text(time(fix(tIcm-0.07 * PicLength)),Ictop_on + fix(PicHeight*0.05),['Ictop_on =',num2str(Ictop_on),'A'], 'FontSize',13,'Color','r');
+        text(time(fix(tIcm-0.08 * PicLength)),Ictop_on + fix(PicHeight*0.05),['Ictop_o_n =',num2str(Ictop_on),'A'], 'FontSize',13,'Color','r');
         % Ic校准线及标注
         barStart = static_ic_interval(1);
         barEnd = static_ic_interval(end);
@@ -142,7 +142,7 @@ if Id_flag~=0
         hold on;
         line([time(barStart),time(barStart)],[Idbase_on-barheight, Idbase_on+barheight], 'Color', [0.5 0.5 0.5]);
         line([time(barEnd),time(barEnd)],[Idbase_on-barheight, Idbase_on+barheight], 'Color', [0.5 0.5 0.5]);
-        text(time(barStart),Idbase_on - fix(PicHeight*0.05),['Idbase_on =',num2str(Idbase_on),'A'], 'FontSize',13,'Color','b');
+        text(time(barStart),Idbase_on - fix(PicHeight*0.05),['Idbase_o_n =',num2str(Idbase_on),'A'], 'FontSize',13,'Color','b');
         
         % Id校准线及标注
         barStart = static_id_interval(1);

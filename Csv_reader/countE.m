@@ -110,31 +110,9 @@ end
 % Vge过零点位置记录
 nspd = time(2)-time(1); % 时间分辨率
 cntVge = indzer(Vge,Vgeth,fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
-cntsw = length(cntVge);
-
-if (cntsw ~= 6) && (cntsw ~= 4)
-    fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
-    cntVge_time=zeros(1,cntsw);
-    for i=1:cntsw
-        cntVge_time(i) = time(cntVge(i))*1e6;
-    end
-    disp(cntVge_time)
-    figure('Position', [0, 0, 2000/DPI, 600/DPI]);
-    plot(time, Vge);
-    hold on;
-    plot(time(cntVge), Vge(cntVge), 'o', 'color','red');
-    xlabel('时间 (s)');
-    ylabel('门极电压 (V)');
-    grid on;
-    xlim([time(1), time(end)]);
-    ylim([min(Vge)*1.1, max(Vge)*1.1]);
-    legend('Vge信号', '过零点');
-    hold off;
-    error('过零点判断异常')
-end
 
 %% 修正门极控制时间
-[Vgetop,Vgebase,cntVge] = count_Cnt_Vge(Vge,cntVge);
+[Vgetop,Vgebase,cntVge] = count_Cnt_Vge(time,DPI,Vge,cntVge);
 cntsw = length(cntVge);
 
 [cntVce,RangeVce] = count_Cnt_Vce(time,ch2,cntVge,DPI,Wave_count);

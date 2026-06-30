@@ -1,10 +1,36 @@
-function [Vgetop,Vgebase,cntVge] = count_Cnt_Vge(Vge,cntVge)
+function [Vgetop,Vgebase,cntVge] = count_Cnt_Vge(time,DPI,Vge,cntVge)
 
 cntsw = length(cntVge);
 ton1=cntVge(cntsw-3);
 toff1=cntVge(cntsw-2);
 ton2=cntVge(cntsw-1);
 toff2=cntVge(cntsw);
+
+% Vge_wd = wdenoise(ch1,5,'Wavelet','db4','DenoisingMethod','Bayes','thresholdRule','Soft');% 叶贝斯阈值法 软滤波
+
+if (cntsw ~= 6) && (cntsw ~= 4)
+    fprintf('\n Vge开通阈值位置有%d处 可能出现开关状态判断异常 \n',cntsw)
+    cntVge_time=zeros(1,cntsw);
+    for i=1:cntsw
+        cntVge_time(i) = time(cntVge(i))*1e6;
+    end
+    disp(cntVge_time)
+    figure('Position', [0, 0, 2000/DPI, 600/DPI]);
+    hold on;
+    % plot(time, Vge);
+    plot(time,Vge_wd,'color','r');
+    plot(time(cntVge), Vge(cntVge), 'o', 'color','red');
+    xlabel('时间 (s)');
+    ylabel('门极电压 (V)');
+    grid on;
+    xlim([time(1), time(end)]);
+    ylim([min(Vge)*1.1, max(Vge)*1.1]);
+    legend('Vge信号', '过零点');
+    hold off;
+    error('过零点判断异常')
+end
+
+
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）

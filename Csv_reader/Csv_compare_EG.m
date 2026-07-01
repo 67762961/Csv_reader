@@ -40,7 +40,7 @@ Para_mode.gate_Erec     = 30;
 Para_mode.Vgeth         = 3;
 
 % --- 第一部分：计算时延 ---
-Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icfix(A)', 'Idfix(A)' ,'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'I2dt_on','I2dt_off','Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','I_Fuizai_on','I_Fuizai_off','Ton0', 'Toff0','Ton1', 'Toff1','Ton2', 'Toff2','T_Vcemax','T_Vdmax','Tdvdt_fs','Tdvdt_fe','Tdvdt_rs','Tdvdt_re','Tdidt_rs','Tdidt_re','Tdidt_fs','Tdidt_fe'};
+Full_title = {'脉宽长(us)', '  CSV  ', 'Ic(A)', 'Icfix(A)', 'Idfix(A)' ,'Icmax(A)', 'Eon(mJ)', 'Eoff(mJ)', 'VceMAX(V)', 'VdMAX(V)', 'Vcetop(V)', 'dv/dton(V/us)', 'dv/dtoff(V/us)', 'di/dton(A/us)','di/dtoff(A/us)', 'Erec(mJ)', 'Prrmax(kW)', 'PrrPROMAX(kW)', 'Vgetop(V)','Vgebase(V)','Tdon(ns)', 'Trise(ns)', 'Tdoff(ns)', 'Tfall(ns)', 'I2dt_on','I2dt_off','Vgedg1max(V)', 'Vgedg1min(V)', 'Vgedg1mean(V)', 'Vgedg2max(V)', 'Vgedg2min(V)', 'Vgedg2mean(V)','I_on','I_off','Ton0', 'Toff0','Ton1', 'Toff1','Ton2', 'Toff2','T_Vcemax','T_Vdmax','Tdvdt_fs','Tdvdt_fe','Tdvdt_rs','Tdvdt_re','Tdidt_rs','Tdidt_re','Tdidt_fs','Tdidt_fe'};
 title = Full_title;
 
 dpiValue = winqueryreg('HKEY_CURRENT_USER', 'Control Panel\Desktop\WindowMetrics', 'AppliedDPI');
@@ -93,6 +93,8 @@ raw_data1 = double(CSV_1{:, 2:end});
 raw_data2 = double(CSV_2{:, 2:end});
 
 % 如果 Ch_labels_1 = [1, 3, 6]，则提取 raw_data1 的第 1、3、6 列
+Ch_labels_1 = abs(Ch_labels_1); % 确保通道索引为正数
+Ch_labels_2 = abs(Ch_labels_2); % 确保通道索引为正数
 data1 = raw_data1(:, Ch_labels_1);
 data2 = raw_data2(:, Ch_labels_2);
 

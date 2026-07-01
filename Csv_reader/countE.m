@@ -300,8 +300,12 @@ dataMap('Tdidt_fe') = Tdidt_fall_end;
 output=zeros(length(title),1);
 for i = 1:length(title)
     currentKey = title{i};
-    currentValue = dataMap(currentKey);
-    output(i) = currentValue;
+    if ~isKey(dataMap, currentKey)
+        error('键 "%s" 不存在', currentKey);
+    else
+        currentValue = dataMap(currentKey);
+        output(i) = currentValue;
+    end
 end
 
 output_backup = zeros(length(Full_title),1);

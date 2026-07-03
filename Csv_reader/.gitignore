@@ -4,6 +4,7 @@
 # 只跟踪当前已存在的特定文件（不忽略这些文件）
 !.gitignore
 !count_I_Fix.m
+!count_didt_max.m
 !count_didt.m
 !count_dvdt.m
 !count_Eon_Eoff.m

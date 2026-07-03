@@ -1,4 +1,4 @@
-function [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count)
+function [didt_on,didt_off,Tdidt,Pic_win] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 switch Wave_count(1)
@@ -99,6 +99,7 @@ PicLength = PicEnd - PicStart;
 PicTop = abs(fix(1.05*max(abs(ch3(PicStart:PicEnd)))));
 PicBottom = fix(-0.2*PicTop);
 PicHeight = PicTop - PicBottom;
+Pic_win(1:4) = [PicTop,PicBottom,PicStart,PicEnd];
 
 close all;
 figure('Position', [320, 240, 1600/DPI, 600/DPI]);
@@ -196,6 +197,7 @@ PicLength = PicEnd - PicStart;
 PicTop = fix(1.5*max(abs(ch3(PicStart:PicEnd))));
 PicBottom = fix(-0.2*PicTop);
 PicHeight = PicTop - PicBottom;
+Pic_win(5:8) = [PicTop,PicBottom,PicStart,PicEnd];
 
 subplot('Position', [0.55, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), ch3(PicStart:PicEnd), 'b');

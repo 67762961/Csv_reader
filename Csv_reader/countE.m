@@ -8,6 +8,7 @@ Eonmode     = Para_mode.Eonmode;         %% 开通损耗配置
 Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
 dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode    = Para_mode.didtmode ;       %% didt模式
+didt_step   = Para_mode.d_dtstep(1);
 Fuzaimode   = Para_mode.Fuzaimode;
 INTG_I2t    = Para_mode.INTG_I2t;
 DuiguanMARK = Para_mode.DuiguanMARK;
@@ -147,8 +148,13 @@ Tdvdt_rise_end = time(Tdvdt(4));
 
 if (Ch_labels(3)~=0)
     % ====================== di/dt计算模块 ======================
-    [didt_on,didt_off,Tdidt] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count);
-    
+    [didt_on,didt_off,Tdidt,Picwin] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count);
+    if (didt_step~=0)
+        [didton_max,didtoff_min] = count_didt_max(num,DPI,didtmode,didt_step,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count,Picwin);
+    else
+        didton_max = " ";
+        didtoff_min = " ";
+    end
     % ====================== 开通关断时间（Ton&Toff）计算 ======================
     [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch3,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,'Tdidt',Tdidt,Wave_count);
     
@@ -259,6 +265,8 @@ dataMap('dv/dton(V/us)') = dvdt_on;
 dataMap('dv/dtoff(V/us)') = dvdt_off;
 dataMap('di/dton(A/us)') = didt_on;
 dataMap('di/dtoff(A/us)') = didt_off;
+dataMap('di/dtonMAX(A/us)') = didton_max;
+dataMap('di/dtoffMIN(A/us)') = didtoff_min;
 dataMap('Erec(mJ)') = Erec;
 dataMap('Prrmax(kW)') = Prrmax;
 dataMap('PrrPROMAX(kW)') = PrrPROMAX;

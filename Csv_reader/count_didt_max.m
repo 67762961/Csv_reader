@@ -1,4 +1,4 @@
-function [didton_max,didtoff_min] = count_didt_max(num,DPI,didtmode,didt_step,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count,Pic_win)
+function [didton_max,didtoff_min] = count_didt_max(num,DPI,didt_step,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count,Pic_win)
 
 % ====================== 开通时刻 di/dt计算模块 ======================
 switch Wave_count(1)
@@ -31,21 +31,23 @@ fprintf('       窗口长度近似为: %.1f ns\n',didt_step_dot*nspd*1e9);
 Window_Start = Posedge(1);
 Window_Stop = Posedge(end);
 window_di = Window_Start : Window_Stop;
-[T_Icmax,~] = max(ch3(window_di));
+[~,T_Icmax] = max(ch3(window_di));
 Window_Stop_count = fix(T_Icmax + Window_Start - 1); % 重新定义窗口结束点为Icmax点
 window_di = Window_Start : Window_Stop_count;
-
 didton_max = 0;
 
 for i = window_di
     delta_time = time(i + didt_step_dot) - time(i); % 时间差(ns转秒)
     didton_temp = (ch3(i + didt_step_dot) - ch3(i)) / delta_time * 1e-6;
+    % fprintf('采样点time = %fus 当前didt = %f\n',time(i)*1e6,didton_temp)
     if didton_temp > didton_max
+        % fprintf('采样点time = %fus 当前didt = %f 超过最大didt = %f 触发替换最大值\n',time(i)*1e6,didton_temp,didton_max)
         didton_max = didton_temp;
         valid_rise_start = i;
         valid_rise_end = i + didt_step_dot;
     end
 end
+% fprintf('最大didt = %f\n',didton_max)
 
 if isempty(didton_max)
     didton_max = 0;
@@ -73,8 +75,8 @@ plot(time(valid_rise_start), ch3(valid_rise_start), 'ro', 'MarkerFaceColor','r')
 plot(time(valid_rise_end), ch3(valid_rise_end), 'ro', 'MarkerFaceColor','r');
 
 % 动态标注
-text(time(fix(valid_rise_start+0.03*PicLength)),ch3(valid_rise_start),['Ic',num2str(didtmode(1)),'=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
-text(time(fix(valid_rise_end+0.03*PicLength)),ch3(valid_rise_end),['Ic',num2str(didtmode(2)),'=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
+text(time(fix(valid_rise_start+0.03*PicLength)),ch3(fix(valid_rise_start-PicHeight*0.01)),['Ic','=',num2str(ch3(valid_rise_start)),'A'],'FontSize',13);
+text(time(fix(valid_rise_end+0.03*PicLength)),ch3(fix(valid_rise_end+PicHeight*0.05)),['Ic','=',num2str(ch3(valid_rise_end)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_on)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dtMAX = ',num2str(fix(didton_max+0.5)),'A/us'],'FontSize',13);
 plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
@@ -128,8 +130,8 @@ plot(time(Window_Start), ch3(Window_Start),'o','color','blue');
 plot(time(Window_Stop), ch3(Window_Stop),'o','color','blue');
 
 % 动态标注
-text(time(fix(valid_fall_start+0.05*PicLength)),ch3(valid_fall_start),['Ic',num2str(didtmode(3)),'=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
-text(time(fix(valid_fall_end+0.05*PicLength)),ch3(valid_fall_end),['Ic',num2str(didtmode(4)),'=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
+text(time(fix(valid_fall_start+0.05*PicLength)),ch3(fix(valid_fall_start+PicHeight*0.05)),['Ic','=',num2str(ch3(valid_fall_start)),'A'],'FontSize',13);
+text(time(fix(valid_fall_end+0.05*PicLength)),ch3(fix(valid_fall_end-PicHeight*0.05)),['Ic','=',num2str(ch3(valid_fall_end)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.9,['Ictop = ',num2str(fix(I_off+0.5)),'A'],'FontSize',13);
 text(time(PicStart+fix(PicLength*0.05)),PicBottom+PicHeight*0.8,['di/dtMIN = ',num2str(fix(didtoff_min+0.5)),'A/us'],'FontSize',13);
 text(time(valid_fall_start),PicBottom+PicHeight*0.03,[num2str(time(valid_fall_start)*1e6),'us'],'FontSize',8,'color','r');

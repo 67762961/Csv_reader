@@ -150,7 +150,7 @@ if (Ch_labels(3)~=0)
     % ====================== di/dt计算模块 ======================
     [didt_on,didt_off,Tdidt,Picwin] = count_didt(num,DPI,didtmode,gate_didt,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count);
     if (didt_step~=0)
-        [didton_max,didtoff_min] = count_didt_max(num,DPI,didtmode,didt_step,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count,Picwin);
+        [didton_max,didtoff_min] = count_didt_max(num,DPI,didt_step,time,ch3,I_on,I_off,path,dataname,cntVge,Wave_count,Picwin);
     else
         didton_max = " ";
         didtoff_min = " ";

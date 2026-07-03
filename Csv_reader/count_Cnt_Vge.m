@@ -17,8 +17,8 @@ if (cntsw ~= 6) && (cntsw ~= 4)
     disp(cntVge_time)
     figure('Position', [0, 0, 2000/DPI, 600/DPI]);
     hold on;
-    % plot(time, Vge);
-    plot(time,Vge_wd,'color','r');
+    plot(time, Vge);
+    % plot(time,Vge_wd,'color','r');
     plot(time(cntVge), Vge(cntVge), 'o', 'color','red');
     xlabel('时间 (s)');
     ylabel('门极电压 (V)');

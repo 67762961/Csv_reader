@@ -29,6 +29,7 @@ Para_mode.Eonmode       = [0.1, 0.02, 0.2, 0];
 Para_mode.Eoffmode      = [0.1, 0.02, 0.2, 0];
 Para_mode.dvdtmode      = [80, 20, 10, 90];
 Para_mode.didtmode      = [10, 90, 80, 20];
+Para_mode.d_dtstep      = [10,0];
 Para_mode.DuiguanMARK   = [0, 0];
 Para_mode.DuiguanCH     = [0, 0];
 Para_mode.Fuzaimode     = 0;

@@ -125,7 +125,7 @@ cntsw = length(cntVge);
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
 [Ictop,Icmax,I_on,I_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
 
-[Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count);
+[Vcemax,Vcemax_fix,Vcetop,Vcetop_fix,Vdmax,Vdmax_fix,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count);
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================
@@ -259,8 +259,11 @@ dataMap('Idfix(A)') = Idfix;
 dataMap('Eon(mJ)') = Eon;
 dataMap('Eoff(mJ)') = Eoff;
 dataMap('VceMAX(V)') = Vcemax;
+dataMap('VceMAX_fix(V)') = Vcemax_fix;
 dataMap('VdMAX(V)') = Vdmax;
+dataMap('VdMAX_fix(V)') = Vdmax_fix;
 dataMap('Vcetop(V)') = Vcetop;
+dataMap('Vcetop_fix(V)') = Vcetop_fix;
 dataMap('dv/dton(V/us)') = dvdt_on;
 dataMap('dv/dtoff(V/us)') = dvdt_off;
 dataMap('di/dton(A/us)') = didt_on;

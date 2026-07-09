@@ -1,4 +1,4 @@
-function [Vcemax,Vcetop,Vdmax,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count)
+function [Vcemax,Vcemax_fix,Vcetop,Vcetop_fix,Vdmax,Vdmax_fix,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count)
 
 switch Wave_count(1)
     case 1
@@ -26,27 +26,31 @@ end
 start_idx = fix(negedge(1) + 3*length(negedge)/8);         % 起始索引：关断后1/20周期
 end_idx = fix(negedge(end) - 3*length(negedge)/8);          % 结束索引：下一次导通前1/20周期
 Vcetop = median(ch2(start_idx:end_idx));       % 使用均值
+Vcetop_fix = (fix((Vcetop-10)/50)+1)*50;
 
 %% Vcemax计算
 % 找出最大值
 [Vcemax, cemax_idx] = max(ch2(Negedge));
 cemax_idx = Negedge(1) + cemax_idx - 1;  % 转换为全局索引
 T_Vcemax = time(cemax_idx);
+Vcemax_fix = Vcemax - Vcetop + Vcetop_fix;
 
 %% ================ Vdmax计算 ================
 if 0 ~= Vd_flag
     [Vdmax, dmax_idx] = max(ch4(Posedge));
     dmax_idx = Posedge(1) + dmax_idx - 1;
     T_Vdmax = time(dmax_idx);
+    Vdmax_fix = Vdmax - Vcetop + Vcetop_fix;
 else
     Vdmax = "   ";
     T_Vdmax = "   ";
+    Vdmax_fix = "   ";
 end
 
 PicStart = RangeVce(1);
 PicEnd = RangeVce(2);
 PicLength = PicEnd - PicStart;
-PicTop = fix(1.1*max(ch2(PicStart:PicEnd)));
+PicTop = fix(1.2*max(ch2(PicStart:PicEnd)));
 if 0 ~= Vd_flag
     PicTop = max(PicTop, fix(1.1*max(ch4(PicStart:PicEnd))));
 end
@@ -70,10 +74,12 @@ plot(time(PicStart:PicEnd), ch2(PicStart:PicEnd), 'b');
 if 0 ~= Vd_flag
     plot(time(PicStart:PicEnd), ch4(PicStart:PicEnd), 'g');
     plot(time(dmax_idx), Vdmax, 'ro', 'MarkerFaceColor','r');
-    text(time(fix(dmax_idx-0.10 * PicLength)), Vdmax + 0.05*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
+    text(time(fix(dmax_idx-0.10 * PicLength)), Vdmax + 0.11*PicHeight,['Vdmax=',num2str(Vdmax),'V'], 'FontSize',13,'Color','g');
+    text(time(fix(dmax_idx-0.10 * PicLength)), Vdmax + 0.05*PicHeight,['Vdmax-fix=',num2str(Vdmax_fix),'V'], 'FontSize',13,'Color','g');
 end
 plot(time(cemax_idx), Vcemax, 'ro', 'MarkerFaceColor','r');
-text(time(fix(cemax_idx-0.10 * PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx-0.10 * PicLength)), Vcemax + 0.11*PicHeight, ['Vcemax=',num2str(Vcemax),'V'], 'FontSize',13,'Color','b');
+text(time(fix(cemax_idx-0.10 * PicLength)), Vcemax + 0.05*PicHeight, ['Vcemax-fix=',num2str(Vcemax_fix),'V'], 'FontSize',13,'Color','b');
 ylim([PicBottom, PicTop]);
 xlim([time(PicStart), time(PicEnd)]);
 title(['Ic=',num2str(fix(Ictop)),'A Vcemax']);

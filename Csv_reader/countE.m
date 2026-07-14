@@ -171,9 +171,10 @@ elseif (Fuzaimode ~= 0 || (Ch_labels(5)~=0))
     Tdidt_rise_end = " ";
     Tdidt_fall_start = " ";
     Tdidt_fall_end = " ";
-    
     didt_on = " ";
     didt_off = " ";
+    didton_max = " ";
+    didtoff_min = " ";
 else
     Tdidt_rise_start = " ";
     Tdidt_rise_end = " ";

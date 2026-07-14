@@ -123,21 +123,17 @@ cntsw = length(cntVge);
 
 %% 各项数据计算
 % ====================== Vcetop Vcemax Ictop Icmax Vdmax 计算 ======================
-[Ictop,Icmax,I_on,I_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
+[Ictop,Icmax,I_on,I_off,Idmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count);
 
 [Vcemax,Vcemax_fix,Vcetop,Vcetop_fix,Vdmax,Vdmax_fix,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Ch_labels(4),ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count);
 
 if (Ch_labels(3)~=0)
     % ====================== 开关损耗计算（Eon&Eoff） ======================
     [Eon,Eoff] = count_Eon_Eoff(num,DPI,time,Ic,Vce,Ictop,Vcetop,path,dataname,cntVge,Eonmode,Eoffmode,Wave_count);
-    
-    % cntSW = [SWon_start,SWon_stop,SWoff_start,SWoff_stop];
 else
     Eon = " ";
     Eoff = " ";
-    % cntSW = [ton2-fix(cnton1/5),ton2+fix(cnton1/5),toff1-fix(cnton1/5),toff1+fix(cnton1/5)];
 end
-
 % ====================== dv/dt计算模块 ======================
 [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count);
 
@@ -255,6 +251,7 @@ dataMap('脉宽长(us)') = Length_ton0;
 dataMap('  CSV  ') = str2double(num);
 dataMap('Ic(A)') = Ictop;
 dataMap('Icmax(A)') = Icmax;
+dataMap('Idmax(A)') = Idmax;
 dataMap('Icfix(A)') = Icfix;
 dataMap('Idfix(A)') = Idfix;
 dataMap('Eon(mJ)') = Eon;

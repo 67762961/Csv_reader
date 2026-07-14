@@ -1,4 +1,4 @@
-function [Ictop_out,Icmax,I_on,I_off] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
+function [Ictop_out,Icmax,I_on,I_off,Idmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
 
 cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
@@ -113,6 +113,14 @@ if Id_flag~=0
     Range_Idbase = fix(negedge(1) + 3*length(negedge)/8) : fix(negedge(end) - 3*length(negedge)/8);
     Idbase =  mean(ch5(Range_Idbase)); % 关断时平均Id作为Ictop
     
+    Length_Range_Idmax = posedge(1)-Posedge(1);
+    Range_Idmax = posedge(1) - Length_Range_Idmax : posedge(1) + Length_Range_Idmax;
+    Range_Idmax = max(Range_Idmax(1),1) : min(Range_Idmax(end), length(time));
+    [Idmax, Idmax_idx] = max(ch5(Range_Idmax));
+    Idmax_idx = Range_Idmax(1) + Idmax_idx - 1;
+    % 绘图
+    plot(time(Idmax_idx), Idmax, 'ro', 'MarkerFaceColor','r');
+    text(time(Idmax_idx + fix(0.03 * PicLength)),Idmax,['Idmax=',num2str(Idmax),'A'], 'FontSize',13,'Color','b');
     % Idbase水平线及标注
     barStart = Range_Idbase(1);
     barEnd = Range_Idbase(end);
@@ -151,10 +159,21 @@ if Id_flag~=0
         line([time(barStart),time(barStart)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
         line([time(barEnd),time(barEnd)],[0-barheight, 0+barheight], 'Color', [0.5 0.5 0.5]);
         
+        Length_Range_Idmax = posedge(2)-Posedge(2);
+        Range_Idmax = posedge(1) - Length_Range_Idmax : posedge(1) + Length_Range_Idmax;
+        Range_Idmax = max(Range_Idmax(1),1) : min(Range_Idmax(end), length(time));
+        [Idmax, Idmax_idx] = max(ch5(Range_Idmax));
+        Idmax_idx = Range_Idmax(1) + Idmax_idx - 1;
+        % 绘图
+        plot(time(Idmax_idx), Idmax, 'ro', 'MarkerFaceColor','r');
+        text(time(Idmax_idx + fix(0.03 * PicLength)),Idmax,['Idmax=',num2str(Idmax),'A'], 'FontSize',13,'Color','b');
+        
         plot(time(PicStart:PicEnd), ch5(PicStart:PicEnd), 'Color','b');
     else
         Idbase_on = Idbase;
     end
+else
+    Idmax = "   ";
 end
 
 % 若有I_Fuzai输入 则以静态区I_Fuzai值作为

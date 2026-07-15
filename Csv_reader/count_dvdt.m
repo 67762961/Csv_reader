@@ -1,4 +1,4 @@
-function [dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count)
+function [dvdt_on,dvdt_off,Tdvdt,Pic_win] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count)
 
 switch Wave_count(1)
     case 1
@@ -70,6 +70,7 @@ PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.1*PicTop);
 PicHeight = PicTop - PicBottom;
+Pic_win(1:4) = [PicTop,PicBottom,PicStart,PicEnd];
 
 close all;
 figure('Position', [320, 240, 1600/DPI, 600/DPI]);
@@ -142,6 +143,7 @@ PicLength = PicEnd - PicStart;
 PicTop = fix(1.05*Vcemax);
 PicBottom = fix(-0.1*PicTop);
 PicHeight = PicTop - PicBottom;
+Pic_win(5:8) = [PicTop,PicBottom,PicStart,PicEnd];
 
 subplot('Position', [0.05, 0.15, 0.4, 0.75]);
 plot(time(PicStart:PicEnd), Vce(PicStart:PicEnd), 'b');

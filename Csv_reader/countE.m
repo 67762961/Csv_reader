@@ -9,6 +9,7 @@ Eoffmode    = Para_mode.Eoffmode;        %% 关断损耗配置
 dvdtmode    = Para_mode.dvdtmode ;       %% dvdt模式
 didtmode    = Para_mode.didtmode ;       %% didt模式
 didt_step   = Para_mode.d_dtstep(1);
+dvdt_step   = Para_mode.d_dtstep(2);
 Fuzaimode   = Para_mode.Fuzaimode;
 INTG_I2t    = Para_mode.INTG_I2t;
 DuiguanMARK = Para_mode.DuiguanMARK;
@@ -135,12 +136,19 @@ else
     Eoff = " ";
 end
 % ====================== dv/dt计算模块 ======================
-[dvdt_on,dvdt_off,Tdvdt] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count);
+[dvdt_on,dvdt_off,Tdvdt,Pic_win] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count);
 
 Tdvdt_fall_start = time(Tdvdt(1));
 Tdvdt_fall_end = time(Tdvdt(2));
 Tdvdt_rise_start = time(Tdvdt(3));
 Tdvdt_rise_end = time(Tdvdt(4));
+
+if (dvdt_step~=0)
+    [dvdtoff_max,dvdton_min] = count_dvdt_max(num,DPI,dvdt_step,time,Vce,Ictop,Vcetop,path,dataname,cntVge,Wave_count,Pic_win);
+else
+    dvdtoff_max = " ";
+    dvdton_min = " ";
+end
 
 if (Ch_labels(3)~=0)
     % ====================== di/dt计算模块 ======================
@@ -264,6 +272,8 @@ dataMap('Vcetop(V)') = Vcetop;
 dataMap('Vcetop_fix(V)') = Vcetop_fix;
 dataMap('dv/dton(V/us)') = dvdt_on;
 dataMap('dv/dtoff(V/us)') = dvdt_off;
+dataMap('dv/dtoffMAX(A/us)') = dvdtoff_max;
+dataMap('dv/dtonMIN(A/us)') = dvdton_min;
 dataMap('di/dton(A/us)') = didt_on;
 dataMap('di/dtoff(A/us)') = didt_off;
 dataMap('di/dtonMAX(A/us)') = didton_max;

@@ -62,9 +62,6 @@ for gate = 0.90:-0.01:0.1
         end
         break;
     end
-    if isempty(toff90_1_indices)
-        error('第一关断时间异常');
-    end
 end
 
 if isempty(toff90_1_indices)
@@ -86,9 +83,6 @@ for gate = 0.90:-0.01:0.1
             fprintf('       第二关断时间门极电压阈值降低到 %.2f Vgetop = %.2f\n', gate, gate * Vgetop);
         end
         break;
-    end
-    if isempty(toff90_2_indices)
-        error('第二关断时间异常');
     end
 end
 
@@ -124,9 +118,6 @@ for gate = 0.1:0.01:2
         end
         break;
     end
-    if isempty(ton10_2_indices)
-        error('第二开通时间异常');
-    end
 end
 
 if isempty(ton10_2_indices)
@@ -148,9 +139,6 @@ for gate = 0.1:0.01:2
             fprintf('       第一开通时间门极电压补偿 %.2f 阈值提高到 Vgebase = %.2f\n', gate, Vgebase - gate*Vgebase);
         end
         break;
-    end
-    if isempty(ton10_1_indices)
-        error('第一开通时间异常');
     end
 end
 
@@ -177,9 +165,11 @@ if length(cntVge) > 4
             end
             break;
         end
-        if isempty(ton10_0_indices)
-            error('第零开通时间异常');
-        end
+    end
+    
+    if isempty(ton10_0_indices)
+        print('门极0次开通点识别失败')
+        error('门极0次开通点识别失败')
     end
     
     for gate = 0.90:-0.01:0.1
@@ -197,9 +187,12 @@ if length(cntVge) > 4
             break;
         end
     end
+    
     if isempty(toff90_0_indices)
-        error('第零关断时间异常');
+        print('门极0次关断点识别失败')
+        error('门极0次关断点识别失败')
     end
+    
     cntVge(cntsw-5) = ton10_0;
     cntVge(cntsw-4) = toff90_0;
 end

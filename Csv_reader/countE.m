@@ -166,30 +166,19 @@ if (Ch_labels(3)~=0)
     Tdidt_rise_end = time(Tdidt(2));
     Tdidt_fall_start = time(Tdidt(3));
     Tdidt_fall_end = time(Tdidt(4));
-    
-elseif (Fuzaimode ~= 0 || (Ch_labels(5)~=0))
-    % ====================== 开通关断时间（Ton&Toff）计算 ======================
-    [tdon,tr,tdoff,tf] = count_Ton_Toff(num,DPI,time,ch1,ch2,Vgetop,Vgebase,Ictop,path,dataname,cntVge,cntVce,'Tdvdt',Tdvdt,Wave_count);
-    
-    Tdidt_rise_start = " ";
-    Tdidt_rise_end = " ";
-    Tdidt_fall_start = " ";
-    Tdidt_fall_end = " ";
-    didt_on = " ";
-    didt_off = " ";
-    didton_max = " ";
-    didtoff_min = " ";
 else
     Tdidt_rise_start = " ";
     Tdidt_rise_end = " ";
     Tdidt_fall_start = " ";
     Tdidt_fall_end = " ";
-    didt_on = " ";
-    didt_off = " ";
     tdon = " ";
     tr = " ";
     tdoff = " ";
     tf = " ";
+    didt_on = " ";
+    didt_off = " ";
+    didton_max = " ";
+    didtoff_min = " ";
 end
 
 % ====================== 对管门极监测 Vge_dg ======================

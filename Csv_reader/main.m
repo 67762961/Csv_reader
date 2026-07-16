@@ -182,12 +182,22 @@ title_fix = strrep(title_fix, 'Vgedg2max(V)', ['VgemaxT',num2str(DuiguanMARK(2))
 title_fix = strrep(title_fix, 'Vgedg2min(V)', ['VgeminT',num2str(DuiguanMARK(2)),'(V)']);
 title_fix = strrep(title_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)),'(V)']);
 
+title_fix = strrep(title_fix, 'dv/dton(V/us)',['dv/dtoff',num2str(dvdtmode(1)/10),num2str(dvdtmode(2)/10),'((V/us))']);
+title_fix = strrep(title_fix, 'dv/dtoff(V/us)',['dv/dton',num2str(dvdtmode(3)/10),num2str(dvdtmode(4)/10),'((V/us))']);
+title_fix = strrep(title_fix, 'di/dton(A/us)',['di/dton',num2str(didtmode(1)/10),num2str(didtmode(2)/10),'((A/us))']);
+title_fix = strrep(title_fix, 'di/dtoff(A/us)',['di/dtoff',num2str(didtmode(3)/10),num2str(didtmode(4)/10),'((A/us))']);
+
 title_Full_fix = strrep(title_Full    , 'Vgedg1max(V)', ['VgemaxT',num2str(DuiguanMARK(1)),'(V)']);
 title_Full_fix = strrep(title_Full_fix, 'Vgedg1min(V)', ['VgeminT',num2str(DuiguanMARK(1)),'(V)']);
 title_Full_fix = strrep(title_Full_fix, 'Vgedg1mean(V)',['VgemeanT',num2str(DuiguanMARK(1)),'(V)']);
 title_Full_fix = strrep(title_Full_fix, 'Vgedg2max(V)', ['VgemaxT',num2str(DuiguanMARK(2)),'(V)']);
 title_Full_fix = strrep(title_Full_fix, 'Vgedg2min(V)', ['VgeminT',num2str(DuiguanMARK(2)),'(V)']);
 title_Full_fix = strrep(title_Full_fix, 'Vgedg2mean(V)',['VgemeanT',num2str(DuiguanMARK(2)),'(V)']);
+
+title_Full_fix = strrep(title_Full_fix, 'dv/dton(V/us)',['dv/dtoff',num2str(dvdtmode(1)/10),num2str(dvdtmode(2)/10),'((V/us))']);
+title_Full_fix = strrep(title_Full_fix, 'dv/dtoff(V/us)',['dv/dton',num2str(dvdtmode(3)/10),num2str(dvdtmode(4)/10),'((V/us))']);
+title_Full_fix = strrep(title_Full_fix, 'di/dton(A/us)',['di/dton',num2str(didtmode(1)/10),num2str(didtmode(2)/10),'((A/us))']);
+title_Full_fix = strrep(title_Full_fix, 'di/dtoff(A/us)',['di/dtoff',num2str(didtmode(3)/10),num2str(didtmode(4)/10),'((A/us))']);
 
 
 %% 数据写入

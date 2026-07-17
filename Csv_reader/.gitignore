@@ -6,6 +6,7 @@
 !count_I_Fix.m
 !count_didt_max.m
 !count_didt.m
+!count_dvdt_max.m
 !count_dvdt.m
 !count_Eon_Eoff.m
 !count_i2dt.m

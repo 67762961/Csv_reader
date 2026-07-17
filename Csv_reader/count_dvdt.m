@@ -17,8 +17,8 @@ window_dv = negedge;
 
 rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
 if isempty(rise_start_idx_a)
-    print('dvdt_off起始点识别失败')
-    error('dvdt_off起始点识别失败')
+    warning('dvdt_off起始点识别失败')
+    rise_start_idx_a = window_dv(1);
 end
 Diff1 = abs(Vce(rise_start_idx_a) - V_a);
 Diff2 = abs(Vce(rise_start_idx_a - 1) - V_a);
@@ -29,8 +29,8 @@ end
 
 rise_end_idx_b  = find(Vce(rise_start_idx_a:window_dv(end)) >= V_b, 1, 'first') + rise_start_idx_a - 1;
 if isempty(rise_end_idx_b)
-    print('dvdt_off结束点识别失败')
-    error('dvdt_off结束点识别失败')
+    warning('dvdt_off结束点识别失败')
+    rise_end_idx_b = window_dv(end);
 end
 Diff1 = abs(Vce(rise_end_idx_b) - V_b);
 Diff2 = abs(Vce(rise_end_idx_b - 1) - V_b);
@@ -91,8 +91,8 @@ window_dv = posedge;
 
 fall_start_idx_c = find(Vce(window_dv) <= V_c, 1, 'first') + window_dv(1) - 1;
 if isempty(fall_start_idx_c)
-    print('dvdt_on起始点识别失败')
-    error('dvdt_on起始点识别失败')
+    warning('dvdt_on起始点识别失败')
+    fall_start_idx_c = window_dv(1);
 end
 Diff1 = abs(Vce(fall_start_idx_c) - V_c);
 Diff2 = abs(Vce(fall_start_idx_c - 1) - V_c);
@@ -103,8 +103,8 @@ end
 
 fall_end_idx_d  = find(Vce(fall_start_idx_c:window_dv(end)) <= V_d, 1, 'first') + fall_start_idx_c - 1;
 if isempty(fall_end_idx_d)
-    print('dvdt_on结束点识别失败')
-    error('dvdt_on结束点识别失败')
+    warning('dvdt_on结束点识别失败')
+    fall_end_idx_d = window_dv(end);
 end
 Diff1 = abs(Vce(fall_end_idx_d) - V_d);
 Diff2 = abs(Vce(fall_end_idx_d - 1) - V_d);

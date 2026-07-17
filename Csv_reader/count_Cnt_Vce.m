@@ -7,7 +7,7 @@ function [cntVce,VceRange,PicRange] = count_Cnt_Vce(time,ch2,cntVge,DPI,Wave_cou
 Vce = smoothdata(ch2, 'movmean',100);
 Vcemax = max(Vce);
 nspd = time(2)-time(1); % 时间分辨率
-cntVce = indzer(Vce,fix(Vcemax/2),fix(200/nspd*1e-9)); % 过零点索引及时间间隔过滤
+cntVce = indzer(Vce,fix(Vcemax/2),fix(100/nspd*1e-9)); % 过零点索引及时间间隔过滤
 
 % nspd = time(2)-time(1); % 时间分辨率
 % [~, cntVce] = findpeaks(Diff_Vce, ...
@@ -22,7 +22,7 @@ if (length(cntVce) ~= 4) && (cntVge(5) == length(time)) || (length(cntVce) ~= 6)
     figure('Position', [320, 240, 1600/DPI, 600/DPI]);
     hold on;
     % Vce跳变点绘图
-    plot(time(1:end-1), Vce(1:end), 'b');
+    plot(time, Vce, 'b');
     plot(time(cntVce), Vce(cntVce), 'ro', 'MarkerFaceColor','r');
     
     %Vce分段绘图

@@ -1,22 +1,9 @@
-function [dvdt_on,dvdt_off,Tdvdt,Pic_win] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,cntVge,Wave_count)
+function [dvdt_on,dvdt_off,Tdvdt,Pic_win] = count_dvdt(num,DPI,dvdtmode,time,Vce,Ictop,Vcetop,Vcemax,path,dataname,VceRange)
 
-switch Wave_count(1)
-    case 1
-        Posedge = cntVge(1):cntVge(2);
-    case 2
-        Posedge = cntVge(3):cntVge(4);
-    case 3
-        Posedge = cntVge(5):cntVge(6);
-end
 
-switch Wave_count(2)
-    case 1
-        Negedge = cntVge(2):cntVge(3);
-    case 2
-        Negedge = cntVge(4):cntVge(5);
-    case 3
-        Negedge = cntVge(6):length(time);
-end
+posedge = VceRange(1):VceRange(2);
+negedge = VceRange(3):VceRange(4);
+% disp(VceRange)
 
 %% 关断dv/dt计算模块
 % 阈值定义
@@ -26,7 +13,7 @@ V_c  = Vcetop * dvdtmode(1)/100;
 V_d  = Vcetop * dvdtmode(2)/100;
 
 % 电压上升沿阈值检测
-window_dv = Negedge;
+window_dv = negedge;
 
 rise_start_idx_a = find(Vce(window_dv) >= V_a, 1, 'first') + window_dv(1) - 1;
 if isempty(rise_start_idx_a)
@@ -100,7 +87,7 @@ grid on;
 dvdt_off = dvdt_a_b;
 
 %% 开通dv/dt计算模块
-window_dv = Posedge;
+window_dv = posedge;
 
 fall_start_idx_c = find(Vce(window_dv) <= V_c, 1, 'first') + window_dv(1) - 1;
 if isempty(fall_start_idx_c)

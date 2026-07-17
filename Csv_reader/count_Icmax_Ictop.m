@@ -1,4 +1,4 @@
-function [Ictop_out,Icmax,I_on,I_off,Idmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,RangeVce,I_FixBar,Wave_count)
+function [Ictop_out,Icmax,I_on,I_off,Idmax] = count_Icmax_Ictop(num,DPI,time,Ch_labels,Fuzaimode,ch3,ch5,I_fuzai,path,dataname,I_meature,cntVge,cntVce,PicRange,I_FixBar,Wave_count)
 
 cntsw = length(cntVge);
 toff1=cntVge(cntsw-2);
@@ -50,8 +50,8 @@ static_id_interval = I_FixBar(3):I_FixBar(4);
 
 %%
 nspd = (time(2)-time(1))*1e9;
-PicStart = RangeVce(1);
-PicEnd = RangeVce(2);
+PicStart = PicRange(1);
+PicEnd = PicRange(2);
 PicLength = PicEnd - PicStart;
 Max = max(max(ch3(PicStart:PicEnd)),max(ch5(PicStart:PicEnd)));
 Max = max(Max, max(I_fuzai(PicStart:PicEnd)));

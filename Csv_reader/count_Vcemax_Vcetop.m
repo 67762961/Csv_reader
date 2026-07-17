@@ -1,27 +1,24 @@
-function [Vcemax,Vcemax_fix,Vcetop,Vcetop_fix,Vdmax,Vdmax_fix,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVge,cntVce,RangeVce,Wave_count)
+function [Vcemax,Vcemax_fix,Vcetop,Vcetop_fix,Vdmax,Vdmax_fix,T_Vcemax,T_Vdmax] = count_Vcemax_Vcetop(num,DPI,time,ch2,Vd_flag,ch4,Ictop,path,dataname,cntVce,PicRange,Wave_count)
 
 switch Wave_count(1)
     case 1
-        Posedge = cntVge(1):cntVge(2);
+        posedge = cntVce(1):cntVce(2);
     case 2
-        Posedge = cntVge(3):cntVge(4);
+        posedge = cntVce(3):cntVce(4);
     case 3
-        Posedge = cntVge(5):cntVge(6);
+        posedge = cntVce(5):cntVce(6);
 end
 
 switch Wave_count(2)
     case 1
-        Negedge = cntVge(2):cntVge(3);
         negedge = cntVce(2):cntVce(3);
     case 2
-        Negedge = cntVge(4):cntVge(5);
         negedge = cntVce(4):cntVce(5);
     case 3
-        Negedge = cntVge(6):length(time);
         negedge = cntVce(6):length(time);
 end
 
-%% Vcetop Ictop 计算
+%% Vcetop 计算
 % 计算Vcetop
 start_idx = fix(negedge(1) + 3*length(negedge)/8);         % 起始索引：关断后1/20周期
 end_idx = fix(negedge(end) - 3*length(negedge)/8);          % 结束索引：下一次导通前1/20周期
@@ -30,15 +27,15 @@ Vcetop_fix = (fix((Vcetop-10)/50)+1)*50;
 
 %% Vcemax计算
 % 找出最大值
-[Vcemax, cemax_idx] = max(ch2(Negedge));
-cemax_idx = Negedge(1) + cemax_idx - 1;  % 转换为全局索引
+[Vcemax, cemax_idx] = max(ch2(negedge));
+cemax_idx = negedge(1) + cemax_idx - 1;  % 转换为全局索引
 T_Vcemax = time(cemax_idx);
 Vcemax_fix = Vcemax - Vcetop + Vcetop_fix;
 
 %% ================ Vdmax计算 ================
 if 0 ~= Vd_flag
-    [Vdmax, dmax_idx] = max(ch4(Posedge));
-    dmax_idx = Posedge(1) + dmax_idx - 1;
+    [Vdmax, dmax_idx] = max(ch4(posedge));
+    dmax_idx = posedge(1) + dmax_idx - 1;
     T_Vdmax = time(dmax_idx);
     Vdmax_fix = Vdmax - Vcetop + Vcetop_fix;
 else
@@ -47,8 +44,8 @@ else
     Vdmax_fix = "   ";
 end
 
-PicStart = RangeVce(1);
-PicEnd = RangeVce(2);
+PicStart = PicRange(1);
+PicEnd = PicRange(2);
 PicLength = PicEnd - PicStart;
 PicTop = fix(1.2*max(ch2(PicStart:PicEnd)));
 if 0 ~= Vd_flag

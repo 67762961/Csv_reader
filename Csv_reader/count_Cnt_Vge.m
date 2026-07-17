@@ -47,7 +47,7 @@ Vgetop = median(Vge_top);
 
 Print_Flag = 0;
 
-for gate = 0.90:-0.01:0.1
+for gate = 0.90:-0.01:-10
     toff90_1_indices = find(Vge(toff1:-1:ton1) > gate * Vgetop, 1, 'first');
     toff90_1 = toff1 - toff90_1_indices + 1; % 转换为原始索引
     if isempty(toff90_1_indices)
@@ -69,7 +69,7 @@ if isempty(toff90_1_indices)
     error('门极1次关断点识别失败')
 end
 
-for gate = 0.90:-0.01:0.1
+for gate = 0.90:-0.01:-10
     toff90_2_indices = find(Vge(toff2:-1:ton2) > gate * Vgetop, 1, 'first');
     toff90_2 = toff2 - toff90_2_indices + 1; % 转换为原始索引
     if isempty(toff90_2_indices)
@@ -93,7 +93,7 @@ end
 
 %% ================ Vgebase计算 ================
 % 计算Vge低电平电压（使用中值避免噪声干扰）
-Vge_count = Vge(toff90_1:toff90_2);
+Vge_count = Vge;
 Vge_ne = Vge_count(Vge_count<=0);
 High_Thresh = quantile(Vge_ne, 0.07);
 Low_Thresh = quantile(Vge_ne, 0.03);
@@ -103,7 +103,7 @@ Vgebase = median(Vge_base);
 % disp(['Vge高电平电压Vgetop = ', num2str(Vgetop), ' V']);
 % disp(['Vge低电平电压Vgebase = ', num2str(Vgebase), ' V']);
 
-for gate = 0.1:0.01:2
+for gate = 0.1:0.01:10
     ton10_2_indices = find(Vge(ton2:-1:toff1) < Vgebase - gate*Vgebase, 1, 'first');
     ton10_2 = ton2 - ton10_2_indices + 1;
     if isempty(ton10_2_indices)
@@ -125,7 +125,7 @@ if isempty(ton10_2_indices)
     error('门极2次开通点识别失败')
 end
 
-for gate = 0.1:0.01:2
+for gate = 0.1:0.01:10
     ton10_1_indices = find(Vge(ton1:-1:1) <  Vgebase - gate*Vgebase, 1, 'first');
     ton10_1 = ton1 - ton10_1_indices + 1;
     if isempty(ton10_1_indices)
@@ -150,7 +150,7 @@ end
 if length(cntVge) > 4
     ton0=cntVge(1);
     toff0=cntVge(2);
-    for gate = 0.1:0.01:2
+    for gate = 0.1:0.01:10
         ton10_0_indices = find(Vge(ton0:-1:1) <  Vgebase - gate*Vgebase, 1, 'first');
         ton10_0 = ton0 - ton10_0_indices + 1;
         if isempty(ton10_0_indices)
@@ -172,7 +172,7 @@ if length(cntVge) > 4
         error('门极0次开通点识别失败')
     end
     
-    for gate = 0.90:-0.01:0.1
+    for gate = 0.90:-0.01:-10
         toff90_0_indices = find(Vge(toff0:-1:ton0) > gate * Vgetop, 1, 'first');
         toff90_0 = toff0 - toff90_0_indices + 1; % 转换为原始索引
         if isempty(toff90_0_indices)

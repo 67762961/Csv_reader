@@ -1,10 +1,6 @@
 function [Vgetop,Vgebase,cntVge] = count_Cnt_Vge(time,DPI,Vge,cntVge)
 
 cntsw = length(cntVge);
-ton1=cntVge(cntsw-3);
-toff1=cntVge(cntsw-2);
-ton2=cntVge(cntsw-1);
-toff2=cntVge(cntsw);
 
 % Vge_wd = wdenoise(ch1,5,'Wavelet','db4','DenoisingMethod','Bayes','thresholdRule','Soft');% 叶贝斯阈值法 软滤波
 
@@ -30,7 +26,10 @@ if (cntsw ~= 6) && (cntsw ~= 4)
     error('过零点判断异常')
 end
 
-
+ton1=cntVge(cntsw-3);
+toff1=cntVge(cntsw-2);
+ton2=cntVge(cntsw-1);
+toff2=cntVge(cntsw);
 
 %% ================ Vgetop计算 ================
 % 计算Vge高电平电压（使用中值避免噪声干扰）
